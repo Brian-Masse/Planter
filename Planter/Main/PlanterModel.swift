@@ -27,7 +27,7 @@ class PlanterModel: ObservableObject {
     static let realmManager: RealmManager = RealmManager()
     static let shared: PlanterModel = PlanterModel()
     
-    @Published var offline: Bool = true
+    @Published var offline: Bool = false
     @Published var state: AppState = .authentication
     
     var ownerID: String { PlanterModel.realmManager.user?.id ?? "no user" }
@@ -41,8 +41,7 @@ class PlanterModel: ObservableObject {
         self.state = .authentication
         
         await PlanterModel.realmManager.signInAnonymously()
-//        if PlanterModel.realmManager.user != nil {
-        if PlanterModel.realmManager.checkSignedIn() {
+        if PlanterModel.realmManager.user != nil {
             self.state = .openingRealm
             await self.openRealm()
         } else {

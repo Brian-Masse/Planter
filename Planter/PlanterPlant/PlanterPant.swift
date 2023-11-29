@@ -11,7 +11,7 @@ import RealmSwift
 
 class PlanterPlant: Object {
     
-    @Persisted(primaryKey: true) var objectID: ObjectId
+    @Persisted(primaryKey: true) var _id: ObjectId
     
     @Persisted var ownerID: String = ""
     @Persisted var name: String = ""

@@ -16,7 +16,7 @@ class RealmManager {
     
 //    MARK: Vars
 //    for online access to the database this needs to be given an ID
-    let app: App = App(id: "-")
+    let app: App = App(id: "application-0-bwmin")
     
     var realm: Realm? = nil
     var user: User? = nil
@@ -27,7 +27,7 @@ class RealmManager {
 //    the getOwnerId check is redundant and should be removed. But while i cannot create an app to connect to I need to
 //    read it as the check for whether a user is signed in or not
     func checkSignedIn() -> Bool {
-         app.currentUser != nil || getOwnerId() != nil
+         app.currentUser != nil || getLocalOwnerId() != nil
     }
     
 //    for offline access there should be a local copy of the ownerID in user defaults
@@ -36,7 +36,7 @@ class RealmManager {
         defaults.set(id, forKey: DefaultKey.ownerID.rawValue)
     }
     
-    private func getOwnerId() -> String? {
+    private func getLocalOwnerId() -> String? {
         defaults.string(forKey: DefaultKey.ownerID.rawValue)
     }
 
@@ -49,14 +49,8 @@ class RealmManager {
                 self.saveOwnerIdLocally(self.user!.id)
             } catch {
                 print( "error signing user in: \(error.localizedDescription)" )
-                
-//                This is temporary, if a user is offline they cannot signIn, because the app will not be active
-//                however i need to test offline stuff without being able to go online to first sign in.
-//                so, once the user fails to login because im offline, this will save an ownerID into local storage to allow
-//                me to continue testing the app
-                self.saveOwnerIdLocally("hello")
             }
-        }
+        } else { self.user = app.currentUser! }
     }
     
 

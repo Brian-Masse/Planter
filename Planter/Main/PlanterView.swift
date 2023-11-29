@@ -27,8 +27,7 @@ struct PlanterView: View {
             case .creatingProfile:
                 Text( "Creating Profile" )
                 
-            case .app:
-                Text( "App" )
+            case .app: MainView()
                 
             case .error:
                 Text( "Error" )

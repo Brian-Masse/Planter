@@ -11,11 +11,11 @@ import SwiftUI
 
 struct MainView: View {
     
-    @ObservedObject var model: PlanterModel = PlanterModel.s
+    @ObservedObject var model: PlanterModel = PlanterModel()
     
     var body: some View {
         
-        
+        Text("hello")
         
         
     }
