@@ -35,11 +35,6 @@ struct PlanterView: View {
             }
             
             Spacer()
-            
-            Text( model.ownerID )
-            
-            Spacer()
-            
         }
         .task {
             await model.authenticateUser()

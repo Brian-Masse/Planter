@@ -9,6 +9,7 @@ import Foundation
 import RealmSwift
 import SwiftUI
 
+var inDev: Bool = true
 
 class PlanterModel: ObservableObject {
     
@@ -31,6 +32,8 @@ class PlanterModel: ObservableObject {
     @Published var state: AppState = .authentication
     
     var ownerID: String { PlanterModel.realmManager.user?.id ?? "no user" }
+    
+    @Published var activeColor: Color = Colors.main
     
     
 //    MARK: Flow

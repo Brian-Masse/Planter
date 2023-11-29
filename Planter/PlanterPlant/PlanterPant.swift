@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 
-class PlanterPlant: Object {
+class PlanterPlant: Object, Identifiable {
     
     @Persisted(primaryKey: true) var _id: ObjectId
     

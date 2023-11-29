@@ -7,11 +7,16 @@
 
 import Foundation
 import RealmSwift
+import Realm
 
 class RealmManager {
     
     enum DefaultKey: String {
         case ownerID
+    }
+    
+    enum SubscriptionKey: String {
+        case planterPlant
     }
     
 //    MARK: Vars
@@ -76,17 +81,111 @@ class RealmManager {
         
         do {
             self.realm = try await Realm(configuration: config)
-            
+            await self.setupSubscriptions()
             
         } catch {
             print( "failed to open realm: \(error.localizedDescription)" )
         }
     }
     
+//    MARK: Subscriptions
+    func addGenericSubcriptions<T>(realm: Realm? = nil, name: String, query: @escaping ((Query<T>) -> Query<Bool>) ) async -> T? where T:RealmSwiftObject  {
+            
+        let localRealm = (realm == nil) ? self.realm! : realm!
+        let subscriptions = localRealm.subscriptions
+        
+        do {
+            try await subscriptions.update {
+                
+                let querySub = QuerySubscription(name: name, query: query)
+                
+                if checkSubscription(name: name, realm: localRealm) {
+                    let foundSubscriptions = subscriptions.first(named: name)!
+                    foundSubscriptions.updateQuery(toType: T.self, where: query)
+                }
+                else { subscriptions.append(querySub) }
+            }
+        } catch { print("error adding subcription: \(error)") }
+        
+        return nil
+    }
+    
+    func removeSubscription(name: String) async {
+            
+        let subscriptions = self.realm!.subscriptions
+        let foundSubscriptions = subscriptions.first(named: name)
+        if foundSubscriptions == nil {return}
+        
+        do {
+            try await subscriptions.update{
+                subscriptions.remove(named: name)
+            }
+        } catch { print("error adding subcription: \(error)") }
+    }
+    
+    private func checkSubscription(name: String, realm: Realm) -> Bool {
+        let subscriptions = realm.subscriptions
+        let foundSubscriptions = subscriptions.first(named: name)
+        return foundSubscriptions != nil
+    }
+    
     private func setupSubscriptions() async {
+        
+        let _: PlanterPlant? = await addGenericSubcriptions(name: SubscriptionKey.planterPlant.rawValue) { query in
+            query.ownerID == PlanterModel.shared.ownerID
+        }
         
     }
     
-    
-    
+//    MARK: Realm Functions
+    //    in all add, update, and delete transactions, the user has the option to pass in a realm
+    //    if they want to write to a different realm.
+    //    This is a convenience function either choose that realm, if it has a value, or the default realm
+      static func getRealm(from realm: Realm?) -> Realm {
+          realm ?? PlanterModel.realmManager.realm!
+      }
+      
+      static func writeToRealm(_ realm: Realm? = nil, _ block: () -> Void ) {
+          do {
+              if getRealm(from: realm).isInWriteTransaction { block() }
+              else { try getRealm(from: realm).write(block) }
+              
+          } catch { print("ERROR WRITING TO REALM:" + error.localizedDescription) }
+      }
+      
+      static func updateObject<T: Object>(realm: Realm? = nil, _ object: T, _ block: (T) -> Void, needsThawing: Bool = true) {
+          RealmManager.writeToRealm(realm) {
+              guard let thawed = object.thaw() else {
+                  print("failed to thaw object: \(object)")
+                  return
+              }
+              block(thawed)
+          }
+      }
+      
+      static func addObject<T:Object>( _ object: T, realm: Realm? = nil ) {
+          self.writeToRealm(realm) { getRealm(from: realm).add(object) }
+      }
+      
+      static func retrieveObject<T:Object>( realm: Realm? = nil, where query: ( (Query<T>) -> Query<Bool> )? = nil ) -> Results<T> {
+          if query == nil { return getRealm(from: realm).objects(T.self) }
+          else { return getRealm(from: realm).objects(T.self).where(query!) }
+      }
+      
+      @MainActor
+      static func retrieveObjects<T: Object>(realm: Realm? = nil, where query: ( (T) -> Bool )? = nil) -> [T] {
+          if query == nil { return Array(getRealm(from: realm).objects(T.self)) }
+          else { return Array(getRealm(from: realm).objects(T.self).filter(query!)  ) }
+          
+          
+      }
+      
+      static func deleteObject<T: RealmSwiftObject>( _ object: T, where query: @escaping (T) -> Bool, realm: Realm? = nil ) where T: Identifiable {
+          
+          if let obj = getRealm(from: realm).objects(T.self).filter( query ).first {
+              self.writeToRealm {
+                  getRealm(from: realm).delete(obj)
+              }
+          }
+      }
 }
