@@ -22,6 +22,23 @@ struct CalendarPageView: View {
     }
     
     
+    enum PlantCreationScene: String, CaseIterable, Identifiable {
+        case page1
+        case page2
+        case page3
+        
+        var id: String {
+            self.rawValue
+        }
+    }
+    
+    
+    @State var plantScene: PlantCreationScene = .page1
+    
+//    MARK: Vars
+    @State var showingPlantCreationView: Bool = false
+    
+    
 //    MARK: Struct Methods
     private func filterPlants() -> Dictionary< String, [PlanterPlant] > {
         
@@ -61,13 +78,7 @@ struct CalendarPageView: View {
 
             UniversalText( PlanterModel.shared.ownerID, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
             
-            HStack {
-                Spacer()
-            }
-            
-            ForEach(plants) { plant in
-                Text(plant.name)
-            }
+            HStack { Spacer() }
             
             ForEach( FilteredPlantKey.allCases, id: \.self ) { content in
                 
@@ -81,19 +92,26 @@ struct CalendarPageView: View {
                         ForEach( list ) { plant in
                             
                             UniversalText( plant.name, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
-                            
                         }
                         
                     }
                 }
-            
-                
             }
             
             Spacer()
             
+            LargeRoundedButton("create plant", icon: "plus") {
+                showingPlantCreationView = true
+            }
+            
         }
         .onAppear { self.filteredPlants = self.filterPlants() }
-        
+        .sheet(isPresented: $showingPlantCreationView) {
+            
+            PlanterScene($plantScene) { scene in
+                Text("idk")
+            }
+            
+        }
     }
 }
