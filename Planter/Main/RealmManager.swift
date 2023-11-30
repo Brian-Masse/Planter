@@ -81,7 +81,7 @@ class RealmManager {
         
         do {
             self.realm = try await Realm(configuration: config)
-            await self.setupSubscriptions()
+            if !PlanterModel.shared.offline { await self.setupSubscriptions() }
             
         } catch {
             print( "failed to open realm: \(error.localizedDescription)" )

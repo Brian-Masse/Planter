@@ -13,9 +13,7 @@ struct PlanterView: View {
     
     var body: some View {
        
-        VStack {
-            
-            Spacer()
+        Group {
             
             switch model.state {
             case .authentication:
@@ -27,19 +25,16 @@ struct PlanterView: View {
             case .creatingProfile:
                 Text( "Creating Profile" )
                 
-            case .app: MainView()
+            case .app: 
+                MainView()
                 
             case .error:
                 Text( "Error" )
                 
             }
-            
-            Spacer()
         }
         .task {
             await model.authenticateUser()
         }
-        
-        
     }
 }

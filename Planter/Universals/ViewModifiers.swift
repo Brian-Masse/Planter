@@ -16,10 +16,7 @@ private struct UniversalBackground: ViewModifier {
     let padding: Bool
     
     func body(content: Content) -> some View {
-//        GeometryReader { geo in
-            content
-//                .ignoresSafeArea(.keyboard)
-//        }
+        content
             .background(
                 Rectangle()
                     .foregroundColor(.clear)
@@ -29,17 +26,7 @@ private struct UniversalBackground: ViewModifier {
                     }
             )
             .ignoresSafeArea(.container, edges: .bottom)
-//        .edgesIgnoringSafeArea(.bottom)
-        .background(
-            Image("PaperNoise")
-                .resizable()
-                .blendMode( colorScheme == .light ? .multiply : .lighten)
-                .opacity( colorScheme == .light ? 0.35 : 0.2)
-                .ignoresSafeArea()
-                .allowsHitTesting(false)
-
-        )
-        .background(colorScheme == .light ? Colors.lightGrey : .black)
+            .background(colorScheme == .light ? Colors.lightGrey : .black)
     }
 }
 

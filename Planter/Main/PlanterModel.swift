@@ -28,7 +28,7 @@ class PlanterModel: ObservableObject {
     static let realmManager: RealmManager = RealmManager()
     static let shared: PlanterModel = PlanterModel()
     
-    @Published var offline: Bool = false
+    @Published var offline: Bool = true
     @Published var state: AppState = .authentication
     
     var ownerID: String { PlanterModel.realmManager.user?.id ?? "no user" }
