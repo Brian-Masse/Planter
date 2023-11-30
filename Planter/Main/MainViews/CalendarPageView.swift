@@ -59,22 +59,44 @@ struct CalendarPageView: View {
     
     @State var filteredPlants: Dictionary<String, [PlanterPlant]> = Dictionary()
     
+//    MARK: ViewBuilders
+    private func makeTodayView() -> some View {
+        GeometryReader { geo in
+            ZStack {
+                Rectangle()
+                    .universalForegroundColor()
+                    .cornerRadius(Constants.UILargeCornerRadius, corners: [.topLeft, .bottomRight])
+                    .padding(-10)
+                
+                HStack {
+                    VStack(alignment: .leading) {
+                        ForEach( plants ) { plant in
+                            
+                            PlantPreviewView(plant: plant)
+                        }
+                    }
+                    
+//                    UniversalText( "Today", size: Constants.UITitleTextSize, font: Constants.titleFont, wrap: false)
+//                        .textCase(.uppercase)
+//                        .rotationEffect(.degrees(90))
+                }
+            }.frame(maxWidth: geo.size.width)
+        }
+    }
+    
 //    MARK: Body
     var body: some View {
         
         VStack(alignment: .leading) {
-            
+                        
             UniversalText( "Planter.", size: Constants.UITitleTextSize, font: Constants.titleFont )
                 .textCase(.uppercase)
             
             UniversalText( PlanterModel.shared.ownerID, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
             
             ScrollView(.vertical) {
-                
-                ForEach( plants ) { plant in
-                    
-                    PlantPreviewView(plant: plant)
-                }
+                makeTodayView()
+               
                 
                 //            ForEach( FilteredPlantKey.allCases, id: \.self ) { content in
                 //
