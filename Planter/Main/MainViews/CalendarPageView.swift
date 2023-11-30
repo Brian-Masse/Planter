@@ -61,27 +61,38 @@ struct CalendarPageView: View {
     
 //    MARK: ViewBuilders
     private func makeTodayView() -> some View {
-        GeometryReader { geo in
-            ZStack {
-                Rectangle()
-                    .universalForegroundColor()
-                    .cornerRadius(Constants.UILargeCornerRadius, corners: [.topLeft, .bottomRight])
-                    .padding(-10)
-                
-                HStack {
-                    VStack(alignment: .leading) {
-                        ForEach( plants ) { plant in
-                            
-                            PlantPreviewView(plant: plant)
+        ZStack {
+            Rectangle()
+                .universalForegroundColor()
+                .cornerRadius(Constants.UILargeCornerRadius, corners: [.topLeft, .bottomRight])
+                .ignoresSafeArea()
+                .padding(-7)
+            
+            VStack(spacing: 0) {
+                if !plants.isEmpty {
+                    HStack(alignment: .top) {
+                        PlantPreviewView(plants[0])
+                        
+                        VerticalLayout() {
+                            UniversalText( "Today", size: Constants.UITitleTextSize, font: Constants.titleFont, wrap: false)
+                                .textCase(.uppercase)
+                        }
+                        .rotationEffect(.degrees(90))
+                        .padding(.leading, -10)
+                    }
+                    .padding(.bottom)
+                    
+                    VStack {
+                        if plants.count > 1 {
+                            ForEach( 1..<plants.count, id: \.self ) { i in
+                                PlantPreviewView(plants[ i ])
+                            }
                         }
                     }
-                    
-//                    UniversalText( "Today", size: Constants.UITitleTextSize, font: Constants.titleFont, wrap: false)
-//                        .textCase(.uppercase)
-//                        .rotationEffect(.degrees(90))
                 }
-            }.frame(maxWidth: geo.size.width)
+            }.padding(7)
         }
+        .padding(.vertical)
     }
     
 //    MARK: Body
@@ -89,39 +100,26 @@ struct CalendarPageView: View {
         
         VStack(alignment: .leading) {
                         
-            UniversalText( "Planter.", size: Constants.UITitleTextSize, font: Constants.titleFont )
-                .textCase(.uppercase)
+            HStack {
+                UniversalText( "Planter.", size: Constants.UITitleTextSize, font: Constants.titleFont )
+                    .textCase(.uppercase)
+                Spacer()
+            }
+            .padding(.horizontal, 7)
             
             UniversalText( PlanterModel.shared.ownerID, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
+                .padding(.horizontal, 7)
             
             ScrollView(.vertical) {
                 makeTodayView()
-               
-                
-                //            ForEach( FilteredPlantKey.allCases, id: \.self ) { content in
-                //
-                //                if let list = filteredPlants[ content.rawValue ] {
-                //                    if list.count != 0 {
-                //
-                //                        UniversalText( content.rawValue,
-                //                                       size: Constants.UISubHeaderTextSize,
-                //                                       font: Constants.titleFont )
-                //
-                //                        ForEach( list ) { plant in
-                //
-                //                            PlantPreviewView(plant: plant)
-                //                        }
-                //
-                //                    }
-                //                }
-                //            }
                 
                 Spacer()
             }
             
-            LargeRoundedButton("create plant", icon: "plus") {
+            LargeRoundedButton("create plant", icon: "plus", wide: true) {
                 showingPlantCreationView = true
             }
+            .padding(7)
             
         }
         .onAppear { self.filteredPlants = self.filterPlants() }

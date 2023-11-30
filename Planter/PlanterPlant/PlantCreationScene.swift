@@ -110,7 +110,7 @@ struct PlantCreationScene: View {
                 UniversalText("Coose Cover Photo", size: Constants.UIDefaultTextSize, font: Constants.mainFont)
             }
             
-            if let image = photoManager.retrievedImage {
+            if let _ = photoManager.retrievedImage {
                 
                 photoManager.image!
                     .resizable()

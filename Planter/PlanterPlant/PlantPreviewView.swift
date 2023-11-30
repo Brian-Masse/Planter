@@ -12,12 +12,16 @@ struct PlantPreviewView: View {
     
     let plant: PlanterPlant
     
+    init(_ plant: PlanterPlant) {
+        self.plant = plant
+    }
+    
 //    MARK: ViewBuilders
     @ViewBuilder
     private func makeBackground(height: CGFloat = 300) -> some View {
         
         let alignment: Alignment = .center
-        let normalBlurHeight: CGFloat = 1/5
+        let normalBlurHeight: CGFloat = 2/5
         
         let gradient = LinearGradient(stops: [
             .init(color: .white, location: normalBlurHeight ),
@@ -25,31 +29,36 @@ struct PlantPreviewView: View {
                                       startPoint: .bottom,
                                       endPoint: .top)
         
-        ZStack(alignment: alignment) {
-            if let coverImage = plant.getCoverImage() {
-                coverImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .overlay {
-                        coverImage
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .blur(radius: 40)
-                            .padding(-40)
-                            .clipped()
-                            .mask(alignment: alignment) {
-                                gradient
-                                    .frame(height: height)
-                                    .padding(.vertical, 20)
-                            }
-                    }
-            } else {
+        GeometryReader { geo in
+            ZStack {
                 Rectangle()
                     .foregroundStyle(.black)
+                
+                if let coverImage = plant.getCoverImage() {
+                    coverImage
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geo.size.width, height: height, alignment: alignment)
+                        .clipped()
+                        .overlay {
+                            coverImage
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .blur(radius: 40)
+                                .padding(-40)
+                                .frame(width: geo.size.width, height: height, alignment: alignment)
+                                .clipped()
+                                .mask(alignment: .bottom) {
+                                    gradient
+                                        .frame(height: height / 1.5)
+//                                            .padding(.vertical, 20)
+                                }
+                        }
+                }
             }
-        }
-        .frame(maxHeight: height, alignment: alignment)
-        .cornerRadius(Constants.UIDefaultCornerRadius)
+            .frame(height: height, alignment: alignment)
+            .cornerRadius(Constants.UIDefaultCornerRadius)
+        }.frame(height: height)
     }
     
     @ViewBuilder
