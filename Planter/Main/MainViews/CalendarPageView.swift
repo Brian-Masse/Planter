@@ -61,13 +61,16 @@ struct CalendarPageView: View {
 //    @State var upNextPlants: [PlanterPlant] = []
 //    @State var overduePlants: [PlanterPlant] = []
     
+    @State var filteredPlants: Dictionary<String, [PlanterPlant]> = Dictionary()
+    
 //    MARK: Body
     var body: some View {
         
         VStack(alignment: .leading) {
             
             UniversalText( "Planter.", size: Constants.UITitleTextSize, font: Constants.titleFont )
-
+                .textCase(.uppercase)
+            
             UniversalText( PlanterModel.shared.ownerID, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
             
             HStack { Spacer() }

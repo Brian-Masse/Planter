@@ -10,6 +10,7 @@ import SwiftUI
 import Charts
 
 enum ProvidedFont: String {
+    case madeTommyRegular = "MadeTommy"
     case renoMono = "RenoMono-Regular"
     case helvetica = "helvetica"
     case syneHeavy = "Syne-Bold"

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import PhotosUI
 
 struct PlantCreationScene: View {
     
@@ -14,6 +15,7 @@ struct PlantCreationScene: View {
     enum PlantCreationScene: Int, CaseIterable, Identifiable {
         case basicInfo
         case waterScheduling
+        case coverPhoto
         
         var id: Int {
             self.rawValue
@@ -22,6 +24,8 @@ struct PlantCreationScene: View {
     
     @Environment(\.presentationMode) var presentationMode
     
+    @ObservedObject var photoManager = PlanterModel.photoManager
+    
     @State var scene: PlantCreationScene = .basicInfo
     @State var sceneComplete: Bool = true
     
@@ -29,6 +33,7 @@ struct PlantCreationScene: View {
     @State var notes: String = ""
     
     @State var wateringInterval: Double = Constants.DayTime * 7
+
     
 //    MARK: Struct Methods
     private func submit() {
@@ -53,10 +58,10 @@ struct PlantCreationScene: View {
             TextFieldWithPrompt(title: "Add any additional notes on this plant", binding: $notes)
             
         }
-        .onChange(of: name) { newValue in
+        .onChange(of: name) { oldValue, newValue in
             sceneComplete = !(newValue.isEmpty || notes.isEmpty)
         }
-        .onChange(of: notes) { newValue in
+        .onChange(of: notes) { oldValue, newValue in
             sceneComplete = !(newValue.isEmpty || name.isEmpty)
         }
     }
@@ -92,6 +97,19 @@ struct PlantCreationScene: View {
         
     }
     
+    @ViewBuilder
+    private func makePhotoPickerScene() -> some View {
+        
+        PhotosPicker(selection: $photoManager.imageSelection,
+                     photoLibrary: .shared()) {
+            UniversalText("Coose Cover Photo", size: Constants.UIDefaultTextSize, font: Constants.mainFont)
+    //        }
+    //                     .onChange(of: $photoManager.retrievedImage) {
+    //                         <#code#>
+    //                     }
+                    
+    }
+    
     
     
     
@@ -104,6 +122,7 @@ struct PlantCreationScene: View {
                 switch scene {
                 case .basicInfo: makeBasicInformationScene()
                 case .waterScheduling: makeWateringScheduleScene()
+                case .coverPhoto: makePhotoPickerScene()
                 }
             }
         }

@@ -39,7 +39,7 @@ class Constants {
     
     //    font sizes
     static let UILargeTextSize: CGFloat     = 90
-    static let UITitleTextSize: CGFloat     = 45
+    static let UITitleTextSize: CGFloat     = 80
     static let UIHeaderTextSize: CGFloat    = 30
     static let UISubHeaderTextSize: CGFloat = 20
     static let UIDefaultTextSize: CGFloat   = 15
@@ -69,8 +69,8 @@ class Constants {
     static let yearTime: Double = 31557600
     
     //    fonts
-    static let titleFont: ProvidedFont = .syneHeavy
-    static let mainFont: ProvidedFont = .renoMono
+    static let titleFont: ProvidedFont = .madeTommyRegular
+    static let mainFont: ProvidedFont = .madeTommyRegular
     
     //    texts
     static let tagSplashPurpose: String = "Tags are a way to organize similar types of events in your life, as well as label how those activites contribute to your goals."

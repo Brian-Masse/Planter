@@ -22,6 +22,8 @@
 		C96C7E522B1717B300FC2FB0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E4A2B1717B300FC2FB0 /* Extensions.swift */; };
 		C96C7E532B1717B300FC2FB0 /* UniversalButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */; };
 		C96C7E582B18338500FC2FB0 /* PlantCreationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */; };
+		C96C7E5A2B183E8300FC2FB0 /* PlantPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */; };
+		C96C7E5D2B183FD900FC2FB0 /* MadeTommy.otf in Resources */ = {isa = PBXBuildFile; fileRef = C96C7E5C2B183FD900FC2FB0 /* MadeTommy.otf */; };
 		C9B981422B140FCF0045D4A6 /* PlanterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981412B140FCF0045D4A6 /* PlanterApp.swift */; };
 		C9B981442B140FCF0045D4A6 /* PlanterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981432B140FCF0045D4A6 /* PlanterView.swift */; };
 		C9B981462B140FD10045D4A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9B981452B140FD10045D4A6 /* Assets.xcassets */; };
@@ -63,6 +65,9 @@
 		C96C7E4A2B1717B300FC2FB0 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniversalButtons.swift; sourceTree = "<group>"; };
 		C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantCreationScene.swift; sourceTree = "<group>"; };
+		C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantPreviewView.swift; sourceTree = "<group>"; };
+		C96C7E5C2B183FD900FC2FB0 /* MadeTommy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MadeTommy.otf; sourceTree = "<group>"; };
+		C96C7E5E2B18405000FC2FB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C9B9813E2B140FCF0045D4A6 /* Planter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Planter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9B981412B140FCF0045D4A6 /* PlanterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterApp.swift; sourceTree = "<group>"; };
 		C9B981432B140FCF0045D4A6 /* PlanterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterView.swift; sourceTree = "<group>"; };
@@ -110,6 +115,7 @@
 				C906BDB82B141ECC0067B403 /* PlanterPant.swift */,
 				C91586F92B1825F300444826 /* PlanterScene.swift */,
 				C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */,
+				C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */,
 			);
 			path = PlanterPlant;
 			sourceTree = "<group>";
@@ -137,6 +143,14 @@
 			path = Universals;
 			sourceTree = "<group>";
 		};
+		C96C7E5B2B183FA800FC2FB0 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				C96C7E5C2B183FD900FC2FB0 /* MadeTommy.otf */,
+			);
+			path = fonts;
+			sourceTree = "<group>";
+		};
 		C9B981352B140FCF0045D4A6 = {
 			isa = PBXGroup;
 			children = (
@@ -160,6 +174,8 @@
 		C9B981402B140FCF0045D4A6 /* Planter */ = {
 			isa = PBXGroup;
 			children = (
+				C96C7E5E2B18405000FC2FB0 /* Info.plist */,
+				C96C7E5B2B183FA800FC2FB0 /* fonts */,
 				C96C7E432B17177300FC2FB0 /* Universals */,
 				C906BDBA2B141ED20067B403 /* PlanterPlant */,
 				C9B9816C2B140FE90045D4A6 /* Main */,
@@ -319,6 +335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9B9814A2B140FD10045D4A6 /* Preview Assets.xcassets in Resources */,
+				C96C7E5D2B183FD900FC2FB0 /* MadeTommy.otf in Resources */,
 				C9B981462B140FD10045D4A6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -354,6 +371,7 @@
 				C96C7E4F2B1717B300FC2FB0 /* Animations.swift in Sources */,
 				C91586F82B17E9CB00444826 /* CalendarPageView.swift in Sources */,
 				C96C7E512B1717B300FC2FB0 /* UIUniversals.swift in Sources */,
+				C96C7E5A2B183E8300FC2FB0 /* PlantPreviewView.swift in Sources */,
 				C96C7E522B1717B300FC2FB0 /* Extensions.swift in Sources */,
 				C9B981422B140FCF0045D4A6 /* PlanterApp.swift in Sources */,
 				C9B9816E2B1410800045D4A6 /* RealmManager.swift in Sources */,
@@ -523,6 +541,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Planter/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -561,6 +580,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Planter/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

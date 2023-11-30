@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+
 struct PlanterScene<Content: View, Scene>: View where Scene: CaseIterable, Scene: RawRepresentable, Scene: Identifiable, Scene.AllCases: RandomAccessCollection, Scene.RawValue == Int {
     
     let contentBuilder: ( Scene ) -> Content
