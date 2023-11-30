@@ -21,6 +21,7 @@
 		C96C7E512B1717B300FC2FB0 /* UIUniversals.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E492B1717B300FC2FB0 /* UIUniversals.swift */; };
 		C96C7E522B1717B300FC2FB0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E4A2B1717B300FC2FB0 /* Extensions.swift */; };
 		C96C7E532B1717B300FC2FB0 /* UniversalButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */; };
+		C96C7E582B18338500FC2FB0 /* PlantCreationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */; };
 		C9B981422B140FCF0045D4A6 /* PlanterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981412B140FCF0045D4A6 /* PlanterApp.swift */; };
 		C9B981442B140FCF0045D4A6 /* PlanterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981432B140FCF0045D4A6 /* PlanterView.swift */; };
 		C9B981462B140FD10045D4A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9B981452B140FD10045D4A6 /* Assets.xcassets */; };
@@ -61,6 +62,7 @@
 		C96C7E492B1717B300FC2FB0 /* UIUniversals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUniversals.swift; sourceTree = "<group>"; };
 		C96C7E4A2B1717B300FC2FB0 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniversalButtons.swift; sourceTree = "<group>"; };
+		C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantCreationScene.swift; sourceTree = "<group>"; };
 		C9B9813E2B140FCF0045D4A6 /* Planter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Planter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9B981412B140FCF0045D4A6 /* PlanterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterApp.swift; sourceTree = "<group>"; };
 		C9B981432B140FCF0045D4A6 /* PlanterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterView.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			children = (
 				C906BDB82B141ECC0067B403 /* PlanterPant.swift */,
 				C91586F92B1825F300444826 /* PlanterScene.swift */,
+				C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */,
 			);
 			path = PlanterPlant;
 			sourceTree = "<group>";
@@ -346,6 +349,7 @@
 				C9B981442B140FCF0045D4A6 /* PlanterView.swift in Sources */,
 				C96C7E532B1717B300FC2FB0 /* UniversalButtons.swift in Sources */,
 				C96C7E4C2B1717B300FC2FB0 /* UniversalForm.swift in Sources */,
+				C96C7E582B18338500FC2FB0 /* PlantCreationScene.swift in Sources */,
 				C906BDB92B141ECC0067B403 /* PlanterPant.swift in Sources */,
 				C96C7E4F2B1717B300FC2FB0 /* Animations.swift in Sources */,
 				C91586F82B17E9CB00444826 /* CalendarPageView.swift in Sources */,

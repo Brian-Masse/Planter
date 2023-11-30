@@ -20,21 +20,7 @@ struct CalendarPageView: View {
             self.rawValue
         }
     }
-    
-    
-    enum PlantCreationScene: String, CaseIterable, Identifiable {
-        case page1
-        case page2
-        case page3
-        
-        var id: String {
-            self.rawValue
-        }
-    }
-    
-    
-    @State var plantScene: PlantCreationScene = .page1
-    
+
 //    MARK: Vars
     @State var showingPlantCreationView: Bool = false
     
@@ -62,12 +48,18 @@ struct CalendarPageView: View {
         return dic
     }
     
+    private func setFilteredPlants() {
+        
+    }
+    
     
 //    MARK: Vars
-    static let upNextPlantCount: Int = 2
+    static let upNextPlantCount: Int = 100
     let plants: [PlanterPlant]
     
-    @State var filteredPlants: Dictionary<String, [PlanterPlant]> = Dictionary()
+//    @State var todayPlants: [PlanterPlant] = []
+//    @State var upNextPlants: [PlanterPlant] = []
+//    @State var overduePlants: [PlanterPlant] = []
     
 //    MARK: Body
     var body: some View {
@@ -106,12 +98,11 @@ struct CalendarPageView: View {
             
         }
         .onAppear { self.filteredPlants = self.filterPlants() }
-        .sheet(isPresented: $showingPlantCreationView) {
-            
-            PlanterScene($plantScene) { scene in
-                Text("idk")
-            }
-            
+        .onChange(of: self.plants) { oldValue, newValue in
+            self.filteredPlants = self.filteredPlants
         }
+        
+        
+        .sheet(isPresented: $showingPlantCreationView) { PlantCreationScene() }
     }
 }

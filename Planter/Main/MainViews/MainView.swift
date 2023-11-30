@@ -24,6 +24,7 @@ struct MainView: View {
             CalendarPageView(plants: arrPlants)
         }
         .padding(7)
+        .padding(.bottom)
         .universalBackground()
     }
 }
