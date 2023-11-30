@@ -40,14 +40,14 @@ class Constants {
     //    font sizes
     static let UILargeTextSize: CGFloat     = 90
     static let UITitleTextSize: CGFloat     = 80
-    static let UIHeaderTextSize: CGFloat    = 30
+    static let UIHeaderTextSize: CGFloat    = 50
     static let UISubHeaderTextSize: CGFloat = 20
     static let UIDefaultTextSize: CGFloat   = 15
     static let UISmallTextSize: CGFloat     = 11
     
     //    extra
-    static let UIDefaultCornerRadius: CGFloat = 20
-    static let UILargeCornerRadius: CGFloat = 30
+    static let UIDefaultCornerRadius: CGFloat = 40
+    static let UILargeCornerRadius: CGFloat = 55
     static let UIBottomOfPagePadding: CGFloat = 130
     
     //    forms
