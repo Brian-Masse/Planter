@@ -37,10 +37,13 @@ struct PlantCreationScene: View {
     
 //    MARK: Struct Methods
     private func submit() {
+        let coverImageData = PlanterPlant.encodeImage( photoManager.retrievedImage )
+        
         let plant = PlanterPlant(ownerID: PlanterModel.shared.ownerID,
                                  name: name,
                                  notes: notes,
-                                 wateringInterval: wateringInterval)
+                                 wateringInterval: wateringInterval,
+                                 coverImageData: coverImageData)
         
         RealmManager.addObject(plant)
         
@@ -100,14 +103,21 @@ struct PlantCreationScene: View {
     @ViewBuilder
     private func makePhotoPickerScene() -> some View {
         
-        PhotosPicker(selection: $photoManager.imageSelection,
-                     photoLibrary: .shared()) {
-            UniversalText("Coose Cover Photo", size: Constants.UIDefaultTextSize, font: Constants.mainFont)
-    //        }
-    //                     .onChange(of: $photoManager.retrievedImage) {
-    //                         <#code#>
-    //                     }
-                    
+        VStack(alignment: .leading) {
+            
+            PhotosPicker(selection: $photoManager.imageSelection,
+                         photoLibrary: .shared()) {
+                UniversalText("Coose Cover Photo", size: Constants.UIDefaultTextSize, font: Constants.mainFont)
+            }
+            
+            if let image = photoManager.retrievedImage {
+                
+                photoManager.image!
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            }
+                
+        }
     }
     
     

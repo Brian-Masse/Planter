@@ -14,7 +14,25 @@ struct PlantPreviewView: View {
     
     var body: some View {
         
-        Text("")
+        VStack(alignment: .leading) {
+            
+            HStack {
+                
+                UniversalText( plant.name, size: Constants.UISubHeaderTextSize, font: Constants.titleFont )
+                
+                Spacer()
+                
+            }
+            .padding(.bottom, 5)
+            
+            if let coverImage = plant.getCoverImage() {
+                coverImage
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxHeight: 300)
+            }
+        }
+        .secondaryOpaqueRectangularBackground()
         
     }
     

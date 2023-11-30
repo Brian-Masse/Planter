@@ -57,10 +57,6 @@ struct CalendarPageView: View {
     static let upNextPlantCount: Int = 100
     let plants: [PlanterPlant]
     
-//    @State var todayPlants: [PlanterPlant] = []
-//    @State var upNextPlants: [PlanterPlant] = []
-//    @State var overduePlants: [PlanterPlant] = []
-    
     @State var filteredPlants: Dictionary<String, [PlanterPlant]> = Dictionary()
     
 //    MARK: Body
@@ -73,27 +69,33 @@ struct CalendarPageView: View {
             
             UniversalText( PlanterModel.shared.ownerID, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
             
-            HStack { Spacer() }
-            
-            ForEach( FilteredPlantKey.allCases, id: \.self ) { content in
+            ScrollView(.vertical) {
                 
-                if let list = filteredPlants[ content.rawValue ] {
-                    if list.count != 0 {
-                        
-                        UniversalText( content.rawValue,
-                                       size: Constants.UISubHeaderTextSize,
-                                       font: Constants.titleFont )
-                        
-                        ForEach( list ) { plant in
-                            
-                            UniversalText( plant.name, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
-                        }
-                        
-                    }
+                ForEach( plants ) { plant in
+                    
+                    PlantPreviewView(plant: plant)
                 }
+                
+                //            ForEach( FilteredPlantKey.allCases, id: \.self ) { content in
+                //
+                //                if let list = filteredPlants[ content.rawValue ] {
+                //                    if list.count != 0 {
+                //
+                //                        UniversalText( content.rawValue,
+                //                                       size: Constants.UISubHeaderTextSize,
+                //                                       font: Constants.titleFont )
+                //
+                //                        ForEach( list ) { plant in
+                //
+                //                            PlantPreviewView(plant: plant)
+                //                        }
+                //
+                //                    }
+                //                }
+                //            }
+                
+                Spacer()
             }
-            
-            Spacer()
             
             LargeRoundedButton("create plant", icon: "plus") {
                 showingPlantCreationView = true

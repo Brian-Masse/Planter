@@ -11,6 +11,10 @@ import SwiftUI
 import PhotosUI
 import UIKit
 
+//MARK: PhotoManager
+//this class loads photos using the PhotosPicker SwiftUI component
+//it can only load / process one image at a time. Once a UI has received the photo it is requesting (retrievedImage != nil)
+//it should capture that, so this class can arbitrate that var for the next photo 
 class PhotoManager: ObservableObject {
     
     @Published var imageSelection: PhotosPickerItem? = nil {
@@ -23,7 +27,14 @@ class PhotoManager: ObservableObject {
         }
     }
     
-    @Published var retrievedImage: Image? = nil
+    @Published var retrievedImage: UIImage? = nil
+    
+    var image: Image? {
+        if let uiImage = retrievedImage {
+            return Image(uiImage: uiImage)
+        }
+        return nil
+    }
     
     private func loadTransferable(from imageSelection: PhotosPickerItem) -> Progress {
         
@@ -41,8 +52,29 @@ class PhotoManager: ObservableObject {
             }
         }
     }
+}
+
+enum ImageError: Error {
+    case transferError( String )
+}
+
+//MARK: Planter Images
+struct PlanterImage: Transferable {
+    
+    let image: UIImage
+    
+    static var transferRepresentation: some TransferRepresentation {
+        
+        DataRepresentation(importedContentType: .image) { data in
+            guard let uiImage = UIImage(data: data) else {
+                throw ImageError.transferError("Data Import Failed")
+            }
+            return PlanterImage(image: uiImage)
+        }
+    }
     
 }
+
 
 class PlanterPlant: Object, Identifiable {
     
@@ -60,7 +92,7 @@ class PlanterPlant: Object, Identifiable {
     @Persisted var wateringInterval: Double = Constants.DayTime * 7
     
 //    MARK: init
-    convenience init( ownerID: String, name: String, notes: String, wateringInterval: Double) {
+    convenience init( ownerID: String, name: String, notes: String, wateringInterval: Double, coverImageData: Data) {
         self.init()
         
         self.ownerID = ownerID
@@ -70,33 +102,26 @@ class PlanterPlant: Object, Identifiable {
         self.dateLastWatered = .now
         self.wateringInterval = wateringInterval
         
+        self.coverImage = coverImageData
+        
     }
     
 //    MARK: Class Methods
     func getNextWateringDate() -> Date {
         dateLastWatered + wateringInterval
     }
-}
-
-enum ImageError: Error {
-    case transferError( String )
-}
-
-//MARK: Planter Images
-struct PlanterImage: Transferable {
-    
-    let image: Image
-    
-    static var transferRepresentation: some TransferRepresentation {
-        
-        DataRepresentation(importedContentType: .image) { data in
-            guard let uiImage = UIImage(data: data) else {
-                throw ImageError.transferError("Data Import Failed")
-            }
-            let image = Image(uiImage: uiImage)
-            return PlanterImage(image: image)
-        }
-        
+//    
+    static func encodeImage( _ image: UIImage? ) -> Data {
+        if let image { return image.jpegData(compressionQuality: 0.9) ?? Data() }
+        return Data()
     }
     
+//    MARK: Convenience Functions
+    func getCoverImage() -> Image? {
+        if let uiImage = UIImage(data: coverImage) {
+            return Image(uiImage: uiImage)
+        }
+        return nil
+    }
 }
+
