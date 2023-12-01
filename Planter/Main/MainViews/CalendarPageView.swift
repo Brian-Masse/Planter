@@ -117,12 +117,12 @@ struct CalendarPageView: View {
                 makeTodayView()
                 
                 Spacer()
+                
+                LargeRoundedButton("create plant", icon: "plus", wide: true) {
+                    showingPlantCreationView = true
+                }
+                .padding(7)
             }
-            
-            LargeRoundedButton("create plant", icon: "plus", wide: true) {
-                showingPlantCreationView = true
-            }
-            .padding(7)
             
         }
         .onAppear { self.filteredPlants = self.filterPlants() }

@@ -36,5 +36,6 @@ struct PlanterView: View {
         .task {
             await model.authenticateUser()
         }
+        .planterSheetPresenter()
     }
 }

@@ -25,6 +25,7 @@
 		C96C7E582B18338500FC2FB0 /* PlantCreationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */; };
 		C96C7E5A2B183E8300FC2FB0 /* PlantPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */; };
 		C96C7E5D2B183FD900FC2FB0 /* MadeTommy.otf in Resources */ = {isa = PBXBuildFile; fileRef = C96C7E5C2B183FD900FC2FB0 /* MadeTommy.otf */; };
+		C996EFC22B19C84500392C4E /* PlanterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C996EFC12B19C84500392C4E /* PlanterSheet.swift */; };
 		C9B981422B140FCF0045D4A6 /* PlanterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981412B140FCF0045D4A6 /* PlanterApp.swift */; };
 		C9B981442B140FCF0045D4A6 /* PlanterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981432B140FCF0045D4A6 /* PlanterView.swift */; };
 		C9B981462B140FD10045D4A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9B981452B140FD10045D4A6 /* Assets.xcassets */; };
@@ -70,6 +71,7 @@
 		C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantPreviewView.swift; sourceTree = "<group>"; };
 		C96C7E5C2B183FD900FC2FB0 /* MadeTommy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MadeTommy.otf; sourceTree = "<group>"; };
 		C96C7E5E2B18405000FC2FB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C996EFC12B19C84500392C4E /* PlanterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterSheet.swift; sourceTree = "<group>"; };
 		C9B9813E2B140FCF0045D4A6 /* Planter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Planter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9B981412B140FCF0045D4A6 /* PlanterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterApp.swift; sourceTree = "<group>"; };
 		C9B981432B140FCF0045D4A6 /* PlanterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterView.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 		C9B981352B140FCF0045D4A6 = {
 			isa = PBXGroup;
 			children = (
+				C996EFC12B19C84500392C4E /* PlanterSheet.swift */,
 				C9B981402B140FCF0045D4A6 /* Planter */,
 				C9B981522B140FD20045D4A6 /* PlanterTests */,
 				C9B9815C2B140FD20045D4A6 /* PlanterUITests */,
@@ -378,6 +381,7 @@
 				C96C7E5A2B183E8300FC2FB0 /* PlantPreviewView.swift in Sources */,
 				C96C7E522B1717B300FC2FB0 /* Extensions.swift in Sources */,
 				C9B981422B140FCF0045D4A6 /* PlanterApp.swift in Sources */,
+				C996EFC22B19C84500392C4E /* PlanterSheet.swift in Sources */,
 				C9B9816E2B1410800045D4A6 /* RealmManager.swift in Sources */,
 				C91586FA2B1825F300444826 /* PlanterScene.swift in Sources */,
 				C96C7E502B1717B300FC2FB0 /* ViewModifiers.swift in Sources */,

@@ -25,6 +25,7 @@ struct SlideState: AnimatableModifier {
     }
 }
 
+//MARK: Transitions
 extension AnyTransition {
     
     enum SlideDirection {
@@ -45,3 +46,18 @@ extension AnyTransition {
         }
     }
 }
+
+
+//MARK: Transactions
+//extension View {
+//    
+//    func withScaleFade(action: @escaping () -> Void ) {
+//        
+//        var transaction = Transaction()
+//        transaction.disablesAnimations = true
+//        
+//        transaction.animation =
+//
+//    }
+//    
+//}

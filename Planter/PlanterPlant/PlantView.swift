@@ -12,6 +12,7 @@ struct PlantView: View {
     
     @Environment( \.colorScheme ) var colorScheme
     @Environment( \.presentationMode ) var presentationMode
+    @Environment( \.planterSheetDismiss ) var planterSheetDismiss
     
     let plant: PlanterPlant
     
@@ -53,13 +54,21 @@ struct PlantView: View {
                     }
                     
                     Spacer()
+                
+                    UniversalText(plant.name, size: Constants.UIDefaultTextSize)
+                    
+                    LargeRoundedButton("", icon: "arrow.down", wide: true) {
+                        planterSheetDismiss.dismiss()
+                    }
+                    .padding(.bottom)
+                    
                 }
+        
                 
                 
                 
-                LargeRoundedButton("", icon: "arrow.down", wide: true) {
-                    withAnimation { presentationMode.wrappedValue.dismiss() }
-                }
+                
+                
                 
             }
         }

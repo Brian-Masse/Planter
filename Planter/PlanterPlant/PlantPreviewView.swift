@@ -15,6 +15,7 @@ struct PlantPreviewView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @Binding var showingPlantView: Bool 
+    @State var test: Bool = false
     
 //    MARK: ViewBuilders
     @ViewBuilder
@@ -108,14 +109,14 @@ struct PlantPreviewView: View {
                 .padding(7)
             }
         }
-        .onTapGesture { showingPlantView = true }
-        .fullScreenCover(isPresented: $showingPlantView) {
-//            PlantView(plant: plant, isPresented: $showingPlantView)
-            Text(self.plant.name)
-                .onTapGesture {
-//                    presentationMode.wrappedValue.dismiss()
-                    withAnimation { showingPlantView = false }
-                }
+        .onTapGesture { withAnimation { test = true }}
+        .planterSheet(isPresented: $test, transition: .slide) {
+            PlantView(plant: plant)
+            
+//            Text(self.plant.name)
+//                .onTapGesture {
+//                    withAnimation { showingPlantView = false }
+//                }
         }
 
 //        .onTapGesture { showingPlantView = true }

@@ -379,8 +379,17 @@ extension View {
 //    MARK: Transitions
     func slideTransition() -> some View {
         modifier( SlideTransition() )
-        
     }
+    
+    func withoutAnimation(action: @escaping () -> Void) {
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            action()
+        }
+    }
+    
+    
 }
 
 //MARK: Vertical Layout
