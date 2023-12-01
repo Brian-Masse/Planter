@@ -9,12 +9,12 @@ import Foundation
 import SwiftUI
 
 struct PlantPreviewView: View {
-    
+//    MARK: Vars
     let plant: PlanterPlant
     
-    init(_ plant: PlanterPlant) {
-        self.plant = plant
-    }
+    @Environment(\.presentationMode) var presentationMode
+    
+    @Binding var showingPlantView: Bool 
     
 //    MARK: ViewBuilders
     @ViewBuilder
@@ -54,6 +54,7 @@ struct PlantPreviewView: View {
 //                                            .padding(.vertical, 20)
                                 }
                         }
+                        .allowsHitTesting(false)
                 }
             }
             .frame(height: height, alignment: alignment)
@@ -107,5 +108,16 @@ struct PlantPreviewView: View {
                 .padding(7)
             }
         }
+        .onTapGesture { showingPlantView = true }
+        .fullScreenCover(isPresented: $showingPlantView) {
+//            PlantView(plant: plant, isPresented: $showingPlantView)
+            Text(self.plant.name)
+                .onTapGesture {
+//                    presentationMode.wrappedValue.dismiss()
+                    withAnimation { showingPlantView = false }
+                }
+        }
+
+//        .onTapGesture { showingPlantView = true }
     }
 }

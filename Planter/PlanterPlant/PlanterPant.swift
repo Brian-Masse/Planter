@@ -80,6 +80,7 @@ class PlanterPlant: Object, Identifiable {
     
 //    MARK: Vars
     @Persisted(primaryKey: true) var _id: ObjectId
+    var id: String { name }
     
     @Persisted var ownerID: String = ""
     

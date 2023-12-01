@@ -26,7 +26,7 @@ private struct UniversalBackground: ViewModifier {
                     }
             )
             .ignoresSafeArea(.container, edges: .bottom)
-            .background(colorScheme == .light ? Colors.lightGrey : .black)
+            .background(colorScheme == .light ? Colors.baseLight : Colors.baseDark)
     }
 }
 
@@ -132,7 +132,7 @@ private struct OpaqueRectangularBackground: ViewModifier {
                     }
                 }
             )
-            .background(colorScheme == .light ? Colors.lightGrey : .black )
+            .background(colorScheme == .light ? Colors.baseLight : Colors.baseDark )
             .if(stroke) { view in
                 view
                     .overlay(
@@ -154,7 +154,7 @@ private struct SecondaryOpaqueRectangularBackground: ViewModifier {
         content
             .if(padding == nil) { view in view.padding() }
             .if(padding != nil) { view in view.padding(padding!) }
-            .background( colorScheme == .dark ? Colors.darkGrey : Colors.secondaryLightColor )
+            .background( colorScheme == .dark ? Colors.secondaryDark : Colors.secondaryLight )
             .cornerRadius(Constants.UIDefaultCornerRadius)
 //            .shadow(color: Colors.tint.opacity( colorScheme == .dark ? 0.2 : 0.4), radius: 50)
     }

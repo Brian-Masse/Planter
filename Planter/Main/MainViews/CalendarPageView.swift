@@ -23,7 +23,7 @@ struct CalendarPageView: View {
 
 //    MARK: Vars
     @State var showingPlantCreationView: Bool = false
-    
+    @State var showingPlantView: Bool = false
     
 //    MARK: Struct Methods
     private func filterPlants() -> Dictionary< String, [PlanterPlant] > {
@@ -71,7 +71,8 @@ struct CalendarPageView: View {
             VStack(spacing: 0) {
                 if !plants.isEmpty {
                     HStack(alignment: .top) {
-                        PlantPreviewView(plants[0])
+                        PlantPreviewView(plant: plants.first!, 
+                                         showingPlantView: $showingPlantView)
                         
                         VerticalLayout() {
                             UniversalText( "Today", size: Constants.UITitleTextSize, font: Constants.titleFont, wrap: false)
@@ -85,7 +86,9 @@ struct CalendarPageView: View {
                     VStack {
                         if plants.count > 1 {
                             ForEach( 1..<plants.count, id: \.self ) { i in
-                                PlantPreviewView(plants[ i ])
+                                PlantPreviewView(plant: plants[ i ],
+                                                 showingPlantView: $showingPlantView)
+                                
                             }
                         }
                     }
@@ -128,6 +131,6 @@ struct CalendarPageView: View {
         }
         
         
-        .sheet(isPresented: $showingPlantCreationView) { PlantCreationScene() }
+//        .sheet(isPresented: $showingPlantCreationView) { PlantCreationScene() }
     }
 }
