@@ -11,61 +11,38 @@ import SwiftUI
 
 var inDev: Bool = true
 
-class PlanterModel: ObservableObject {
-    
-//    MARK: State
-    enum AppState: Int {
-        
-        case authentication
-        case openingRealm
-        case creatingProfile
-        case app
-        case error
-        
-    }
+struct PlanterModel {
     
 //    MARK: vars
     static let realmManager: RealmManager = RealmManager()
     static let photoManager: PhotoManager = PhotoManager()
-    static let shared: PlanterModel = PlanterModel()
+    static var shared: PlanterModel = PlanterModel()
     
-    @Published var offline: Bool = false
-    @Published var state: AppState = .authentication
+    var offline: Bool = false
     
     var ownerID: String { PlanterModel.realmManager.user?.id ?? "no user" }
     
-    @Published var activeColor: Color = Colors.main
+    var activeColor: Color = Colors.main
     
     
 //    MARK: Flow
+//    These functions will be called after the work of either authentication or open realm is performed
+//    Their value will be used to progress the app state accordingly
+    func getAuthenticationCompletion() -> Bool {
+        PlanterModel.realmManager.user != nil
+    }
     
-    @MainActor
-    func authenticateUser() async {
-        
-        self.state = .authentication
-        
-        await PlanterModel.realmManager.signInAnonymously()
-        if PlanterModel.realmManager.user != nil {
-            self.state = .openingRealm
-            await self.openRealm()
-        } else {
-            self.state = .error
-        }
+    func getOpenRealmCompletion() -> Bool {
+        PlanterModel.realmManager.realm != nil
     }
     
     @MainActor
-    func openRealm() async {
-     
-        self.state = .openingRealm
-        
+    func authenticateUser() async {
+        await PlanterModel.realmManager.signInAnonymously()
+    }
+    
+    @MainActor
+    func openRealm() async { 
         await PlanterModel.realmManager.openRealm()
-        if PlanterModel.realmManager.realm != nil {
-            self.state = .app
-            
-        } else {
-            self.state = .error
-        }
-            
-        
     }
 }

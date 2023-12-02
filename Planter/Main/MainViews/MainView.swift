@@ -11,17 +11,17 @@ import RealmSwift
 
 struct MainView: View {
     
-    @ObservedObject var model: PlanterModel = PlanterModel()
+    var model: PlanterModel = PlanterModel()
     
     @ObservedResults( PlanterPlant.self ) var plants
     
     var body: some View {
         
         let arrPlants = Array( plants )
-        
-        VStack(alignment: .leading) {
-         
-            CalendarPageView(plants: arrPlants)
+        TabView {
+            VStack(alignment: .leading) {
+                CalendarPageView(plants: arrPlants)
+            }
         }
         .padding(.bottom)
         .universalBackground()

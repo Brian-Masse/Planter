@@ -58,7 +58,7 @@ struct PlantView: View {
                     UniversalText(plant.name, size: Constants.UIDefaultTextSize)
                     
                     LargeRoundedButton("", icon: "arrow.down", wide: true) {
-                        planterSheetDismiss.dismiss()
+                        presentationMode.wrappedValue.dismiss()
                     }
                     .padding(.bottom)
                     

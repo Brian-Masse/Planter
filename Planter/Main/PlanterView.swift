@@ -7,15 +7,52 @@
 
 import SwiftUI
 
+@MainActor
 struct PlanterView: View {
     
-    @ObservedObject var model: PlanterModel = PlanterModel.shared
+//    MARK: State
+    enum AppState: Int {
+        
+        case authentication
+        case openingRealm
+        case creatingProfile
+        case app
+        case error
+        
+    }
     
+    var model: PlanterModel = PlanterModel.shared
+    
+    @State var appState: AppState = .authentication
+    
+    @MainActor
+    private func initializeApp() async {
+        
+        self.appState = .authentication
+        await model.authenticateUser()
+        if !model.getAuthenticationCompletion() {
+            self.appState = .error
+            return
+        }
+        
+        self.appState = .openingRealm
+        await model.openRealm()
+        if !model.getOpenRealmCompletion() {
+            self.appState = .error
+            return
+        }
+        
+        self.appState = .app
+    }
+    
+    @State var toggle: Bool = false
+    
+//    MARK: Body
     var body: some View {
        
-        Group {
+        VStack {
             
-            switch model.state {
+            switch appState {
             case .authentication:
                 Text( "Authentication" )
                 
@@ -25,17 +62,14 @@ struct PlanterView: View {
             case .creatingProfile:
                 Text( "Creating Profile" )
                 
-            case .app: 
-                MainView()
+            case .app:  MainView()
                 
             case .error:
                 Text( "Error" )
                 
             }
         }
-        .task {
-            await model.authenticateUser()
-        }
-        .planterSheetPresenter()
+        .task { await self.initializeApp() }
+
     }
 }

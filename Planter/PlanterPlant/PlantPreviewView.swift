@@ -110,7 +110,7 @@ struct PlantPreviewView: View {
             }
         }
         .onTapGesture { withAnimation { test = true }}
-        .planterSheet(isPresented: $test, transition: .slide) {
+        .fullScreenCover(isPresented: $test) {
             PlantView(plant: plant)
             
 //            Text(self.plant.name)

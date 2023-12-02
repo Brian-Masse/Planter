@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import RealmSwift
 
+@MainActor
 struct CalendarPageView: View {
 
     enum FilteredPlantKey: String, CaseIterable, Identifiable {
@@ -26,27 +27,27 @@ struct CalendarPageView: View {
     @State var showingPlantView: Bool = false
     
 //    MARK: Struct Methods
-    private func filterPlants() -> Dictionary< String, [PlanterPlant] > {
-        
-        var dic: Dictionary<String, [PlanterPlant]> = Dictionary()
-        
-        for key in FilteredPlantKey.allCases {
-            dic[key.rawValue] = []
-        }
-        
-        for plant in plants {
-            let nextWater = plant.getNextWateringDate()
-            if nextWater.matches(.now, to: .day) {
-                dic[ FilteredPlantKey.today.rawValue ]!.append( plant )
-            } else if nextWater < .now {
-                dic[ FilteredPlantKey.overdue.rawValue ]!.append( plant )
-            } else if dic[FilteredPlantKey.next.rawValue]!.count < CalendarPageView.upNextPlantCount {
-                dic[ FilteredPlantKey.next.rawValue ]!.append(plant)
-            }
-        }
-        
-        return dic
-    }
+//    private func filterPlants() -> Dictionary< String, [PlanterPlant] > {
+//        
+//        var dic: Dictionary<String, [PlanterPlant]> = Dictionary()
+//        
+//        for key in FilteredPlantKey.allCases {
+//            dic[key.rawValue] = []
+//        }
+//        
+//        for plant in plants {
+//            let nextWater = plant.getNextWateringDate()
+//            if nextWater.matches(.now, to: .day) {
+//                dic[ FilteredPlantKey.today.rawValue ]!.append( plant )
+//            } else if nextWater < .now {
+//                dic[ FilteredPlantKey.overdue.rawValue ]!.append( plant )
+//            } else if dic[FilteredPlantKey.next.rawValue]!.count < CalendarPageView.upNextPlantCount {
+//                dic[ FilteredPlantKey.next.rawValue ]!.append(plant)
+//            }
+//        }
+//        
+//        return dic
+//    }
     
     private func setFilteredPlants() {
         
@@ -102,7 +103,8 @@ struct CalendarPageView: View {
     var body: some View {
         
         VStack(alignment: .leading) {
-                        
+            
+        
             HStack {
                 UniversalText( "Planter.", size: Constants.UITitleTextSize, font: Constants.titleFont )
                     .textCase(.uppercase)
@@ -123,14 +125,38 @@ struct CalendarPageView: View {
                 }
                 .padding(7)
             }
-            
         }
-        .onAppear { self.filteredPlants = self.filterPlants() }
-        .onChange(of: self.plants) { oldValue, newValue in
-            self.filteredPlants = self.filteredPlants
-        }
+//        .onAppear { self.filteredPlants = self.filterPlants() }
+//        .onChange(of: self.plants) { oldValue, newValue in
+//            self.filteredPlants = self.filteredPlants
+//        }
+//        
         
-        
-//        .sheet(isPresented: $showingPlantCreationView) { PlantCreationScene() }
+        .sheet(isPresented: $showingPlantCreationView) { PlantCreationScene() }
     }
+}
+
+
+@MainActor
+struct TestView: View {
+    
+    @State var showingView: Bool = false
+    
+    let name: String
+    
+    var body: some View {
+        
+        Text(name)
+            .onTapGesture { showingView = true }
+            .fullScreenCover(isPresented: $showingView, content: {
+                Text(name)
+                    .onTapGesture {
+                        withAnimation { showingView = false }
+                    }
+                
+            })
+        
+        
+    }
+    
 }

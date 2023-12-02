@@ -27,6 +27,7 @@ private struct UniversalBackground: ViewModifier {
             )
             .ignoresSafeArea(.container, edges: .bottom)
             .background(colorScheme == .light ? Colors.baseLight : Colors.baseDark)
+    
     }
 }
 
