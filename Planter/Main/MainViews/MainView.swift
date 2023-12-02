@@ -11,19 +11,34 @@ import RealmSwift
 
 struct MainView: View {
     
-    var model: PlanterModel = PlanterModel()
-    
+    enum MainPage: String, CaseIterable, Identifiable {
+        case calendarPageView
+        case roomsPageView
+        
+        var id: String {
+            self.rawValue
+        }
+    }
+
     @ObservedResults( PlanterPlant.self ) var plants
     
+    var model: PlanterModel = PlanterModel()
+
+    @State var page: MainPage = .calendarPageView
+    
+    
+//    MARK: Body
     var body: some View {
         
         let arrPlants = Array( plants )
-        TabView {
-            VStack(alignment: .leading) {
-                CalendarPageView(plants: arrPlants)
+        
+        VStack(alignment: .leading) {
+            TabView(selection: $page) {
+                CalendarPageView(plants: arrPlants).tag( MainPage.calendarPageView.rawValue )
+                RoomsPageView().tag( MainPage.roomsPageView.rawValue )
             }
+            .tabViewStyle(.page(indexDisplayMode: .never))
         }
-        .padding(.bottom)
         .universalBackground()
     }
 }

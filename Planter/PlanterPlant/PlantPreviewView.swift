@@ -9,13 +9,22 @@ import Foundation
 import SwiftUI
 
 struct PlantPreviewView: View {
+    
 //    MARK: Vars
-    let plant: PlanterPlant
+    enum Layout {
+        case full
+        case half
+    }
     
     @Environment(\.presentationMode) var presentationMode
     
-    @Binding var showingPlantView: Bool 
-    @State var test: Bool = false
+    static let fullLayoutHeight: CGFloat = 300
+    static let halfLayoutHeight: CGFloat = 150
+    
+    let plant: PlanterPlant
+    let layout: Layout
+     
+    @State var showingPlantView: Bool = false
     
 //    MARK: ViewBuilders
     @ViewBuilder
@@ -73,17 +82,36 @@ struct PlantPreviewView: View {
         }
         .frame(width: 120, height: 120)
         .cornerRadius(Constants.UILargeCornerRadius)
-    
     }
     
-//    MARK: Body
-    var body: some View {
-        
+    @ViewBuilder
+    private func makeHeader() -> some View {
+        HStack {
+            VStack(alignment: .leading) {
+                UniversalText(plant.name, 
+                              size: Constants.UIHeaderTextSize,
+                              font: Constants.titleFont,
+                              wrap: false,
+                              scale: false)
+                    .textCase(.uppercase)
+                
+                UniversalText(plant.notes, size: Constants.UIDefaultTextSize, font: Constants.mainFont, wrap: false)
+            }
+            
+            Spacer()
+        }
+        .foregroundStyle(.white)
+        .padding()
+        .padding(7)
+    }
+    
+//    MARK: Layouts
+    @ViewBuilder
+    private func makeFullSizedLayout() -> some View {
         ZStack(alignment: .bottom) {
-            makeBackground()
+            makeBackground(height: PlantPreviewView.fullLayoutHeight)
             
             VStack {
-                
                 HStack {
                     Spacer()
                     
@@ -94,31 +122,40 @@ struct PlantPreviewView: View {
                 
                 Spacer()
                 
-                HStack {
-                    VStack(alignment: .leading) {
-                        UniversalText(plant.name, size: Constants.UIHeaderTextSize, font: Constants.titleFont, wrap: false)
-                            .textCase(.uppercase)
-                        
-                        UniversalText(plant.notes, size: Constants.UIDefaultTextSize, font: Constants.mainFont, wrap: false)
-                    }
-                    
-                    Spacer()
-                }
-                .foregroundStyle(.white)
-                .padding()
-                .padding(7)
+                makeHeader()
             }
         }
-        .onTapGesture { withAnimation { test = true }}
-        .fullScreenCover(isPresented: $test) {
-            PlantView(plant: plant)
+    }
+    
+    @ViewBuilder
+    private func makeHalfSizedLayout() -> some View {
+        ZStack {
+            makeBackground(height: PlantPreviewView.halfLayoutHeight)
             
-//            Text(self.plant.name)
-//                .onTapGesture {
-//                    withAnimation { showingPlantView = false }
-//                }
+            HStack {
+                makeHeader()
+                Spacer()
+                makeCheckmarkButton(style: .ultraThinMaterial)
+                    .padding(.trailing, 7)
+            }
         }
-
-//        .onTapGesture { showingPlantView = true }
+        
+    }
+    
+//    MARK: Body
+    var body: some View {
+        
+        Group {
+            
+            switch layout {
+            case .full: makeFullSizedLayout()
+            case .half: makeHalfSizedLayout()
+            }
+            
+        }
+        .onTapGesture { withAnimation { showingPlantView = true }}
+        .fullScreenCover(isPresented: $showingPlantView) {
+            PlantView(plant: plant)
+        }
     }
 }

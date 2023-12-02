@@ -16,17 +16,22 @@ private struct UniversalBackground: ViewModifier {
     let padding: Bool
     
     func body(content: Content) -> some View {
-        content
-            .background(
-                Rectangle()
-                    .foregroundColor(.clear)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        content.hideKeyboard()
-                    }
-            )
-            .ignoresSafeArea(.container, edges: .bottom)
+        GeometryReader { geo in
+            ZStack(alignment: .center) {
+                content
+                    .background(
+                        Rectangle()
+                            .foregroundColor(.clear)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                content.hideKeyboard()
+                            }
+                    )
+                    .ignoresSafeArea(.container, edges: .bottom)
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
             .background(colorScheme == .light ? Colors.baseLight : Colors.baseDark)
+        }
     
     }
 }

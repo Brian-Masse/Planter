@@ -26,6 +26,7 @@
 		C96C7E5A2B183E8300FC2FB0 /* PlantPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */; };
 		C96C7E5D2B183FD900FC2FB0 /* MadeTommy.otf in Resources */ = {isa = PBXBuildFile; fileRef = C96C7E5C2B183FD900FC2FB0 /* MadeTommy.otf */; };
 		C996EFC22B19C84500392C4E /* PlanterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C996EFC12B19C84500392C4E /* PlanterSheet.swift */; };
+		C996EFC52B1BA71300392C4E /* RoomsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C996EFC42B1BA71300392C4E /* RoomsPageView.swift */; };
 		C9B981422B140FCF0045D4A6 /* PlanterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981412B140FCF0045D4A6 /* PlanterApp.swift */; };
 		C9B981442B140FCF0045D4A6 /* PlanterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981432B140FCF0045D4A6 /* PlanterView.swift */; };
 		C9B981462B140FD10045D4A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9B981452B140FD10045D4A6 /* Assets.xcassets */; };
@@ -72,6 +73,7 @@
 		C96C7E5C2B183FD900FC2FB0 /* MadeTommy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MadeTommy.otf; sourceTree = "<group>"; };
 		C96C7E5E2B18405000FC2FB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C996EFC12B19C84500392C4E /* PlanterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterSheet.swift; sourceTree = "<group>"; };
+		C996EFC42B1BA71300392C4E /* RoomsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomsPageView.swift; sourceTree = "<group>"; };
 		C9B9813E2B140FCF0045D4A6 /* Planter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Planter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9B981412B140FCF0045D4A6 /* PlanterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterApp.swift; sourceTree = "<group>"; };
 		C9B981432B140FCF0045D4A6 /* PlanterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterView.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 			children = (
 				C906BDBB2B141F7A0067B403 /* MainView.swift */,
 				C91586F72B17E9CB00444826 /* CalendarPageView.swift */,
+				C996EFC42B1BA71300392C4E /* RoomsPageView.swift */,
 			);
 			path = MainViews;
 			sourceTree = "<group>";
@@ -154,6 +157,13 @@
 				C96C7E5C2B183FD900FC2FB0 /* MadeTommy.otf */,
 			);
 			path = fonts;
+			sourceTree = "<group>";
+		};
+		C996EFC32B1BA6F300392C4E /* PlanterRooms */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PlanterRooms;
 			sourceTree = "<group>";
 		};
 		C9B981352B140FCF0045D4A6 = {
@@ -183,6 +193,7 @@
 				C96C7E5E2B18405000FC2FB0 /* Info.plist */,
 				C96C7E5B2B183FA800FC2FB0 /* fonts */,
 				C96C7E432B17177300FC2FB0 /* Universals */,
+				C996EFC32B1BA6F300392C4E /* PlanterRooms */,
 				C906BDBA2B141ED20067B403 /* PlanterPlant */,
 				C9B9816C2B140FE90045D4A6 /* Main */,
 				C9B981452B140FD10045D4A6 /* Assets.xcassets */,
@@ -369,6 +380,7 @@
 			files = (
 				C92B97D22B1413ED00A2D3F5 /* PlanterModel.swift in Sources */,
 				C906BDBC2B141F7A0067B403 /* MainView.swift in Sources */,
+				C996EFC52B1BA71300392C4E /* RoomsPageView.swift in Sources */,
 				C9B981442B140FCF0045D4A6 /* PlanterView.swift in Sources */,
 				C91586FC2B194AAF00444826 /* PlantView.swift in Sources */,
 				C96C7E532B1717B300FC2FB0 /* UniversalButtons.swift in Sources */,

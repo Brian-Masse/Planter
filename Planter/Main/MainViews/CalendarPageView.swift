@@ -23,45 +23,31 @@ struct CalendarPageView: View {
     }
 
 //    MARK: Vars
+    static let upNextPlantCount: Int = 100
+    
     @State var showingPlantCreationView: Bool = false
-    @State var showingPlantView: Bool = false
     
-//    MARK: Struct Methods
-//    private func filterPlants() -> Dictionary< String, [PlanterPlant] > {
-//        
-//        var dic: Dictionary<String, [PlanterPlant]> = Dictionary()
-//        
-//        for key in FilteredPlantKey.allCases {
-//            dic[key.rawValue] = []
-//        }
-//        
-//        for plant in plants {
-//            let nextWater = plant.getNextWateringDate()
-//            if nextWater.matches(.now, to: .day) {
-//                dic[ FilteredPlantKey.today.rawValue ]!.append( plant )
-//            } else if nextWater < .now {
-//                dic[ FilteredPlantKey.overdue.rawValue ]!.append( plant )
-//            } else if dic[FilteredPlantKey.next.rawValue]!.count < CalendarPageView.upNextPlantCount {
-//                dic[ FilteredPlantKey.next.rawValue ]!.append(plant)
-//            }
-//        }
-//        
-//        return dic
-//    }
+    let plants: [PlanterPlant]
     
-    private func setFilteredPlants() {
-        
+//    MARK: ViewBuilders
+    @ViewBuilder
+    private func makeHeader()  -> some View {
+        VStack(alignment: .leading) {
+            HStack {
+                UniversalText( "Planter.", size: Constants.UITitleTextSize, font: Constants.titleFont )
+                    .textCase(.uppercase)
+                Spacer()
+            }
+            .padding(.horizontal, 7)
+            
+            UniversalText( PlanterModel.shared.ownerID, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
+                .padding(.horizontal, 7)
+        }
     }
     
     
-//    MARK: Vars
-    static let upNextPlantCount: Int = 100
-    let plants: [PlanterPlant]
-    
-    @State var filteredPlants: Dictionary<String, [PlanterPlant]> = Dictionary()
-    
-//    MARK: ViewBuilders
-    private func makeTodayView() -> some View {
+    @ViewBuilder
+    private func makeTodayView(from plants: [PlanterPlant]) -> some View {
         ZStack {
             Rectangle()
                 .universalForegroundColor()
@@ -72,23 +58,21 @@ struct CalendarPageView: View {
             VStack(spacing: 0) {
                 if !plants.isEmpty {
                     HStack(alignment: .top) {
-                        PlantPreviewView(plant: plants.first!, 
-                                         showingPlantView: $showingPlantView)
+                        PlantPreviewView(plant: plants.first!, layout: .full)
                         
                         VerticalLayout() {
                             UniversalText( "Today", size: Constants.UITitleTextSize, font: Constants.titleFont, wrap: false)
                                 .textCase(.uppercase)
                         }
                         .rotationEffect(.degrees(90))
-                        .padding(.leading, -10)
+                        .padding(.horizontal, -10)
                     }
-                    .padding(.bottom)
+//                    .padding(.bottom)
                     
                     VStack {
                         if plants.count > 1 {
                             ForEach( 1..<plants.count, id: \.self ) { i in
-                                PlantPreviewView(plant: plants[ i ],
-                                                 showingPlantView: $showingPlantView)
+                                PlantPreviewView(plant: plants[ i ], layout: .full)
                                 
                             }
                         }
@@ -96,7 +80,39 @@ struct CalendarPageView: View {
                 }
             }.padding(7)
         }
-        .padding(.vertical)
+        .padding(.top)
+    }
+    
+    @ViewBuilder
+    private func makeUpNextView(from plants: [PlanterPlant]) -> some View {
+        VStack(alignment: .leading, spacing: 7 ) {
+            if !plants.isEmpty {
+                HStack(alignment: .top) {
+                    
+                    VerticalLayout() {
+                        UniversalText( "Up Next", size: Constants.UITitleTextSize, font: Constants.titleFont, wrap: false)
+                            .textCase(.uppercase)
+                    }
+                    .rotationEffect(.degrees(-90))
+                    .padding(.horizontal, -10)
+                    
+                    VStack {
+                        ForEach( 0...1, id: \.self ) { i in
+                            if i < plants.count {
+                                PlantPreviewView(plant: plants[i], layout: .half)
+                            }
+                        }
+                    }
+                }
+                
+                if plants.count > 2 {
+                    ForEach( 2..<plants.count, id: \.self ) { i in
+                        PlantPreviewView(plant: plants[ i ], layout: .half )
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, 7)
     }
     
 //    MARK: Body
@@ -104,19 +120,21 @@ struct CalendarPageView: View {
         
         VStack(alignment: .leading) {
             
-        
-            HStack {
-                UniversalText( "Planter.", size: Constants.UITitleTextSize, font: Constants.titleFont )
-                    .textCase(.uppercase)
-                Spacer()
+            let todayPlants = plants.filter { plant in
+                plant.getNextWateringDate().matches(.now, to: .day)
             }
-            .padding(.horizontal, 7)
             
-            UniversalText( PlanterModel.shared.ownerID, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
-                .padding(.horizontal, 7)
+            let upNextPlants = plants.filter { plant in
+                let date = plant.getNextWateringDate()
+                return !date.matches(.now, to: .day) && date > .now
+            }
+        
+            makeHeader()
             
             ScrollView(.vertical) {
-                makeTodayView()
+                makeTodayView(from: todayPlants)
+                
+                makeUpNextView(from: upNextPlants)
                 
                 Spacer()
                 
@@ -126,37 +144,6 @@ struct CalendarPageView: View {
                 .padding(7)
             }
         }
-//        .onAppear { self.filteredPlants = self.filterPlants() }
-//        .onChange(of: self.plants) { oldValue, newValue in
-//            self.filteredPlants = self.filteredPlants
-//        }
-//        
-        
         .sheet(isPresented: $showingPlantCreationView) { PlantCreationScene() }
     }
-}
-
-
-@MainActor
-struct TestView: View {
-    
-    @State var showingView: Bool = false
-    
-    let name: String
-    
-    var body: some View {
-        
-        Text(name)
-            .onTapGesture { showingView = true }
-            .fullScreenCover(isPresented: $showingView, content: {
-                Text(name)
-                    .onTapGesture {
-                        withAnimation { showingView = false }
-                    }
-                
-            })
-        
-        
-    }
-    
 }
