@@ -29,7 +29,6 @@ struct ColorPickerOption: View {
                     .foregroundColor(color)
                     .frame(width: size, height: size)
                     .padding(7)
-                    .rectangularBackgorund()
             } else {
                 Circle()
                     .foregroundColor(color)

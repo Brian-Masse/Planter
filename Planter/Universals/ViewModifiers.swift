@@ -93,23 +93,24 @@ private struct UniversalTextField: ViewModifier {
 }
 
 //MARK: Rectangular Backgrounds
-private struct RectangularBackground: ViewModifier {
+private struct TransparentRectangularBackground: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
     
-    let rounded: Bool
+    let padding: CGFloat?
     let radius: CGFloat?
-
+    
     private func getRadius() -> CGFloat {
-        if let radius = radius { return radius}
-        return rounded ? 100 : Constants.UIDefaultCornerRadius
+        if let radius { return radius }
+        return Constants.UIDefaultCornerRadius
     }
     
     func body(content: Content) -> some View {
         content
-            .background(.thinMaterial)
+            .if(padding == nil) { view in view.padding() }
+            .if(padding != nil) { view in view.padding(padding!) }
+            .background(.ultraThinMaterial)
             .foregroundColor(  ( Colors.tint ).opacity(0.6))
-            .foregroundStyle(.ultraThickMaterial)
-            .cornerRadius(getRadius())
+            .cornerRadius( getRadius() )
     }
 }
 
@@ -172,6 +173,12 @@ private struct TintBackground: ViewModifier {
     var model = PlanterModel.shared
     
     let padding: CGFloat?
+    let radius: CGFloat?
+    
+    private func getRadius() -> CGFloat {
+        if let radius { return radius }
+        return Constants.UIDefaultCornerRadius
+    }
     
     func body(content: Content) -> some View {
         content
@@ -179,7 +186,7 @@ private struct TintBackground: ViewModifier {
             .if(padding != nil) { view in view.padding(padding!) }
             .foregroundColor(.black)
             .universalBackgroundColor()
-            .cornerRadius(Constants.UIDefaultCornerRadius)
+            .cornerRadius(getRadius())
     }
 }
 
@@ -196,6 +203,73 @@ private struct AccentBackground: ViewModifier {
             .foregroundColor(.black)
             .background( model.activeColor )
             .cornerRadius( cornerRadius == nil ? Constants.UIDefaultCornerRadius : cornerRadius!)
+    }
+}
+
+private struct ScrollOffsetPreferenceKey: PreferenceKey {
+    
+    static var defaultValue: CGPoint = .zero
+    
+    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) { }
+}
+
+private struct BlurScroll: ViewModifier {
+    
+    let blur: CGFloat
+    let coordinateSpaceName = "scroll"
+    
+    @State private var scrollPosition: CGPoint = .zero
+    
+    func body(content: Content) -> some View {
+        
+        let gradient = LinearGradient(stops: [
+            .init(color: .white, location: 0.10),
+            .init(color: .clear, location: 0.25)],
+                                      startPoint: .bottom,
+                                      endPoint: .top)
+        
+        let invertedGradient = LinearGradient(stops: [
+            .init(color: .clear, location: 0.10),
+            .init(color: .white, location: 0.25)],
+                                              startPoint: .bottom,
+                                              endPoint: .top)
+        
+        GeometryReader { topGeo in
+            ScrollView {
+                ZStack(alignment: .top) {
+                    content
+                        .mask(
+                            VStack {
+                                invertedGradient
+                                
+                                    .frame(height: topGeo.size.height, alignment: .top)
+                                    .offset(y:  -scrollPosition.y )
+                                Spacer()
+                            }
+                        )
+                    
+                    content
+                        .blur(radius: 15)
+                        .frame(height: topGeo.size.height, alignment: .top)
+                        .mask(gradient
+                            .frame(height: topGeo.size.height)
+                            .offset(y:  -scrollPosition.y )
+                        )
+                        .ignoresSafeArea()
+                }
+                .padding(.bottom, topGeo.size.height * 0.25)
+                .background(GeometryReader { geo in
+                    Color.clear
+                        .preference(key: ScrollOffsetPreferenceKey.self,
+                                    value: geo.frame(in: .named(coordinateSpaceName)).origin)
+                })
+                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                    self.scrollPosition = value
+                }
+            }
+            .coordinateSpace(name: coordinateSpaceName)
+        }
+        .ignoresSafeArea()
     }
 }
 
@@ -320,8 +394,8 @@ extension View {
     }
     
 //    MARK: Rectangular Backgrounds (extension)
-    func rectangularBackgorund(rounded: Bool = false, radius: CGFloat? = nil) -> some View {
-        modifier(RectangularBackground(rounded: rounded, radius: radius))
+    func transparentRectangularBackgorund(_ padding: CGFloat? = nil, cornerRadius: CGFloat? = nil) -> some View {
+        modifier(TransparentRectangularBackground(padding: padding, radius: cornerRadius))
     }
     
     func opaqueRectangularBackground(_ padding: CGFloat? = nil, stroke: Bool = false, texture: Bool = true) -> some View {
@@ -336,8 +410,12 @@ extension View {
         modifier(AccentBackground(cornerRadius: cornerRadius))
     }
     
-    func tintRectangularBackground(_ padding: CGFloat? = nil) -> some View {
-        modifier(TintBackground(padding: padding))
+    func tintRectangularBackground(_ padding: CGFloat? = nil, cornerRadius: CGFloat? = nil) -> some View {
+        modifier(TintBackground(padding: padding, radius: cornerRadius))
+    }
+    
+    func blurScroll(_ blur: CGFloat) -> some View {
+        modifier( BlurScroll(blur: blur) )
     }
     
     func onBecomingVisible(perform action: @escaping () -> Void) -> some View {
