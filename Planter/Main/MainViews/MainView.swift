@@ -58,7 +58,7 @@ struct MainView: View {
                 
                 Rectangle()
                     .frame(width: 120)
-                    .aspectRatio(1/2, contentMode: .fit)
+                    .aspectRatio(1/1.8, contentMode: .fit)
                     .cornerRadius(Constants.UILargeCornerRadius)
                     .rotationEffect(.degrees(25))
                     .foregroundStyle(PlanterModel.shared.activeColor)

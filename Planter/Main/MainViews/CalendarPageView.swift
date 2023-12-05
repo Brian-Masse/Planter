@@ -49,14 +49,14 @@ struct CalendarPageView: View {
     @ViewBuilder
     private func makeTodayView(from plants: [PlanterPlant]) -> some View {
         ZStack {
-            Rectangle()
-                .universalForegroundColor()
-                .cornerRadius(Constants.UILargeCornerRadius, corners: [.topLeft, .bottomRight])
-                .ignoresSafeArea()
-                .padding(-7)
-            
-            VStack(spacing: 0) {
-                if !plants.isEmpty {
+            if !plants.isEmpty {
+                Rectangle()
+                    .universalForegroundColor()
+                    .cornerRadius(Constants.UILargeCornerRadius, corners: [.topLeft, .bottomRight])
+                    .ignoresSafeArea()
+                    .padding(-7)
+                
+                VStack(spacing: 0) {
                     HStack(alignment: .top) {
                         PlantPreviewView(plant: plants.first!, layout: .full)
                         
@@ -67,7 +67,6 @@ struct CalendarPageView: View {
                         .rotationEffect(.degrees(90))
                         .padding(.horizontal, -10)
                     }
-//                    .padding(.bottom)
                     
                     VStack {
                         if plants.count > 1 {
@@ -77,8 +76,8 @@ struct CalendarPageView: View {
                             }
                         }
                     }
-                }
-            }.padding(7)
+                }.padding(7)
+            }
         }
         .padding(.top)
     }

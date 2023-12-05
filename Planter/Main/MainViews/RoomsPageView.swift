@@ -16,7 +16,7 @@ struct RoomsPageView: View {
         VStack(alignment: .leading) {
             
             HStack {
-                UniversalText( "Roooms", size: Constants.UITitleTextSize, font: Constants.mainFont )
+                UniversalText( "Rooms", size: Constants.UITitleTextSize, font: Constants.mainFont )
                     .textCase(.uppercase)
                 
                 Spacer()
