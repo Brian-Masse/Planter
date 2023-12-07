@@ -23,37 +23,67 @@ struct UniversalText: View {
     
     let text: String
     let size: CGFloat
-    let bold: Bool
-    let wrap: Bool
-    let lighter: Bool
-    let fixed: Bool
     let font: String
-    let scale: Bool
-    let alignment: TextAlignment
+    let textCase: Text.Case
     
-    init(_ text: String, size: CGFloat, font: ProvidedFont = .helvetica, wrap: Bool = true, lighter: Bool = false, _ bold: Bool = false, fixed: Bool = false, scale: Bool = false, textAlignment: TextAlignment = .leading) {
+    let wrap: Bool
+    let fixed: Bool
+    let scale: Bool
+    
+    let alignment: TextAlignment
+    let lineSpacing: CGFloat
+    
+    init(_ text: String,
+         size: CGFloat,
+         font: ProvidedFont = .helvetica,
+         wrap: Bool = true,
+         case textCase: Text.Case = .lowercase,
+         fixed: Bool = false,
+         scale: Bool = false,
+         textAlignment: TextAlignment = .leading,
+         lineSpacing: CGFloat = 0.5
+    ) {
         self.text = text
         self.size = size
-        self.bold = bold
+        self.font = font.rawValue
+        self.textCase = textCase
+        
         self.wrap = wrap
-        self.lighter = lighter
         self.fixed = fixed
         self.scale = scale
-        self.font = font.rawValue
+        
         self.alignment = textAlignment
+        self.lineSpacing = lineSpacing
+    }
+    
+    @ViewBuilder
+    private func makeText(_ text: String) -> some View {
+        
+        Text(text)
+            .dynamicTypeSize( ...DynamicTypeSize.accessibility1 )
+            .lineSpacing(lineSpacing)
+            .minimumScaleFactor(scale ? 0.1 : 1)
+            .lineLimit(wrap ? 30 : 1)
+            .multilineTextAlignment(alignment)
+            .font( fixed ? Font.custom(font, fixedSize: size) : Font.custom(font, size: size).leading(.tight) )
+            .textCase(textCase)
+        
     }
     
     var body: some View {
         
-        Text(text)
-            .dynamicTypeSize( ...DynamicTypeSize.accessibility1 )
-            .lineSpacing(0.5)
-            .minimumScaleFactor(scale ? 0.1 : 1)
-            .lineLimit(wrap ? 30 : 1)
-            .multilineTextAlignment(alignment)
-            .font( fixed ? Font.custom(font, fixedSize: size) : Font.custom(font, size: size) )
-            .bold(bold)
-            .opacity(lighter ? 0.8 : 1)
+        if lineSpacing < 0 {
+            let texts = text.components(separatedBy: "\n")
+            
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(0..<texts.count, id: \.self) { i in
+                    makeText(texts[i])
+                        .offset(y: CGFloat( i * -10 ) )
+                }
+            }
+        } else {
+            makeText(text)
+        }
     }
 }
 

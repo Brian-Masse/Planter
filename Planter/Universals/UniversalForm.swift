@@ -96,7 +96,7 @@ struct MultiPicker<ListType:Collection>: View where ListType:RangeReplaceableCol
     
     var body: some View {
         HStack {
-            UniversalText(title, size: Constants.UIDefaultTextSize, lighter: true)
+            UniversalText(title, size: Constants.UIDefaultTextSize)
             Spacer()
             
             let menu = Menu {
@@ -138,7 +138,7 @@ struct BasicPicker<ListType:RandomAccessCollection, Content: View>: View where L
     var body: some View {
 
         HStack {
-            UniversalText(title, size: Constants.UIDefaultTextSize, lighter: true)
+            UniversalText(title, size: Constants.UIDefaultTextSize)
             Spacer()
             
             Menu {
@@ -186,7 +186,7 @@ struct TextFieldWithPrompt: View {
     var body: some View {
         
         VStack(alignment: .leading, spacing: 5) {
-            UniversalText(title, size: Constants.UIHeaderTextSize, font: Constants.titleFont, true)
+            UniversalText(title, size: Constants.UIHeaderTextSize, font: Constants.titleFont)
             
             TextField("", text: binding, axis: .vertical)
                 .focused($focused)
@@ -270,7 +270,7 @@ struct SliderWithPrompt: View {
     var body: some View {
         VStack(alignment: .leading) {
             
-            UniversalText(label, size: size, font: Constants.titleFont, true)
+            UniversalText(label, size: size, font: Constants.titleFont)
             
             StyledSlider(minValue: minValue, maxValue: maxValue, binding: binding, strBinding: strBinding, textFieldWidth: textFieldWidth)
         }
