@@ -70,15 +70,26 @@ struct UniversalText: View {
         
     }
     
+    private func translateTextAlignment() -> HorizontalAlignment {
+        switch alignment {
+        case .leading:
+            return .leading
+        case .center:
+            return .center
+        case .trailing:
+            return .trailing
+        }
+    }
+    
     var body: some View {
         
         if lineSpacing < 0 {
             let texts = text.components(separatedBy: "\n")
             
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: translateTextAlignment(), spacing: 0) {
                 ForEach(0..<texts.count, id: \.self) { i in
                     makeText(texts[i])
-                        .offset(y: CGFloat( i * -10 ) )
+                        .offset(y: CGFloat( i ) * lineSpacing )
                 }
             }
         } else {
