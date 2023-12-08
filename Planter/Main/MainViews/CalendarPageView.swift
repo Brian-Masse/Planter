@@ -136,7 +136,7 @@ struct CalendarPageView: View {
             
 //            ScrollView(.vertical) {
                 VStack {
-                    makeTodayView(from: todayPlants)
+                    makeTodayView(from: plants)
                     
                     makeUpNextView(from: upNextPlants)
                     

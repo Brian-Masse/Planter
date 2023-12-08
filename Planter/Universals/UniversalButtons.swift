@@ -68,23 +68,6 @@ struct LargeTextButton: View {
             .frame(width: 100)
             .foregroundStyle( PlanterModel.shared.activeColor )
             .cornerRadius(Constants.UIDefaultCornerRadius)
-            .onTapGesture {
-                withAnimation { action() }
-            }
-            .overlay() { if arrow {
-                GeometryReader { geo in
-                    ZStack(alignment: invertVerticalTextAlignment() ) {
-                        Rectangle()
-                            .foregroundStyle(.clear)
-                        
-                        makeArrow()
-                            .if(verticalTextAlignment == .top) { view in view.padding(.bottom, 20 ) }
-                            .if(verticalTextAlignment != .top) { view in view.padding(.vertical, 20 ) }
-                            .frame(height: geo.size.height / 2)
-                    }
-                }
-            }}
-            .rotationEffect(.degrees(angle))
     }
     
     @ViewBuilder
@@ -129,10 +112,18 @@ struct LargeTextButton: View {
     
     private func degreeToRad() -> Double { angle * ( Double.pi / 180 ) }
     
-    private func getTranslationOffset() -> CGFloat {
+    private func getHorizontalTranslationOffset() -> CGFloat {
         switch verticalTextAlignment {
         case .top: sin(degreeToRad()) * 43
         case .bottom: -sin(degreeToRad()) * 43
+        default: 0
+        }
+    }
+    
+    private func getVerticalTranslationOffset() -> CGFloat {
+        switch verticalTextAlignment {
+        case .top: cos(degreeToRad()) * 43
+        case .bottom: -cos(degreeToRad()) * 43
         default: 0
         }
     }
@@ -149,25 +140,94 @@ struct LargeTextButton: View {
         
         let transformedText = transformText()
         
-        ZStack(alignment: verticalTextAlignment) {
-
-            makeShape(.fit)
-            
-            UniversalText(transformedText,
-                          size: Constants.UIHeaderTextSize + 10,
-                          font: Constants.mainFont,
-                          case: .uppercase, 
-                          scale: true,
-                          textAlignment: .center,
-                          lineSpacing: -25)
-            .padding(.vertical, verticalTextAlignment == .top ? 7 : 0)
-            .scaleEffect(CGSize(width: 0.7, height: 0.7))
-            .offset(x: getTranslationOffset() )
-            .mask(alignment: verticalTextAlignment ) {
-                makeShape(.fill)
+        RotatedLayout(at: degreeToRad(), scale: 0.9) {
+            ZStack(alignment: verticalTextAlignment) {
+                
+                makeShape(.fit)
+                    .overlay() { if arrow {
+                        GeometryReader { geo in
+                            ZStack(alignment: invertVerticalTextAlignment() ) {
+                                Rectangle()
+                                    .foregroundStyle(.clear)
+                                
+                                makeArrow()
+                                    .if(verticalTextAlignment == .top) { view in view.padding(.bottom, 20 ) }
+                                    .if(verticalTextAlignment != .top) { view in view.padding(.vertical, 20 ) }
+                                    .frame(height: geo.size.height / 2)
+                            }
+                        }
+                    }}
+                
+                
+                
+                RotatedLayout(at: 0, scale: 0.7) {
+                    UniversalText(transformedText,
+                                  size: Constants.UIHeaderTextSize + 10,
+                                  font: Constants.mainFont,
+                                  case: .uppercase,
+                                  scale: true,
+                                  textAlignment: .center,
+                                  lineSpacing: -25)
+                    //            .padding(.vertical, verticalTextAlignment == .top ? 7 :` 0)
+                    .scaleEffect(CGSize(width: 0.7, height: 0.7))
+                    .rotationEffect(.degrees(-angle))
+                    //                .offset(x: getHorizontalTranslationOffset(), y: getVerticalTranslationOffset() )
+                    
+                    .allowsHitTesting(false)
+                }
+                .padding(7)
+                .mask(alignment: verticalTextAlignment ) {
+                    makeShape(.fill)
+                    //                                                .rotationEffect(.degrees(angle))
+                }
+                .border(.blue)
+                //            }.border(.green)
+                
+                
+                
             }
-            .allowsHitTesting(false)
+            .frame(width: 100, height: 100 * aspectRatio)
+            .border(.red)
+            .rotationEffect(.degrees(angle))
+            .border(.black)
         }
+        .border(.green)
+//            makeShape(.fit)
+//            
+//            UniversalText(transformedText,
+//                          size: Constants.UIHeaderTextSize + 10,
+//                          font: Constants.mainFont,
+//                          case: .uppercase, 
+//                          scale: true,
+//                          textAlignment: .center,
+//                          lineSpacing: -25)
+////            .padding(.vertical, verticalTextAlignment == .top ? 7 :` 0)
+//            .scaleEffect(CGSize(width: 0.7, height: 0.7))
+//            .offset(x: getHorizontalTranslationOffset(), y: getVerticalTranslationOffset() )
+//            .mask(alignment: verticalTextAlignment ) {
+//                makeShape(.fill)
+//            }
+//            .allowsHitTesting(false)
+//        }
+        
+        
+//        .onTapGesture {
+//            withAnimation { action() }
+//        }
+//        .overlay() { if arrow {
+//            GeometryReader { geo in
+//                ZStack(alignment: invertVerticalTextAlignment() ) {
+//                    Rectangle()
+//                        .foregroundStyle(.clear)
+//                    
+//                    makeArrow()
+//                        .if(verticalTextAlignment == .top) { view in view.padding(.bottom, 20 ) }
+//                        .if(verticalTextAlignment != .top) { view in view.padding(.vertical, 20 ) }
+//                        .frame(height: geo.size.height / 2)
+//                }
+//            }
+//        }}
+//        .rotationEffect(.degrees(angle))
     }
 }
 
