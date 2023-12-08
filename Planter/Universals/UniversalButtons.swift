@@ -154,7 +154,7 @@ struct LargeTextButton: View {
             makeShape(.fit)
             
             UniversalText(transformedText,
-                          size: Constants.UIHeaderTextSize,
+                          size: Constants.UIHeaderTextSize + 10,
                           font: Constants.mainFont,
                           case: .uppercase, 
                           scale: true,

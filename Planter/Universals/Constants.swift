@@ -17,7 +17,7 @@ class Colors {
     static let colorOptions: [Color] = [ accent, blue, purple, grape, pink, red, yellow,  ]
     
     static let baseLight = makeColor( 245, 234, 208 )
-    static let secondaryLight = makeColor(209, 199, 174)
+    static let secondaryLight = makeColor(220, 207, 188)
     static let baseDark = makeColor( 0,0,0 )
     static let secondaryDark = Color(red: 0.1, green: 0.1, blue: 0.1).opacity(0.9)
     
@@ -39,10 +39,10 @@ class Colors {
 class Constants {
     
     //    font sizes
-    static let UILargeTextSize: CGFloat     = 90
+    static let UILargeTextSize: CGFloat     = 130
     static let UITitleTextSize: CGFloat     = 80
-    static let UIHeaderTextSize: CGFloat    = 50
-    static let UISubHeaderTextSize: CGFloat = 20
+    static let UIHeaderTextSize: CGFloat    = 40
+    static let UISubHeaderTextSize: CGFloat = 30
     static let UIDefaultTextSize: CGFloat   = 15
     static let UISmallTextSize: CGFloat     = 11
     
