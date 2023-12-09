@@ -131,8 +131,10 @@ class RealmManager {
     
     private func setupSubscriptions() async {
         
+        let ownerID = PlanterModel.shared.ownerID
+        
         let _: PlanterPlant? = await addGenericSubcriptions(name: SubscriptionKey.planterPlant.rawValue) { query in
-            query.ownerID == PlanterModel.shared.ownerID
+            query.secondaryOwners.contains(ownerID) || query.primaryOwnerId == ownerID
         }
         
     }

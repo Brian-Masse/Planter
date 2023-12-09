@@ -96,15 +96,15 @@ struct PlantView: View {
                 
                 Spacer()
                 
-                UniversalText( latin, size: Constants.UISubHeaderTextSize, font: Constants.mainFont )
-                    .frame(width: geo.size.width / 5)
+//                UniversalText( latin, size: Constants.UISubHeaderTextSize, font: Constants.mainFont )
+//                    .frame(width: geo.size.width / 5)
                 
             }
             .padding(.vertical, -10)
             
             makeDivider()
             
-            UniversalText( plant.notes, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
+            UniversalText( plant.notes, size: Constants.UISmallTextSize, font: Constants.mainFont )
                 .padding(.vertical, 5)
             
             makeDivider()
@@ -128,18 +128,20 @@ struct PlantView: View {
                 }
                 .padding(.bottom, -20)
                 
-                self.image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: geo.size.width - 30, height: 250)
-                    .clipped()
-                    .cornerRadius(Constants.UIDefaultCornerRadius)
-                    .rotation3DEffect(
-                        .degrees(8),
-                        axis: (x: 1.0, y: -1.0, z: 0.0)
-                    )
-                    .shadow(color: .black.opacity(0.5), radius: 15, x: 10, y: 15)
-                    .padding([.bottom, .trailing])
+                if let image = plant.getCoverImage() {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geo.size.width - 30, height: 250)
+                        .clipped()
+                        .cornerRadius(Constants.UIDefaultCornerRadius)
+                        .rotation3DEffect(
+                            .degrees(8),
+                            axis: (x: 1.0, y: -1.0, z: 0.0)
+                        )
+                        .shadow(color: .black.opacity(0.5), radius: 15, x: 10, y: 15)
+                        .padding([.bottom, .trailing])
+                }
                 
                 HStack {
                     Spacer()
@@ -232,7 +234,7 @@ struct PlantView: View {
                                   scale: true,
                                   lineSpacing: -20)
                     .rotationEffect(.degrees(-90))
-                }.border(.blue)
+                }
                 
                 makeDivider(vertical: true)
                 
@@ -273,10 +275,12 @@ struct PlantView: View {
     private func makeBackground() -> some View {
         
         ZStack {
-            self.image
-                .ignoresSafeArea()
-                .blur(radius: 30)
-                .padding(-50)
+            if let image = plant.getCoverImage() {
+                image
+                    .ignoresSafeArea()
+                    .blur(radius: 30)
+                    .padding(-50)
+            }
             
             Colors.secondaryLight.opacity(0.55)
                 .ignoresSafeArea()
@@ -302,64 +306,6 @@ struct PlantView: View {
             .background { makeBackground() }
         }
         .ignoresSafeArea(edges: .bottom)
-//        }
-//        .ignoresSafeArea()
-        
-//        GeometryReader { geo in
-//            ZStack(alignment: .bottom) {
-//                VStack {
-//                    
-//                    let baseColor = colorScheme == .light ? Colors.baseLight : Colors.baseDark
-//                    
-//                    let gradient = LinearGradient(stops: [
-//                        .init(color: baseColor, location: 0.1),
-//                        .init(color: .clear, location: 0.4)
-//                        
-//                    ], startPoint: .bottom, endPoint: .top)
-//                    
-//                    if let image = plant.getCoverImage() {
-//                        
-//                        image
-//                            .resizable()
-//                            .aspectRatio(contentMode: .fill)
-//                            .frame(width: geo.size.width, height: geo.size.height / 1.5)
-//                            .clipped()
-//                            .overlay {
-//                                image
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                                    .blur(radius: 40)
-//                                    .padding(-40)
-//                                    .frame(width: geo.size.width, height: geo.size.height / 1.5)
-//                                    .clipped()
-//                                    .mask { gradient }
-//                            }
-//                            .overlay(alignment: .bottom) {
-//                                gradient
-//                            }
-//                    }
-//                    
-//                    Spacer()
-//                
-//                    UniversalText(plant.name, size: Constants.UIDefaultTextSize)
-//                    
-//                    LargeRoundedButton("", icon: "arrow.down", wide: true) {
-//                        presentationMode.wrappedValue.dismiss()
-//                    }
-//                    .padding(.bottom)
-//                    
-//                }
-//        
-//                
-//                
-//                
-//                
-//                
-//                
-//            }
-//        }
-//        .ignoresSafeArea()
-//        .universalBackground()
     }
 }
 

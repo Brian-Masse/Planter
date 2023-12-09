@@ -8,82 +8,22 @@
 import Foundation
 import RealmSwift
 import SwiftUI
-import PhotosUI
 import UIKit
 
-//MARK: PhotoManager
-//this class loads photos using the PhotosPicker SwiftUI component
-//it can only load / process one image at a time. Once a UI has received the photo it is requesting (retrievedImage != nil)
-//it should capture that, so this class can arbitrate that var for the next photo 
-class PhotoManager: ObservableObject {
-    
-    @Published var imageSelection: PhotosPickerItem? = nil {
-        
-        didSet {
-            if let imageSelection {
-                let _ = self.loadTransferable(from: imageSelection)
-                    
-            }
-        }
-    }
-    
-    @Published var retrievedImage: UIImage? = nil
-    
-    var image: Image? {
-        if let uiImage = retrievedImage {
-            return Image(uiImage: uiImage)
-        }
-        return nil
-    }
-    
-    private func loadTransferable(from imageSelection: PhotosPickerItem) -> Progress {
-        
-        return imageSelection.loadTransferable(type: PlanterImage.self) { result in
-            
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let image?):
-                    self.retrievedImage = image.image
-                case .success(nil):
-                    print("retrieved an empty image!")
-                case .failure(let error):
-                    print("error retrieving image: \(error)")
-                }
-            }
-        }
-    }
-}
 
-enum ImageError: Error {
-    case transferError( String )
-}
-
-//MARK: Planter Images
-struct PlanterImage: Transferable {
-    
-    let image: UIImage
-    
-    static var transferRepresentation: some TransferRepresentation {
-        
-        DataRepresentation(importedContentType: .image) { data in
-            guard let uiImage = UIImage(data: data) else {
-                throw ImageError.transferError("Data Import Failed")
-            }
-            return PlanterImage(image: uiImage)
-        }
-    }
-    
-}
-
-
-class PlanterPlant: Object, Identifiable {
+class PlanterPlant: Object, Identifiable, Shareable {
     
 //    MARK: Vars
     @Persisted(primaryKey: true) var _id: ObjectId
     var id: String { name }
     
-    @Persisted var ownerID: String = ""
-    
+    @Persisted private var ownerID: String = ""
+    @Persisted var secondaryOwners: RealmSwift.List<String> = List()
+    var primaryOwnerId: String {
+        get { ownerID }
+        set { self.updateOwnerId(to: newValue) }
+    }
+
     @Persisted var name: String = ""
     @Persisted var notes: String = ""
     
@@ -107,6 +47,42 @@ class PlanterPlant: Object, Identifiable {
         
     }
     
+//    MARK: Permissions
+    
+    func addOwners( _ owners: [String] ) {
+        RealmManager.updateObject(self) { thawed in
+            thawed.secondaryOwners.append(objectsIn: owners)
+        }
+    }
+    
+    func addOwner( _ ownerID: String ) {
+        RealmManager.updateObject(self) { thawed in
+            thawed.secondaryOwners.append( ownerID )
+        }
+    }
+    
+    func removeOwner(_ ownerID: String) {
+        RealmManager.updateObject(self) { thawed in
+            if let index = thawed.secondaryOwners.firstIndex(of: ownerID) {
+                thawed.secondaryOwners.remove(at: index)
+            }
+        }
+    }
+    
+    func transferOwnership(to ownerID: String) {
+        RealmManager.updateObject(self) { thawed in
+            let oldPrimaryOwner = thawed.primaryOwnerId
+            
+            thawed.removeOwner(ownerID)
+            
+            thawed.addOwner(oldPrimaryOwner)
+            
+            thawed.primaryOwnerId = ownerID
+        }
+    }
+    
+    
+    
 //    MARK: Class Methods
     func getNextWateringDate(_ iterator: Int = 1) -> Date {
         var date = dateLastWatered
@@ -121,6 +97,12 @@ class PlanterPlant: Object, Identifiable {
         return Data()
     }
     
+    private func updateOwnerId(to ownerID: String) {
+        RealmManager.updateObject(self) { thawed in
+            thawed.ownerID = ownerID
+        }
+    }
+    
 //    MARK: Convenience Functions
     func getCoverImage() -> Image? {
         if let uiImage = UIImage(data: coverImage) {
@@ -130,3 +112,19 @@ class PlanterPlant: Object, Identifiable {
     }
 }
 
+
+//MARK: Shareable Protocol
+protocol Shareable {
+    
+    var primaryOwnerId: String {get set}
+    var secondaryOwners: RealmSwift.List<String> {get set}
+    
+    func addOwners(_ ownerID: [String])
+    
+    func addOwner(_ ownerID: String)
+    
+    func removeOwner(_ ownerID: String)
+    
+    func transferOwnership(to ownerID: String)
+    
+}
