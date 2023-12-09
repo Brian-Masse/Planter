@@ -30,7 +30,10 @@ private struct UniversalBackground: ViewModifier {
                     .ignoresSafeArea(.container, edges: .bottom)
             }
             .frame(width: geo.size.width, height: geo.size.height)
-            .background(colorScheme == .light ? Colors.baseLight : Colors.baseDark)
+            .background(
+                Image("UniversalBackground")
+            
+            )
         }
     
     }

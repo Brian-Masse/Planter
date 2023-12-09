@@ -52,6 +52,10 @@ class PhotoManager: ObservableObject {
             }
         }
     }
+    
+    func clearImage() {
+        self.retrievedImage = nil
+    }
 }
 
 enum ImageError: Error {

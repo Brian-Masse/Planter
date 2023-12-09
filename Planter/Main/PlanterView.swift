@@ -10,59 +10,34 @@ import SwiftUI
 @MainActor
 struct PlanterView: View {
     
-//    MARK: State
-    enum AppState: Int {
-        
-        case authentication
-        case openingRealm
-        case creatingProfile
-        case app
-        case error
-        
-    }
-    
-    var model: PlanterModel = PlanterModel.shared
-    
-    @State var appState: AppState = .authentication
+    @ObservedObject var model: PlanterModel = PlanterModel.shared
     
     @MainActor
     private func initializeApp() async {
-        
-        self.appState = .authentication
         await model.authenticateUser()
-        if !model.getAuthenticationCompletion() {
-            self.appState = .error
-            return
-        }
-        
-        self.appState = .openingRealm
-        await model.openRealm()
-        if !model.getOpenRealmCompletion() {
-            self.appState = .error
-            return
-        }
-        
-        self.appState = .app
     }
-    
-    @State var toggle: Bool = false
     
 //    MARK: Body
     var body: some View {
        
         VStack {
             
-            switch appState {
+            switch model.appState {
             case .authentication:
-                Text( "Authentication" )
-                
+                AuthenticationView()
+                    .environment(\.realmConfiguration, PlanterModel.realmManager.configuration)
+            
             case .openingRealm:
-                Text( "Opening Realm" )
+                OpenFlexibleSyncRealmView()
+                    .environment(\.realmConfiguration, PlanterModel.realmManager.configuration)
                 
             case .creatingProfile:
                 Text( "Creating Profile" )
+                    .environment(\.realmConfiguration, PlanterModel.realmManager.configuration)
                 
-            case .app:  MainView()
+            case .app:  
+                MainView()
+                    .environment(\.realmConfiguration, PlanterModel.realmManager.configuration )
                 
             case .error:
                 Text( "Error" )

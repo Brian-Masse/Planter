@@ -11,7 +11,7 @@ import SwiftUI
 
 var inDev: Bool = true
 
-struct PlanterModel {
+class PlanterModel: ObservableObject {
     
 //    MARK: vars
     static let realmManager: RealmManager = RealmManager()
@@ -22,14 +22,26 @@ struct PlanterModel {
     
     var ownerID: String { PlanterModel.realmManager.user?.id ?? "no user" }
     
-    var activeColor: Color = Colors.main
+    @Published var activeColor: Color = Colors.main
     
+//    MARK: State
+    enum AppState: Int {
+        
+        case authentication
+        case openingRealm
+        case creatingProfile
+        case app
+        case error
+        
+    }
+    
+    @Published private(set) var appState: AppState = .authentication
     
 //    MARK: Flow
 //    These functions will be called after the work of either authentication or open realm is performed
 //    Their value will be used to progress the app state accordingly
     func getAuthenticationCompletion() -> Bool {
-        PlanterModel.realmManager.user != nil
+        PlanterModel.realmManager.checkSignedIn()
     }
     
     func getOpenRealmCompletion() -> Bool {
@@ -37,12 +49,44 @@ struct PlanterModel {
     }
     
     @MainActor
-    func authenticateUser() async {
-        await PlanterModel.realmManager.signInAnonymously()
+    func setState(to state: AppState) {
+        withAnimation {
+            self.appState = state
+        }
     }
     
     @MainActor
-    func openRealm() async { 
+    func authenticateUser(allowAnonymousAuthenticationOnFailure: Bool = false) async {
+        self.appState = .authentication
+        
+        if !self.getAuthenticationCompletion() && allowAnonymousAuthenticationOnFailure {
+            await PlanterModel.realmManager.signInAnonymously()
+        }
+        
+        if !self.getAuthenticationCompletion() {
+            self.appState = .authentication
+            return
+        }
+        
+        PlanterModel.realmManager.setActiveUser()
+        PlanterModel.realmManager.setupConfiguration()
+        
+        self.appState = .openingRealm
+        
+        if self.offline { await openRealm() }
+        
+    }
+    
+    @MainActor
+    func openRealm() async {
+        
         await PlanterModel.realmManager.openRealm()
+        
+        if !self.getOpenRealmCompletion() {
+            self.appState = .error
+            return
+        }
+        
+        self.appState = .app
     }
 }

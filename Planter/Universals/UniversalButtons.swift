@@ -9,10 +9,9 @@ import Foundation
 import SwiftUI
 
 //MARK: LargeTextButton
-struct LargeTextButton: View {
+struct LargeTextButton<T: ShapeStyle>: View {
     
     enum ArrowDirection: Int {
-        
         case up = 1
         case down = -1
         
@@ -22,7 +21,6 @@ struct LargeTextButton: View {
             case .down: return .bottom
             }
         }
-        
     }
     
     let text: String
@@ -35,6 +33,8 @@ struct LargeTextButton: View {
     let arrowWidth: CGFloat
     let arrow: Bool
     
+    let style: T
+    
     let action: () -> Void
     
     init( _ text: String,
@@ -44,6 +44,7 @@ struct LargeTextButton: View {
           arrow: Bool = true,
           arrowDirection: ArrowDirection = .down,
           arrowWidth: CGFloat = 4,
+          style: T = PlanterModel.shared.activeColor,
           action: @escaping () -> Void
     ) {
         
@@ -56,6 +57,8 @@ struct LargeTextButton: View {
         self.arrowWidth = arrowWidth
         self.arrowDirection = arrowDirection
         
+        self.style = style
+        
         self.action = action
     
     }
@@ -66,8 +69,8 @@ struct LargeTextButton: View {
         Rectangle()
             .aspectRatio(1 / aspectRatio, contentMode: contentMode)
             .frame(width: 100)
-            .foregroundStyle( PlanterModel.shared.activeColor )
             .cornerRadius(Constants.UIDefaultCornerRadius)
+            .foregroundStyle( self.style )
     }
     
     @ViewBuilder
@@ -137,25 +140,27 @@ struct LargeTextButton: View {
                                 makeArrow()
                                     .if(verticalTextAlignment == .top) { view in view.padding(.bottom, 20 ) }
                                     .if(verticalTextAlignment != .top) { view in view.padding(.vertical, 20 ) }
-                                    .frame(height: geo.size.height / 2)
+                                    .frame(height: !text.isEmpty ? geo.size.height / 2 : geo.size.height - 20)
                             }
                         }
                     }}
                 
-                RotatedLayout(at: 0, scale: 0.7) {
-                    UniversalText(transformedText,
-                                  size: Constants.UIHeaderTextSize + 10,
-                                  font: Constants.mainFont,
-                                  case: .uppercase,
-                                  scale: true,
-                                  textAlignment: .center,
-                                  lineSpacing: -25)
-                    .scaleEffect(CGSize(width: 0.7, height: 0.7))
-                    .rotationEffect(.degrees(-angle))
-                    .allowsHitTesting(false)
+                if !text.isEmpty {
+                    RotatedLayout(at: 0, scale: 0.7) {
+                        UniversalText(transformedText,
+                                      size: Constants.UIHeaderTextSize + 10,
+                                      font: Constants.mainFont,
+                                      case: .uppercase,
+                                      scale: true,
+                                      textAlignment: .center,
+                                      lineSpacing: -25)
+                        .scaleEffect(CGSize(width: 0.7, height: 0.7))
+                        .rotationEffect(.degrees(-angle))
+                        .allowsHitTesting(false)
+                    }
+                    .padding(.vertical)
+                    .mask(alignment: verticalTextAlignment ) { makeShape(.fill) }
                 }
-                .padding(.vertical)
-                .mask(alignment: verticalTextAlignment ) { makeShape(.fill) }
             }
             .frame(width: 100, height: 100 * aspectRatio)
             .onTapGesture { withAnimation { action() } }

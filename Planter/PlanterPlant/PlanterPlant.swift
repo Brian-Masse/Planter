@@ -111,17 +111,16 @@ class PlanterPlant: Object, Identifiable, Shareable {
         return date
     }
     
+    @MainActor
     func water( date: Date, comments: String ) {
+        
         let compiledOwnerId = self.compileOwnerId()
         let wateringNode = PlanterWateringNode(compiledOwnerId: compiledOwnerId, wateringDate: date, comments: comments, watererOwnerId: PlanterModel.shared.ownerID)
         
-//        RealmManager.addObject(wateringNode)
-        
-        RealmManager.updateObject( self) { thawed in
-            thawed.wateringHistory.append( wateringNode )
-            thawed.dateLastWatered = .now
+        RealmManager.updateObject(self) { obj in
+            obj.dateLastWatered = date
+            obj.wateringHistory.append( wateringNode )
         }
-        
     }
     
     static func encodeImage( _ image: UIImage? ) -> Data {

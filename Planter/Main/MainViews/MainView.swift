@@ -25,11 +25,13 @@ struct MainView: View {
     var model: PlanterModel = PlanterModel()
 
     @State var page: MainPage = .calendarPageView
+    @State var showingProfileView: Bool = false
     
 //    MARK: TabBar
     struct TabBar: View {
         
         @Binding var page: MainPage
+        @Binding var showingProfileView: Bool
         
         @ViewBuilder
         private func makeTabBarButton( icon: String, page: MainPage ) -> some View {
@@ -56,15 +58,9 @@ struct MainView: View {
             HStack(alignment: .bottom, spacing: 5) {
                 makeTabBarButton(icon: "calendar", page: .calendarPageView)
                 
-                Rectangle()
-                    .frame(width: 120)
-                    .aspectRatio(1/1.8, contentMode: .fit)
-                    .cornerRadius(Constants.UILargeCornerRadius)
-                    .rotationEffect(.degrees(25))
-                    .foregroundStyle(PlanterModel.shared.activeColor)
-                    .offset(x: 20, y: 10)
-                    .padding(.trailing)
-                
+                LargeTextButton("pro file", at: 45, aspectRatio: 1.8, verticalTextAlignment: .top, arrowDirection: .down) {
+                    showingProfileView = true
+                }
                 
                 makeTabBarButton(icon: "house", page: .roomsPageView)
             }
@@ -87,8 +83,12 @@ struct MainView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 
-                TabBar(page: $page)
+                TabBar(page: $page, showingProfileView: $showingProfileView)
                     .frame(maxWidth: geo.size.width)
+            }
+            .sheet(isPresented: $showingProfileView) {
+                ProfileView()
+                
             }
         }
         .universalBackground()

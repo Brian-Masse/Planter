@@ -22,18 +22,19 @@ class RealmManager {
     
 //    MARK: Vars
 //    for online access to the database this needs to be given an ID
-    let app: App = App(id: "application-0-bwmin")
+    static let appID: String = "application-0-bwmin"
+    let app: App = App(id: RealmManager.appID)
     
-    var realm: Realm? = nil
-    var user: User? = nil
+    private(set) var realm: Realm? = nil
+    private(set) var user: User? = nil
+    
+    private(set) var configuration: Realm.Configuration = Realm.Configuration.defaultConfiguration
     
     let defaults = UserDefaults()
     
 //    MARK: Authentication
-//    the getOwnerId check is redundant and should be removed. But while i cannot create an app to connect to I need to
-//    read it as the check for whether a user is signed in or not
     func checkSignedIn() -> Bool {
-         app.currentUser != nil || getLocalOwnerId() != nil
+         app.currentUser != nil || !(getLocalOwnerId() ?? "").isEmpty
     }
     
 //    for offline access there should be a local copy of the ownerID in user defaults
@@ -42,21 +43,73 @@ class RealmManager {
         defaults.set(id, forKey: DefaultKey.ownerID.rawValue)
     }
     
-    private func getLocalOwnerId() -> String? {
+    func getLocalOwnerId() -> String? {
         defaults.string(forKey: DefaultKey.ownerID.rawValue)
     }
+    
+//    when the app loads, it checks whether there is a user
+//    because the app can be offline, meaning either this class has a currentUser signed in, or its in the defaults
+//    if the app has a currentUser (its online), then it needs to be captured in the realmmanager class
+    func setActiveUser() {
+        if let currentUser = app.currentUser {
+            self.user = currentUser
+        }
+    }
 
+//    MARK: Specific Authentication Methods
+    private func authenticateUser(credentials: Credentials) async {
+        do {
+            self.user = try await app.login(credentials: credentials)
+            self.saveOwnerIdLocally(self.user!.id)
+        } catch {
+            print( "error signing user in: \(error.localizedDescription)" )
+        }
+    }
+    
     func signInAnonymously() async {
         if !checkSignedIn() {
             let credentials: Credentials = Credentials.anonymous
             
-            do {
-                self.user = try await app.login(credentials: credentials)
-                self.saveOwnerIdLocally(self.user!.id)
-            } catch {
-                print( "error signing user in: \(error.localizedDescription)" )
-            }
+            await authenticateUser(credentials: credentials)
+            
         } else { self.user = app.currentUser! }
+    }
+    
+    func signInWithEmail( email: String, password: String ) async {
+        if !checkSignedIn() {
+            let fixedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
+            let client = app.emailPasswordAuth
+            
+            do {
+                try await client.registerUser(email: fixedEmail, password: password)
+            } catch {
+                print( "error registering user with credentials: \(fixedEmail), \(password): \(error.localizedDescription)" )
+            }
+            
+            let credentials: Credentials = Credentials.emailPassword(email: fixedEmail, password: password)
+            await authenticateUser(credentials: credentials)
+            
+        } else { self.user = app.currentUser! }
+        
+    }
+    
+    @MainActor
+    func logout() async {
+        if let user = self.user {
+            
+            do {
+                try await user.logOut()
+                
+                self.user = nil
+                self.saveOwnerIdLocally("")
+                
+                PlanterModel.photoManager.clearImage()
+                
+                PlanterModel.shared.setState(to: .authentication)
+                
+            } catch { print( "error logging out: \(error.localizedDescription)" ) }
+        }
+        
     }
     
 
@@ -77,16 +130,34 @@ class RealmManager {
         }
     }
 
-    func openRealm() async {
+    func setupConfiguration() {
+        
         let config = PlanterModel.shared.offline ? setupDefaultOfflineConfigurtion() : setupDefaultOnlineConfiguration()
         
+        self.configuration = config
+        
+    }
+    
+//    This is called if the app is offline. A non-flex sync realm is opened and used, no subscriptions are added
+    func openRealm() async {
         do {
-            self.realm = try await Realm(configuration: config)
+            self.realm = try await Realm(configuration: self.configuration)
             if !PlanterModel.shared.offline { await self.setupSubscriptions() }
             
         } catch {
             print( "failed to open realm: \(error.localizedDescription)" )
         }
+    }
+    
+//    This is called if the app is online. Once the OpenFlexibleSyncRealmView finishes opening the realm
+//    it passes it into this function for RealmManager to capture, and add subscriptions
+    @MainActor
+    func authRealm(_ realm: Realm) async {
+        self.realm = realm
+        
+        await self.setupSubscriptions()
+        
+        PlanterModel.shared.setState(to: .app)
     }
     
 //    MARK: Subscriptions
@@ -160,14 +231,14 @@ class RealmManager {
           } catch { print("ERROR WRITING TO REALM:" + error.localizedDescription) }
       }
       
-      static func updateObject<T: Object>(realm: Realm? = nil, _ object: T, _ block: (T) -> Void, needsThawing: Bool = true) {
-          RealmManager.writeToRealm(realm) {
-              guard let thawed = object.thaw() else {
-                  print("failed to thaw object: \(object)")
-                  return
-              }
-              block(thawed)
+      static func updateObject<T: Object>(realm: Realm? = nil, _ object: T, needsThawing: Bool = true, _ block: (T) -> Void) {
+          guard let thawed = object.thaw() else {
+              print("failed to thaw object: \(object)")
+              return
           }
+          RealmManager.writeToRealm( thawed.realm ) {
+            block(thawed)
+        }
       }
       
       static func addObject<T:Object>( _ object: T, realm: Realm? = nil ) {

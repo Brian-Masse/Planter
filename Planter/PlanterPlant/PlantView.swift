@@ -20,15 +20,23 @@ struct PlantView: View {
         }
     }
     
+//    MARK: Vars
     @Environment( \.colorScheme ) var colorScheme
     @Environment( \.presentationMode ) var presentationMode
     @Environment( \.planterSheetDismiss ) var planterSheetDismiss
     
     let plant: PlanterPlant
+    let image: Image
     
-    let image: Image = Image("fern")
+    init( plant: PlanterPlant ) {
+        self.plant = plant
+        
+        self.image = self.plant.getCoverImage() ?? Image("fern")
+    }
     
     @State var activePage: PlantPageTab = .overview
+
+    @State var showingWateringView: Bool = false
     
     
 //    MARK: ViewBuilders
@@ -80,8 +88,6 @@ struct PlantView: View {
     @ViewBuilder
     private func makeHeader(_ geo: GeometryProxy) -> some View {
         
-        let latin = "Tracheophyta"
-        
         VStack(alignment: .leading, spacing: 0) {
             makeTabBar()
             
@@ -96,8 +102,9 @@ struct PlantView: View {
                 
                 Spacer()
                 
-//                UniversalText( latin, size: Constants.UISubHeaderTextSize, font: Constants.mainFont )
-//                    .frame(width: geo.size.width / 5)
+                LargeTextButton("", at: 0, aspectRatio: 1, verticalTextAlignment: .top, arrow: true, style: Colors.secondaryLight) {
+                    presentationMode.wrappedValue.dismiss()
+                }
                 
             }
             .padding(.vertical, -10)
@@ -128,20 +135,18 @@ struct PlantView: View {
                 }
                 .padding(.bottom, -20)
                 
-                if let image = plant.getCoverImage() {
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: geo.size.width - 30, height: 250)
-                        .clipped()
-                        .cornerRadius(Constants.UIDefaultCornerRadius)
-                        .rotation3DEffect(
-                            .degrees(8),
-                            axis: (x: 1.0, y: -1.0, z: 0.0)
-                        )
-                        .shadow(color: .black.opacity(0.5), radius: 15, x: 10, y: 15)
-                        .padding([.bottom, .trailing])
-                }
+                self.image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: geo.size.width - 30, height: 250)
+                    .clipped()
+                    .cornerRadius(Constants.UIDefaultCornerRadius)
+                    .rotation3DEffect(
+                        .degrees(8),
+                        axis: (x: 1.0, y: -1.0, z: 0.0)
+                    )
+                    .shadow(color: .black.opacity(0.5), radius: 15, x: 10, y: 15)
+                    .padding([.bottom, .trailing])
                 
                 HStack {
                     Spacer()
@@ -167,7 +172,7 @@ struct PlantView: View {
                     HStack {
                         Spacer()
                         LargeTextButton("water plant", at: 45, aspectRatio: 1.8, verticalTextAlignment: .top, arrowDirection: .down) {
-                            print("hi")
+                            showingWateringView = true
                         }
                         .padding()
                         .offset(y: -25)
@@ -275,12 +280,13 @@ struct PlantView: View {
     private func makeBackground() -> some View {
         
         ZStack {
-            if let image = plant.getCoverImage() {
-                image
-                    .ignoresSafeArea()
-                    .blur(radius: 30)
-                    .padding(-50)
-            }
+            self.image
+                .resizable()
+                .scaledToFill()
+                .blur(radius: 30)
+//                .padding(-50)
+                .clipped()
+                .ignoresSafeArea()
             
             Colors.secondaryLight.opacity(0.55)
                 .ignoresSafeArea()
@@ -290,20 +296,37 @@ struct PlantView: View {
 //    MARK: Body
     var body: some View {
         GeometryReader { geo in
-            VStack(alignment: .leading, spacing: 0) {
+            TabView(selection: $activePage) {
+                VStack(alignment: .leading, spacing: 0) {
+                    makeHeader(geo)
+                    
+                    makeMainBody(geo)
+                    
+                    Spacer()
+                    
+                    makeCalendarPreview()
+                        .frame(height: 120)
+                }.tag( PlantPageTab.overview )
                 
-                makeHeader(geo)
+                VStack(alignment: .leading, spacing: 0) {
+                    
+                    ForEach( plant.wateringHistory, id: \.self ) { node in
+                        
+                        Text(node.comments)
+                        
+                    }
+                    
+                    
+                }.tag( PlantPageTab.comments )
                 
-                makeMainBody(geo)
-                
-                Spacer()
-                
-                makeCalendarPreview()
-                    .frame(height: 120)
                 
             }
+            .tabViewStyle(.page(indexDisplayMode: .never))
             .padding(7)
             .background { makeBackground() }
+            .sheet(isPresented: $showingWateringView) {
+                PlantWateringScene(plant: plant)
+            }
         }
         .ignoresSafeArea(edges: .bottom)
     }
