@@ -14,6 +14,8 @@
 		C911B8FA2B24F23E00F5986A /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C911B8F92B24F23E00F5986A /* AuthenticationView.swift */; };
 		C911B8FD2B24F97900F5986A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C911B8FC2B24F97900F5986A /* ProfileView.swift */; };
 		C911B8FF2B25064400F5986A /* OpenFlexibleRealmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C911B8FE2B25064400F5986A /* OpenFlexibleRealmView.swift */; };
+		C911B9012B2519FC00F5986A /* PlanterRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C911B9002B2519FC00F5986A /* PlanterRoom.swift */; };
+		C911B9032B251D5700F5986A /* RoomCreationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C911B9022B251D5700F5986A /* RoomCreationScene.swift */; };
 		C91586F82B17E9CB00444826 /* CalendarPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91586F72B17E9CB00444826 /* CalendarPageView.swift */; };
 		C91586FA2B1825F300444826 /* PlanterScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91586F92B1825F300444826 /* PlanterScene.swift */; };
 		C91586FC2B194AAF00444826 /* PlantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91586FB2B194AAF00444826 /* PlantView.swift */; };
@@ -67,6 +69,8 @@
 		C911B8F92B24F23E00F5986A /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		C911B8FC2B24F97900F5986A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		C911B8FE2B25064400F5986A /* OpenFlexibleRealmView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenFlexibleRealmView.swift; sourceTree = "<group>"; };
+		C911B9002B2519FC00F5986A /* PlanterRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterRoom.swift; sourceTree = "<group>"; };
+		C911B9022B251D5700F5986A /* RoomCreationScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCreationScene.swift; sourceTree = "<group>"; };
 		C91586F72B17E9CB00444826 /* CalendarPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPageView.swift; sourceTree = "<group>"; };
 		C91586F92B1825F300444826 /* PlanterScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterScene.swift; sourceTree = "<group>"; };
 		C91586FB2B194AAF00444826 /* PlantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantView.swift; sourceTree = "<group>"; };
@@ -189,6 +193,8 @@
 		C996EFC32B1BA6F300392C4E /* PlanterRooms */ = {
 			isa = PBXGroup;
 			children = (
+				C911B9002B2519FC00F5986A /* PlanterRoom.swift */,
+				C911B9022B251D5700F5986A /* RoomCreationScene.swift */,
 			);
 			path = PlanterRooms;
 			sourceTree = "<group>";
@@ -411,6 +417,7 @@
 			files = (
 				C92B97D22B1413ED00A2D3F5 /* PlanterModel.swift in Sources */,
 				C906BDBC2B141F7A0067B403 /* MainView.swift in Sources */,
+				C911B9032B251D5700F5986A /* RoomCreationScene.swift in Sources */,
 				C996EFC52B1BA71300392C4E /* RoomsPageView.swift in Sources */,
 				C9B981442B140FCF0045D4A6 /* PlanterView.swift in Sources */,
 				C911B8F72B24317C00F5986A /* PlanterWateringScene.swift in Sources */,
@@ -430,6 +437,7 @@
 				C996EFC22B19C84500392C4E /* PlanterSheet.swift in Sources */,
 				C911B8FA2B24F23E00F5986A /* AuthenticationView.swift in Sources */,
 				C9B9816E2B1410800045D4A6 /* RealmManager.swift in Sources */,
+				C911B9012B2519FC00F5986A /* PlanterRoom.swift in Sources */,
 				C91586FA2B1825F300444826 /* PlanterScene.swift in Sources */,
 				C911B8FF2B25064400F5986A /* OpenFlexibleRealmView.swift in Sources */,
 				C96C7E502B1717B300FC2FB0 /* ViewModifiers.swift in Sources */,

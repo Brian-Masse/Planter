@@ -34,6 +34,8 @@ class PlanterPlant: Object, Identifiable, Shareable {
     @Persisted var dateLastWatered: Date = .now
     @Persisted var wateringInterval: Double = Constants.DayTime * 7
     
+    @Persisted var rooom: PlanterRoom? = nil
+    
 //    MARK: init
     convenience init( ownerID: String, name: String, notes: String, wateringInterval: Double, coverImageData: Data) {
         self.init()

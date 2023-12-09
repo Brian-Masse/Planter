@@ -18,9 +18,18 @@ struct MainView: View {
         var id: String {
             self.rawValue
         }
+        
+        func getDisplayString() -> String {
+            switch self {
+            case .calendarPageView: return "Cale ndar"
+            case .roomsPageView: return "Roo ms"
+            }
+        }
     }
 
+//    MARK: Vars
     @ObservedResults( PlanterPlant.self ) var plants
+    @ObservedResults( PlanterRoom.self ) var rooms
     
     var model: PlanterModel = PlanterModel()
 
@@ -34,38 +43,42 @@ struct MainView: View {
         @Binding var showingProfileView: Bool
         
         @ViewBuilder
-        private func makeTabBarButton( icon: String, page: MainPage ) -> some View {
+        private func makeTabBarButton(page: MainPage ) -> some View {
             
-            Image(systemName: icon)
-                .if(self.page == page) { view in
-                    view.tintRectangularBackground(45,
-                                                   cornerRadius: Constants.UILargeCornerRadius)
+            VStack {
+                LargeTextButton( page.getDisplayString(),
+                                 at: 0,
+                                 aspectRatio: 1,
+                                 arrow: false,
+                                 style: self.page == page ? Colors.accent : Colors.secondaryLight) {
+                    self.page = page
                 }
-                .if(self.page != page) { view in
-                    view.transparentRectangularBackgorund(45,
-                                                          cornerRadius: Constants.UILargeCornerRadius)
-                }
-                .onTapGesture {
-                    withAnimation { self.page = page }
-                }
-                .shadow(color: .black.opacity(0.4), radius: 10, y: 10)
+            }
+            .scaleEffect(1.25)
             
         }
         
         var body: some View {
          
             
-            HStack(alignment: .bottom, spacing: 5) {
-                makeTabBarButton(icon: "calendar", page: .calendarPageView)
+            ZStack(alignment: .bottom) {
+                HStack(alignment: .bottom, spacing: 5) {
+
+                    makeTabBarButton(page: .calendarPageView)
+                    Spacer()
+                    makeTabBarButton(page: .roomsPageView)
+                }
+                .padding(.horizontal)
                 
-                LargeTextButton("pro file", at: 45, aspectRatio: 1.8, verticalTextAlignment: .top, arrowDirection: .down) {
+                LargeTextButton("pro file", at: 30, aspectRatio: 1.6, verticalTextAlignment: .top, arrowDirection: .down) {
                     showingProfileView = true
                 }
-                
-                makeTabBarButton(icon: "house", page: .roomsPageView)
+                .padding(.leading)
+                .scaleEffect(1.25)
+                .shadow(color: .black.opacity(0.4), radius: 10, y: 10)
             }
             .padding()
-            .padding(.bottom, 15)
+            .padding(.bottom, 25)
             
         }
     }
@@ -74,12 +87,13 @@ struct MainView: View {
     var body: some View {
         
         let arrPlants = Array( plants )
+        let arrRooms = Array(rooms)
         
         GeometryReader { geo in
             ZStack(alignment: .bottom) {
                 TabView(selection: $page) {
                     CalendarPageView(plants: arrPlants).tag( MainPage.calendarPageView )
-                    RoomsPageView().tag( MainPage.roomsPageView )
+                    RoomsPageView(rooms: arrRooms).tag( MainPage.roomsPageView )
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 

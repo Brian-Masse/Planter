@@ -136,21 +136,19 @@ struct CalendarPageView: View {
                 
             }
             
-//            ScrollView(.vertical) {
-                VStack {
-                    makeTodayView(from: plants)
-                    
-                    makeUpNextView(from: upNextPlants)
-                    
-                    Spacer()
-                    
-                    LargeRoundedButton("create plant", icon: "plus", wide: true) {
-                        showingPlantCreationView = true
-                    }
-                    .padding(7)
+            VStack {
+                makeTodayView(from: plants)
+                
+                makeUpNextView(from: upNextPlants)
+                
+                Spacer()
+                
+                LargeRoundedButton("create plant", icon: "plus", wide: true) {
+                    showingPlantCreationView = true
                 }
-                .blurScroll(20)
-//            }
+                .padding(7)
+            }
+            .blurScroll(20)
         }
         .sheet(isPresented: $showingPlantCreationView) { PlantCreationScene() }
     }

@@ -34,6 +34,7 @@ struct LargeTextButton<T: ShapeStyle>: View {
     let arrow: Bool
     
     let style: T
+    let width: CGFloat
     
     let action: () -> Void
     
@@ -45,6 +46,7 @@ struct LargeTextButton<T: ShapeStyle>: View {
           arrowDirection: ArrowDirection = .down,
           arrowWidth: CGFloat = 4,
           style: T = PlanterModel.shared.activeColor,
+          width: CGFloat = 100,
           action: @escaping () -> Void
     ) {
         
@@ -58,6 +60,7 @@ struct LargeTextButton<T: ShapeStyle>: View {
         self.arrowDirection = arrowDirection
         
         self.style = style
+        self.width = width
         
         self.action = action
     
@@ -68,7 +71,7 @@ struct LargeTextButton<T: ShapeStyle>: View {
         
         Rectangle()
             .aspectRatio(1 / aspectRatio, contentMode: contentMode)
-            .frame(width: 100)
+            .frame(width: width)
             .cornerRadius(Constants.UIDefaultCornerRadius)
             .foregroundStyle( self.style )
     }
@@ -162,7 +165,7 @@ struct LargeTextButton<T: ShapeStyle>: View {
                     .mask(alignment: verticalTextAlignment ) { makeShape(.fill) }
                 }
             }
-            .frame(width: 100, height: 100 * aspectRatio)
+            .frame(width: width, height: width * aspectRatio)
             .onTapGesture { withAnimation { action() } }
             .rotationEffect(.degrees(angle))
         }
