@@ -27,6 +27,8 @@ class PlanterPlant: Object, Identifiable, Shareable {
     @Persisted var name: String = ""
     @Persisted var notes: String = ""
     
+    @Persisted var wateringHistory: RealmSwift.List<PlanterWateringNode> = List()
+    
     @Persisted var coverImage: Data = Data()
     
     @Persisted var dateLastWatered: Date = .now
@@ -49,40 +51,57 @@ class PlanterPlant: Object, Identifiable, Shareable {
     
 //    MARK: Permissions
     
-    func addOwners( _ owners: [String] ) {
+    func compileOwnerId() -> String {
+        secondaryOwners.reduce(self.primaryOwnerId) { partialResult, str in
+            partialResult + str
+        }
+    }
+    
+    func updateNestedObjects() {
+        let compiledOwnerId = compileOwnerId()
+        
+        for node in wateringHistory {
+            node.updateCompiledOwnerId(compiledOwnerId)
+        }
+    }
+    
+    func addOwners( _ owners: [String], updateNestedObjects: Bool = false) {
         RealmManager.updateObject(self) { thawed in
             thawed.secondaryOwners.append(objectsIn: owners)
         }
+        if updateNestedObjects { self.updateNestedObjects() }
     }
     
-    func addOwner( _ ownerID: String ) {
+    func addOwner( _ ownerID: String, updateNestedObjects: Bool = false) {
         RealmManager.updateObject(self) { thawed in
             thawed.secondaryOwners.append( ownerID )
         }
+        if updateNestedObjects { self.updateNestedObjects() }
     }
     
-    func removeOwner(_ ownerID: String) {
+    func removeOwner(_ ownerID: String, updateNestedObjects: Bool = true) {
         RealmManager.updateObject(self) { thawed in
             if let index = thawed.secondaryOwners.firstIndex(of: ownerID) {
                 thawed.secondaryOwners.remove(at: index)
             }
         }
+        if updateNestedObjects { self.updateNestedObjects() }
     }
     
     func transferOwnership(to ownerID: String) {
         RealmManager.updateObject(self) { thawed in
             let oldPrimaryOwner = thawed.primaryOwnerId
             
-            thawed.removeOwner(ownerID)
+            thawed.removeOwner(ownerID, updateNestedObjects: false)
             
-            thawed.addOwner(oldPrimaryOwner)
+            thawed.addOwner(oldPrimaryOwner, updateNestedObjects: false)
             
             thawed.primaryOwnerId = ownerID
         }
+        updateNestedObjects()
     }
     
-    
-    
+
 //    MARK: Class Methods
     func getNextWateringDate(_ iterator: Int = 1) -> Date {
         var date = dateLastWatered
@@ -91,7 +110,20 @@ class PlanterPlant: Object, Identifiable, Shareable {
         }
         return date
     }
-//    
+    
+    func water( date: Date, comments: String ) {
+        let compiledOwnerId = self.compileOwnerId()
+        let wateringNode = PlanterWateringNode(compiledOwnerId: compiledOwnerId, wateringDate: date, comments: comments, watererOwnerId: PlanterModel.shared.ownerID)
+        
+//        RealmManager.addObject(wateringNode)
+        
+        RealmManager.updateObject( self) { thawed in
+            thawed.wateringHistory.append( wateringNode )
+            thawed.dateLastWatered = .now
+        }
+        
+    }
+    
     static func encodeImage( _ image: UIImage? ) -> Data {
         if let image { return image.jpegData(compressionQuality: 0.9) ?? Data() }
         return Data()
@@ -112,6 +144,40 @@ class PlanterPlant: Object, Identifiable, Shareable {
     }
 }
 
+//MARK: PlanterWateringNode
+class PlanterWateringNode: Object {
+    
+    @Persisted(primaryKey: true) var _id: ObjectId
+    
+//    This ownerId is a compilation of all its parents owners.
+//    Whenever you add a subowner or change anything to do with permission on the plant class
+//    it should automatically update this class
+    @Persisted var compiledOwnerId: String = ""
+    
+    @Persisted var date: Date = .now
+    @Persisted var comments: String = ""
+    
+    @Persisted var watererOwnerId: String = ""
+    
+    convenience init( compiledOwnerId: String, wateringDate: Date, comments: String, watererOwnerId: String ) {
+        self.init()
+        
+        self.compiledOwnerId = compiledOwnerId
+        
+        self.date = wateringDate
+        self.comments = comments
+        self.watererOwnerId = watererOwnerId
+        
+    }
+    
+    func updateCompiledOwnerId(_ ownerId: String) {
+        RealmManager.updateObject(self) { thawed in
+            thawed.compiledOwnerId = ownerId
+        }
+        
+    }
+}
+
 
 //MARK: Shareable Protocol
 protocol Shareable {
@@ -119,11 +185,18 @@ protocol Shareable {
     var primaryOwnerId: String {get set}
     var secondaryOwners: RealmSwift.List<String> {get set}
     
-    func addOwners(_ ownerID: [String])
+//    If a shareable object has subobjects, they need to be easily accessed by any person with access to the parent object
+//    they will have a variable compiledOwnerId, this function reminds you
+//    to implement an update method whenever the permission of the parent is updated
+    func updateNestedObjects() -> Void
     
-    func addOwner(_ ownerID: String)
+    func compileOwnerId() -> String
     
-    func removeOwner(_ ownerID: String)
+    func addOwners(_ ownerID: [String], updateNestedObjects: Bool)
+    
+    func addOwner(_ ownerID: String, updateNestedObjects: Bool)
+    
+    func removeOwner(_ ownerID: String, updateNestedObjects: Bool)
     
     func transferOwnership(to ownerID: String)
     

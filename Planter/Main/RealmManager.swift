@@ -17,6 +17,7 @@ class RealmManager {
     
     enum SubscriptionKey: String {
         case planterPlant
+        case planterWateringNode
     }
     
 //    MARK: Vars
@@ -135,6 +136,10 @@ class RealmManager {
         
         let _: PlanterPlant? = await addGenericSubcriptions(name: SubscriptionKey.planterPlant.rawValue) { query in
             query.secondaryOwners.contains(ownerID) || query.primaryOwnerId == ownerID
+        }
+        
+        let _:PlanterWateringNode? = await addGenericSubcriptions(name: SubscriptionKey.planterWateringNode.rawValue) { query in
+            query.compiledOwnerId.contains(ownerID)
         }
         
     }
