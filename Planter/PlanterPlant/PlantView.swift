@@ -34,11 +34,12 @@ struct PlantView: View {
 //    MARK: ViewBuilders
     
     @ViewBuilder
-    private func makeDivider() -> some View {
+    private func makeDivider(vertical: Bool = false) -> some View {
         
         Rectangle()
             .foregroundStyle(.black)
-            .frame(height: 1)
+            .if(vertical) { view in view.frame(width: 1) }
+            .if(!vertical) { view in view.frame(height: 1) }
         
     }
     
@@ -54,8 +55,8 @@ struct PlantView: View {
             UniversalText( tab.rawValue, 
                            size: Constants.UISubHeaderTextSize,
                            font: Constants.mainFont,
-                           wrap: false,
                            case: .uppercase,
+                           wrap: false,
                            scale: true)
             .padding(.horizontal, 7)
         }
@@ -88,8 +89,9 @@ struct PlantView: View {
                 UniversalText(plant.name,
                               size: Constants.UILargeTextSize,
                               font: Constants.titleFont,
-                              wrap: false, 
-                              case: .uppercase, 
+                              case: .uppercase,
+                              wrap: false,
+                              fixed: true,
                               scale: true)
                 
                 Spacer()
@@ -98,7 +100,7 @@ struct PlantView: View {
                     .frame(width: geo.size.width / 5)
                 
             }
-            .padding(.bottom, -10)
+            .padding(.vertical, -10)
             
             makeDivider()
             
@@ -137,38 +139,131 @@ struct PlantView: View {
                         axis: (x: 1.0, y: -1.0, z: 0.0)
                     )
                     .shadow(color: .black.opacity(0.5), radius: 15, x: 10, y: 15)
-                    .padding(.bottom)
+                    .padding([.bottom, .trailing])
                 
                 HStack {
                     Spacer()
-                    UniversalText( "status:\nGood",
-                                   size: Constants.UIHeaderTextSize,
-                                   font: Constants.titleFont,
-                                   case: .uppercase,
-                                   textAlignment: .trailing,
-                                   lineSpacing: -22)
+                    VStack(alignment: .trailing, spacing: 0) {
+                        UniversalText( "status:\nGood",
+                                       size: Constants.UIHeaderTextSize,
+                                       font: Constants.titleFont,
+                                       case: .uppercase,
+                                       textAlignment: .trailing,
+                                       lineSpacing: -22)
+                        
+                        UniversalText( "View\n Latest\n Comments",
+                                       size: Constants.UIDefaultTextSize,
+                                       font: Constants.titleFont,
+                                       case: .uppercase,
+                                       textAlignment: .trailing,
+                                       lineSpacing: -7)
+                    }
                 }
             }
+            .overlay {
+                VStack(spacing: 0) {
+                    HStack {
+                        Spacer()
+                        LargeTextButton("water plant", at: 45, aspectRatio: 1.8, verticalTextAlignment: .top, arrowDirection: .down) {
+                            print("hi")
+                        }
+                        .padding()
+                        .offset(y: -25)
+                    }
+                    Spacer()
+                    HStack {
+                        LargeTextButton( "Edit Plant", at: -55, aspectRatio: 2.3, verticalTextAlignment: .top, arrowDirection: .down ) {
+                            print("hello")
+                        }
+                        .padding(.leading)
+                        .offset(y: -5)
+                        
+                        Spacer()
+                    }
+                }
+            }
+        }
+    }
+    
+//    MARK: CalendarPreview
+    @ViewBuilder
+    private func makeCalendarDate( _ date: Date ) -> some View {
+        
+        let month = date.formatted( .dateTime.month(.abbreviated) )
+        let day = date.formatted( .dateTime.day(.twoDigits) )
+        
+        VStack {
             
-            VStack {
-                HStack {
-                    Spacer()
-                    LargeTextButton("water plant", at: 45, aspectRatio: 1.8, verticalTextAlignment: .top, arrowDirection: .down) {
-                        print("hi")
-                    }
-                    .padding(.top, 30)
-                    .padding()
-                }
+            UniversalText( month,
+                           size: Constants.UIHeaderTextSize,
+                           font: Constants.titleFont,
+                           case: .uppercase,
+                           wrap: false,
+                           scale: true )
+            
+            UniversalText( day,
+                           size: Constants.UITitleTextSize,
+                           font: Constants.titleFont,
+                           case: .uppercase,
+                           wrap: false,
+                           scale: true )
+            .offset(y: -10)
+            
+            Spacer()
+        }
+        
+    }
+    
+    @ViewBuilder
+    private func makeCalendarPreview() -> some View {
+        
+        VStack(alignment: .leading, spacing: 0) {
+            
+            makeDivider()
+            
+            HStack(alignment: .bottom) {
+                
                 Spacer()
-                HStack {
-                    LargeTextButton( "Edit Plant", at: -55, aspectRatio: 2.3, verticalTextAlignment: .top, arrowDirection: .down ) {
-                        print("hello")
-                    }
-                    
-                    Spacer()
-                }
-                .padding(.leading, 40)
+                VerticalLayout() {
+                    UniversalText("Up\nNext",
+                                  size: Constants.UIHeaderTextSize,
+                                  font: Constants.titleFont,
+                                  case: .uppercase,
+                                  scale: true,
+                                  lineSpacing: -20)
+                    .rotationEffect(.degrees(-90))
+                }.border(.blue)
+                
+                makeDivider(vertical: true)
+                
+                makeCalendarDate( plant.getNextWateringDate() )
+                
+                makeDivider(vertical: true)
+                
+                makeCalendarDate( plant.getNextWateringDate(2) )
+                
+                makeDivider(vertical: true)
+                
+                UniversalText("Water\nevery\n8days",
+                              size: Constants.UIHeaderTextSize,
+                              font: Constants.titleFont,
+                              case: .uppercase,
+                              scale: true,
+                              lineSpacing: -10)
+                
+                Spacer()
             }
+            .padding(.vertical, 7)
+            .background(
+                Rectangle()
+                    .ignoresSafeArea()
+                    .foregroundStyle(Colors.secondaryLight)
+                    .opacity(0.8)
+                    .cornerRadius(Constants.UIDefaultCornerRadius, corners: [.topLeft, .topRight])
+                    .offset(y: 5)
+            )
+            
+            .padding([.top, .horizontal], 7)
         }
         
     }
@@ -191,19 +286,22 @@ struct PlantView: View {
 //    MARK: Body
     var body: some View {
         GeometryReader { geo in
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 
                 makeHeader(geo)
                 
                 makeMainBody(geo)
-                    .padding(.top, -50)
                 
                 Spacer()
+                
+                makeCalendarPreview()
+                    .frame(height: 120)
                 
             }
             .padding(7)
             .background { makeBackground() }
         }
+        .ignoresSafeArea(edges: .bottom)
 //        }
 //        .ignoresSafeArea()
         

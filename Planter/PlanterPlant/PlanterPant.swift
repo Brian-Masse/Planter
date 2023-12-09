@@ -108,8 +108,12 @@ class PlanterPlant: Object, Identifiable {
     }
     
 //    MARK: Class Methods
-    func getNextWateringDate() -> Date {
-        dateLastWatered + wateringInterval
+    func getNextWateringDate(_ iterator: Int = 1) -> Date {
+        var date = dateLastWatered
+        for _ in (0..<iterator) {
+            date += wateringInterval
+        }
+        return date
     }
 //    
     static func encodeImage( _ image: UIImage? ) -> Data {

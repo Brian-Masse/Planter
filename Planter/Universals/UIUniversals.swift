@@ -32,16 +32,18 @@ struct UniversalText: View {
     
     let alignment: TextAlignment
     let lineSpacing: CGFloat
+    let compensateForEmptySpace: Bool
     
     init(_ text: String,
          size: CGFloat,
          font: ProvidedFont = .helvetica,
-         wrap: Bool = true,
          case textCase: Text.Case = .lowercase,
+         wrap: Bool = true,
          fixed: Bool = false,
          scale: Bool = false,
          textAlignment: TextAlignment = .leading,
-         lineSpacing: CGFloat = 0.5
+         lineSpacing: CGFloat = 0.5,
+         compensateForEmptySpace: Bool = true
     ) {
         self.text = text
         self.size = size
@@ -54,6 +56,7 @@ struct UniversalText: View {
         
         self.alignment = textAlignment
         self.lineSpacing = lineSpacing
+        self.compensateForEmptySpace = compensateForEmptySpace
     }
     
     @ViewBuilder
@@ -92,6 +95,7 @@ struct UniversalText: View {
                         .offset(y: CGFloat( i ) * lineSpacing )
                 }
             }
+            .padding(.bottom, (Double(texts.count - 1) * lineSpacing) )
         } else {
             makeText(text)
         }
