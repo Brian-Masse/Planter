@@ -39,7 +39,11 @@ struct RoomsPageView: View {
                         
                     }
                     
-                    UniversalText( room.notes, size: Constants.UISubHeaderTextSize, font: Constants.titleFont )
+                    UniversalText( room.notes, size: Constants.UIDefaultTextSize, font: Constants.titleFont )
+                    
+                    ForEach(room.plants) { plant in
+                        UniversalText( plant.name, size: Constants.UIDefaultTextSize, font: Constants.titleFont )
+                    }
                     
                 }
                 .secondaryOpaqueRectangularBackground()

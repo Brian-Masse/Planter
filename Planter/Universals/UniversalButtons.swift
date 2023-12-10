@@ -40,7 +40,7 @@ struct LargeTextButton<T: ShapeStyle>: View {
     
     init( _ text: String,
           at angle: Double,
-          aspectRatio: Double = 1/2,
+          aspectRatio: Double = 2,
           verticalTextAlignment: Alignment = .bottom,
           arrow: Bool = true,
           arrowDirection: ArrowDirection = .down,

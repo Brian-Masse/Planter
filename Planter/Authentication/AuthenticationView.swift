@@ -23,7 +23,7 @@ struct AuthenticationView: View {
             await PlanterModel.shared.authenticateUser()
         }
     }
-    
+
 //    MARK: Body
     var body: some View {
         

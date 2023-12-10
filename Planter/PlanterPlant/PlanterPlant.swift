@@ -34,7 +34,7 @@ class PlanterPlant: Object, Identifiable, Shareable {
     @Persisted var dateLastWatered: Date = .now
     @Persisted var wateringInterval: Double = Constants.DayTime * 7
     
-    @Persisted var rooom: PlanterRoom? = nil
+    @Persisted var room: PlanterRoom? = nil
     
 //    MARK: init
     convenience init( ownerID: String, name: String, notes: String, wateringInterval: Double, coverImageData: Data) {
@@ -50,9 +50,41 @@ class PlanterPlant: Object, Identifiable, Shareable {
         self.coverImage = coverImageData
         
     }
+
+//    MARK: Class Methods
+    func getNextWateringDate(_ iterator: Int = 1) -> Date {
+        var date = dateLastWatered
+        for _ in (0..<iterator) {
+            date += wateringInterval
+        }
+        return date
+    }
+    
+    @MainActor
+    func water( date: Date, comments: String ) {
+        
+        let compiledOwnerId = self.compileOwnerId()
+        let wateringNode = PlanterWateringNode(compiledOwnerId: compiledOwnerId, wateringDate: date, comments: comments, watererOwnerId: PlanterModel.shared.ownerID)
+        
+        RealmManager.updateObject(self) { obj in
+            obj.dateLastWatered = date
+            obj.wateringHistory.append( wateringNode )
+        }
+    }
+    
+    static func encodeImage( _ image: UIImage? ) -> Data {
+        if let image { return image.jpegData(compressionQuality: 0.9) ?? Data() }
+        return Data()
+    }
+    
+    private func updateOwnerId(to ownerID: String) {
+        RealmManager.updateObject(self) { thawed in
+            thawed.ownerID = ownerID
+        }
+    }
+    
     
 //    MARK: Permissions
-    
     func compileOwnerId() -> String {
         secondaryOwners.reduce(self.primaryOwnerId) { partialResult, str in
             partialResult + str
@@ -103,45 +135,22 @@ class PlanterPlant: Object, Identifiable, Shareable {
         updateNestedObjects()
     }
     
-
-//    MARK: Class Methods
-    func getNextWateringDate(_ iterator: Int = 1) -> Date {
-        var date = dateLastWatered
-        for _ in (0..<iterator) {
-            date += wateringInterval
-        }
-        return date
-    }
-    
-    @MainActor
-    func water( date: Date, comments: String ) {
-        
-        let compiledOwnerId = self.compileOwnerId()
-        let wateringNode = PlanterWateringNode(compiledOwnerId: compiledOwnerId, wateringDate: date, comments: comments, watererOwnerId: PlanterModel.shared.ownerID)
-        
-        RealmManager.updateObject(self) { obj in
-            obj.dateLastWatered = date
-            obj.wateringHistory.append( wateringNode )
-        }
-    }
-    
-    static func encodeImage( _ image: UIImage? ) -> Data {
-        if let image { return image.jpegData(compressionQuality: 0.9) ?? Data() }
-        return Data()
-    }
-    
-    private func updateOwnerId(to ownerID: String) {
-        RealmManager.updateObject(self) { thawed in
-            thawed.ownerID = ownerID
-        }
-    }
-    
 //    MARK: Convenience Functions
     func getCoverImage() -> Image? {
         if let uiImage = UIImage(data: coverImage) {
             return Image(uiImage: uiImage)
         }
         return nil
+    }
+    
+    func setRoom(to room: PlanterRoom?) {
+        RealmManager.updateObject(self) { thawed in
+            if let room {
+                if let thawedRoom = room.thaw() {
+                    thawed.room = thawedRoom
+                }
+            } else { thawed.room = nil }
+        }
     }
 }
 

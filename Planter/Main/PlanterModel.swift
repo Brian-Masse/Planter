@@ -16,11 +16,13 @@ class PlanterModel: ObservableObject {
 //    MARK: vars
     static let realmManager: RealmManager = RealmManager()
     static let photoManager: PhotoManager = PhotoManager()
+    static var profile: PlanterProfile { PlanterModel.shared.activeProfile! }
     static var shared: PlanterModel = PlanterModel()
     
     var offline: Bool = false
     
     var ownerID: String { PlanterModel.realmManager.user?.id ?? "no user" }
+    private(set) var activeProfile: PlanterProfile? = nil
     
     @Published var activeColor: Color = Colors.main
     
@@ -36,6 +38,10 @@ class PlanterModel: ObservableObject {
     }
     
     @Published private(set) var appState: AppState = .authentication
+    
+    func setProfile( _ profile: PlanterProfile? ) {
+        self.activeProfile = profile
+    }
     
 //    MARK: Flow
 //    These functions will be called after the work of either authentication or open realm is performed

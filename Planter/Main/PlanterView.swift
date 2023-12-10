@@ -32,7 +32,7 @@ struct PlanterView: View {
                     .environment(\.realmConfiguration, PlanterModel.realmManager.configuration)
                 
             case .creatingProfile:
-                Text( "Creating Profile" )
+                ProfileCreationScene()
                     .environment(\.realmConfiguration, PlanterModel.realmManager.configuration)
                 
             case .app:  

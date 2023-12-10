@@ -19,6 +19,7 @@ class RealmManager {
         case planterPlant
         case planterWateringNode
         case planterRoom
+        case planterProfile
     }
     
 //    MARK: Vars
@@ -32,6 +33,17 @@ class RealmManager {
     private(set) var configuration: Realm.Configuration = Realm.Configuration.defaultConfiguration
     
     let defaults = UserDefaults()
+    
+//    MARK: Profile
+    func checkHasProfile() -> Bool {
+        let profile: PlanterProfile? = RealmManager.retrieveObject(where: { query in
+            query.ownerId == PlanterModel.shared.ownerID
+        }).first
+    
+        PlanterModel.shared.setProfile(profile)
+        
+        return profile != nil
+    }
     
 //    MARK: Authentication
     func checkSignedIn() -> Bool {
@@ -105,8 +117,8 @@ class RealmManager {
                 self.saveOwnerIdLocally("")
                 
                 PlanterModel.photoManager.clearImage()
-                
                 PlanterModel.shared.setState(to: .authentication)
+                PlanterModel.shared.setProfile(nil)
                 
             } catch { print( "error logging out: \(error.localizedDescription)" ) }
         }
@@ -158,7 +170,11 @@ class RealmManager {
         
         await self.setupSubscriptions()
         
-        PlanterModel.shared.setState(to: .app)
+        if checkHasProfile() {
+            PlanterModel.shared.setState(to: .app)
+        } else {
+            PlanterModel.shared.setState(to: .creatingProfile)
+        }
     }
     
 //    MARK: Subscriptions
@@ -218,6 +234,10 @@ class RealmManager {
             query.secondaryOwners.contains(ownerID) || query.primaryOwnerId == ownerID
         }
         
+        let _:PlanterProfile? = await addGenericSubcriptions(name: SubscriptionKey.planterProfile.rawValue) { query in
+            query.ownerId == ownerID
+        }
+        
     }
     
 //    MARK: Realm Functions
@@ -225,7 +245,7 @@ class RealmManager {
     //    if they want to write to a different realm.
     //    This is a convenience function either choose that realm, if it has a value, or the default realm
       static func getRealm(from realm: Realm?) -> Realm {
-          realm ?? PlanterModel.realmManager.realm!
+          PlanterModel.realmManager.realm!
       }
       
       static func writeToRealm(_ realm: Realm? = nil, _ block: () -> Void ) {

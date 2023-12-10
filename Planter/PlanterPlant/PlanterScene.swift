@@ -67,7 +67,7 @@ struct PlanterScene<Content: View, Scene>: View where Scene: CaseIterable, Scene
             LargeRoundedButton("previous", icon: "arrow.backward", wide: true) { regressScene() }
         }
         .padding()
-        .universalColoredBackground( PlanterModel.shared.activeColor )
+        .universalBackground()
         
     }
     

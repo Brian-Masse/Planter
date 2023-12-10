@@ -1,103 +1,36 @@
 //
-//  PlanterView.swift
+//  PlantOverviewView.swift
 //  Planter
 //
-//  Created by Brian Masse on 11/30/23.
+//  Created by Brian Masse on 12/9/23.
 //
 
 import Foundation
 import SwiftUI
 
-struct PlantView: View {
+struct PlantOverviewView: View {
     
-    enum PlantPageTab: String, Identifiable, CaseIterable {
-        case overview
-        case calendar
-        case comments
-        
-        var id: String {
-            self.rawValue
-        }
-    }
-    
-//    MARK: Vars
-    @Environment( \.colorScheme ) var colorScheme
-    @Environment( \.presentationMode ) var presentationMode
-    @Environment( \.planterSheetDismiss ) var planterSheetDismiss
+    @Environment(\.presentationMode) var presentationMode
     
     let plant: PlanterPlant
+    let geo: GeometryProxy
     let image: Image
     
-    init( plant: PlanterPlant ) {
-        self.plant = plant
-        
-        self.image = self.plant.getCoverImage() ?? Image("fern")
-    }
-    
-    @State var activePage: PlantPageTab = .overview
-
     @State var showingWateringView: Bool = false
     
-    
-//    MARK: ViewBuilders
-    
-    @ViewBuilder
-    private func makeDivider(vertical: Bool = false) -> some View {
-        
-        Rectangle()
-            .foregroundStyle(.black)
-            .if(vertical) { view in view.frame(width: 1) }
-            .if(!vertical) { view in view.frame(height: 1) }
-        
-    }
-    
 //    MARK: Header
-    @ViewBuilder
-    private func makeTabBarNode( tab: PlantPageTab ) -> some View {
-        
-        VStack(spacing: 0) {
-            Rectangle()
-                .frame(height: 5)
-                .cornerRadius(10)
-            
-            UniversalText( tab.rawValue, 
-                           size: Constants.UISubHeaderTextSize,
-                           font: Constants.mainFont,
-                           case: .uppercase,
-                           wrap: false,
-                           scale: true)
-            .padding(.horizontal, 7)
-        }
-        .shadow(color: .black.opacity(0.7), radius: 20)
-        .foregroundStyle( tab == activePage ? PlanterModel.shared.activeColor : Colors.secondaryLight  )
-        .onTapGesture { withAnimation {
-            activePage = tab
-        } }
-    }
-    
-    @ViewBuilder
-    private func makeTabBar() -> some View {
-        
-        HStack {
-            ForEach( PlantPageTab.allCases, id: \.self ) { content in
-                makeTabBarNode(tab: content)
-            }
-        }
-    }
     
     @ViewBuilder
     private func makeHeader(_ geo: GeometryProxy) -> some View {
         
         VStack(alignment: .leading, spacing: 0) {
-            makeTabBar()
             
-            HStack(spacing: 0) {
+            HStack(alignment: .bottom, spacing: 0) {
                 UniversalText(plant.name,
                               size: Constants.UILargeTextSize,
                               font: Constants.titleFont,
                               case: .uppercase,
                               wrap: false,
-                              fixed: true,
                               scale: true)
                 
                 Spacer()
@@ -105,16 +38,17 @@ struct PlantView: View {
                 LargeTextButton("", at: 0, aspectRatio: 1, verticalTextAlignment: .top, arrow: true, style: Colors.secondaryLight) {
                     presentationMode.wrappedValue.dismiss()
                 }
-                
+                .scaleEffect(0.9)
+                .padding([.vertical, .trailing], 7)
             }
-            .padding(.vertical, -10)
+            .frame(height: 100)
             
-            makeDivider()
+            Divider()
             
             UniversalText( plant.notes, size: Constants.UISmallTextSize, font: Constants.mainFont )
                 .padding(.vertical, 5)
             
-            makeDivider()
+            Divider()
         }
     }
     
@@ -123,7 +57,6 @@ struct PlantView: View {
     private func makeMainBody(_ geo: GeometryProxy) -> some View {
         
         ZStack {
-            
             VStack(spacing: 0) {
                 HStack {
                     UniversalText( "Master\nBedroom",
@@ -133,12 +66,11 @@ struct PlantView: View {
                                    lineSpacing: -22)
                     Spacer()
                 }
-                .padding(.bottom, -20)
                 
                 self.image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: geo.size.width - 30, height: 250)
+                    .frame(width: geo.size.width - 50, height: 250)
                     .clipped()
                     .cornerRadius(Constants.UIDefaultCornerRadius)
                     .rotation3DEffect(
@@ -226,7 +158,7 @@ struct PlantView: View {
         
         VStack(alignment: .leading, spacing: 0) {
             
-            makeDivider()
+            Divider()
             
             HStack(alignment: .bottom) {
                 
@@ -241,15 +173,15 @@ struct PlantView: View {
                     .rotationEffect(.degrees(-90))
                 }
                 
-                makeDivider(vertical: true)
+                Divider(vertical: true)
                 
                 makeCalendarDate( plant.getNextWateringDate() )
                 
-                makeDivider(vertical: true)
+                Divider(vertical: true)
                 
                 makeCalendarDate( plant.getNextWateringDate(2) )
                 
-                makeDivider(vertical: true)
+                Divider(vertical: true)
                 
                 UniversalText("Water\nevery\n8days",
                               size: Constants.UIHeaderTextSize,
@@ -275,67 +207,32 @@ struct PlantView: View {
         
     }
     
-//    MARK: Background
-    @ViewBuilder
-    private func makeBackground() -> some View {
+//    MARK: body
+    var body: some View {
         
-        ZStack {
-            self.image
-                .resizable()
-                .scaledToFill()
-                .blur(radius: 30)
-//                .padding(-50)
-                .clipped()
-                .ignoresSafeArea()
+        VStack(alignment: .leading, spacing: 0) {
+            makeHeader(geo)
             
-            Colors.secondaryLight.opacity(0.55)
-                .ignoresSafeArea()
+            makeMainBody(geo)
+//            
+            Spacer()
+//            
+            makeCalendarPreview()
+                .frame(height: 120)
+            
+        }
+        .ignoresSafeArea(edges: .bottom)
+        .padding(.horizontal, 7)
+        .sheet(isPresented: $showingWateringView) {
+            PlantWateringScene(plant: plant)
         }
     }
     
-//    MARK: Body
-    var body: some View {
-        GeometryReader { geo in
-            TabView(selection: $activePage) {
-                VStack(alignment: .leading, spacing: 0) {
-                    makeHeader(geo)
-                    
-                    makeMainBody(geo)
-                    
-                    Spacer()
-                    
-                    makeCalendarPreview()
-                        .frame(height: 120)
-                }.tag( PlantPageTab.overview )
-                
-                VStack(alignment: .leading, spacing: 0) {
-                    
-                    ForEach( plant.wateringHistory, id: \.self ) { node in
-                        
-                        Text(node.comments)
-                        
-                    }
-                    
-                    
-                }.tag( PlantPageTab.comments )
-                
-                
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            .padding(7)
-            .background { makeBackground() }
-            .sheet(isPresented: $showingWateringView) {
-                PlantWateringScene(plant: plant)
-            }
-        }
-        .ignoresSafeArea(edges: .bottom)
-    }
 }
-
 
 #Preview {
     let plant = PlanterPlant(ownerID: "100",
-                             name: "Fern",
+                             name: "Cactus",
                              notes: "cool plant",
                              wateringInterval: 7,
                              coverImageData: Data())

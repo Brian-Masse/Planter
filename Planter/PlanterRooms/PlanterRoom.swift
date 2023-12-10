@@ -34,6 +34,43 @@ class PlanterRoom: Object, Shareable, Identifiable {
         self.plants.append(objectsIn: plants)
     }
     
+//    MARK: Class Methods
+    func addPlant(_ plant: PlanterPlant) {
+        
+        if let room = plant.room {
+            room.removePlant(plant, setsRoomToNil: false)
+        }
+        
+        plant.setRoom(to: self)
+        
+        if let _ = self.plants.first(where: { node in
+            node == plant
+        }) {
+            removePlant(plant)
+            return
+        }
+        
+        RealmManager.updateObject(self) { thawed in
+            if let thawedPlant = plant.thaw() {
+                thawed.plants.append(thawedPlant)
+            }
+        }
+    }
+    
+    func removePlant(_ plant: PlanterPlant, setsRoomToNil: Bool = true) {
+        
+        if setsRoomToNil { plant.setRoom(to: nil) }
+        
+        if let index = self.plants.firstIndex(where: { node in
+            node == plant
+        }) {
+            RealmManager.updateObject(self) { thawed in
+                thawed.plants.remove(at: index)
+            }
+        }
+        
+    }
+    
 //    MARK: Permissions
 //    This object does not have any nested objects
     func updateNestedObjects() { }

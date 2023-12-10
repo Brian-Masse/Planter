@@ -39,34 +39,22 @@ private struct UniversalBackground: ViewModifier {
     }
 }
 
-private struct UniversalColoredBackground: ViewModifier {
+private struct UniversalAccentBackground: ViewModifier {
     
     @Environment(\.colorScheme) var colorScheme
     let color: Color
     
     func body(content: Content) -> some View {
         GeometryReader { geo in
-            content
-                .universalBackground(padding: false)
-                .ignoresSafeArea()
-//                .background(
-//                    GeometryReader { geo in
-//                        VStack {
-////                            if colorScheme == .dark {
-//                            LinearGradient(colors: [color.opacity( colorScheme == .dark ? 0.1 : 0.25), .clear], startPoint: .top, endPoint: .bottom )
-//                                    .frame(maxHeight: 800)
-//                                Spacer()
-////                            }
-////                            else if colorScheme == .light {
-////                                Spacer()
-////                                LinearGradient(colors: [color.opacity(0.2), .clear], startPoint: .bottom, endPoint: .top )
-////                                    .frame(maxHeight: 800)
-////                            }
-//                        }
-//                    }
-//                        .universalBackground(padding: false)
-//                        .ignoresSafeArea()
-//                )
+            ZStack(alignment: .center) {
+                content
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
+            .background(
+                Rectangle()
+                    .universalForegroundColor()
+                    .ignoresSafeArea()
+            )
         }
     }
 }
@@ -376,8 +364,8 @@ extension View {
         modifier(UniversalBackground( padding: padding ))
     }
     
-    func universalColoredBackground(_ color: Color) -> some View {
-        modifier(UniversalColoredBackground(color: color))
+    func universalAccentBackground(_ color: Color = .red) -> some View {
+        modifier(UniversalAccentBackground(color: color))
     }
     
     func universalTextStyle() -> some View {

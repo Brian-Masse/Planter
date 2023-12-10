@@ -10,8 +10,9 @@ import SwiftUI
 
 struct ProfileView: View {
     
+    let profile: PlanterProfile = PlanterModel.profile
     
-    
+//    MARK: Body
     var body: some View {
         
         VStack(alignment: .leading) {
@@ -27,6 +28,8 @@ struct ProfileView: View {
                     }
                 }
             }
+            
+            UniversalText( profile.fullName(), size: Constants.UIDefaultTextSize, font: Constants.titleFont )
             
             Spacer()
         }

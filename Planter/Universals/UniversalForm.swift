@@ -188,7 +188,7 @@ struct TextFieldWithPrompt: View {
         VStack(alignment: .leading, spacing: 5) {
             UniversalText(title, size: Constants.UIHeaderTextSize, font: Constants.titleFont)
             
-            TextField("", text: binding, axis: .vertical)
+            TextField("", text: binding)
                 .focused($focused)
                 .lineLimit(10)
                 .padding( .trailing, 5 )

@@ -261,3 +261,20 @@ struct CircularProgressView: View {
         }
     }
 }
+
+//MARK: Divider
+struct Divider: View {
+    
+    let vertical: Bool
+    
+    init(vertical: Bool = false) {
+        self.vertical = vertical
+    }
+    
+    var body: some View {
+        Rectangle()
+            .foregroundStyle(.black)
+            .if(vertical) { view in view.frame(width: 1) }
+            .if(!vertical) { view in view.frame(height: 1) }
+    }
+}
