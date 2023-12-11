@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import PhotosUI
 
 //MARK: Basic
 
@@ -569,5 +570,42 @@ struct StyledDatePicker: View {
         }
     }
     
+    
+}
+
+//MARK: Styled Photo Picker
+
+struct StyledPhotoPicker<C: View>: View {
+    
+    @ObservedObject var photoManager = PlanterModel.photoManager
+    
+    let content: C
+    
+    init( contentBuilder: () -> C ) {
+        self.content = contentBuilder()
+    }
+    
+    var body: some View {
+        
+        VStack(alignment: .leading) {
+            if let _ = photoManager.retrievedImage {
+                
+                photoManager.image!
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .cornerRadius(Constants.UIDefaultCornerRadius)
+                
+                
+                
+            } else {
+                PhotosPicker(selection: $photoManager.imageSelection,
+                             photoLibrary: .shared()) {
+                    self.content
+                }
+            }
+                
+        }
+        
+    }
     
 }

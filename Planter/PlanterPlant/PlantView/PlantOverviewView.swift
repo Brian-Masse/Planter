@@ -229,13 +229,13 @@ struct PlantOverviewView: View {
     }
     
 }
-
-#Preview {
-    let plant = PlanterPlant(ownerID: "100",
-                             name: "Cactus",
-                             notes: "cool plant",
-                             wateringInterval: 7,
-                             coverImageData: Data())
-    
-    return PlantView(plant: plant)
-}
+//
+//#Preview {
+//    let plant = PlanterPlant(ownerID: "100",
+//                             name: "Cactus",
+//                             notes: "cool plant",
+//                             wateringInterval: 7,
+//                             coverImageData: Data())
+//    
+//    return PlantView(plant: plant)
+//}

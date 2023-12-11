@@ -59,6 +59,29 @@ private struct UniversalAccentBackground: ViewModifier {
     }
 }
 
+private struct UniversalImageBackground: ViewModifier {
+    
+    let image: Image
+    
+    func body(content: Content) -> some View {
+        content
+            .background {
+                ZStack {
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .blur(radius: 30)
+                        .clipped()
+                        .ignoresSafeArea()
+                    
+                    Colors.secondaryLight.opacity(0.55)
+                        .ignoresSafeArea()
+                }
+            }
+    }
+    
+}
+
 //MARK: TextStyle
 private struct UniversalTextStyle: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
@@ -366,6 +389,10 @@ extension View {
     
     func universalAccentBackground(_ color: Color = .red) -> some View {
         modifier(UniversalAccentBackground(color: color))
+    }
+    
+    func universalImageBackground(_ image: Image) -> some View {
+        modifier( UniversalImageBackground(image: image) )
     }
     
     func universalTextStyle() -> some View {

@@ -105,16 +105,8 @@ struct PlantCreationScene: View {
         
         VStack(alignment: .leading) {
             
-            PhotosPicker(selection: $photoManager.imageSelection,
-                         photoLibrary: .shared()) {
-                UniversalText("Coose Cover Photo", size: Constants.UIDefaultTextSize, font: Constants.mainFont)
-            }
-            
-            if let _ = photoManager.retrievedImage {
-                
-                photoManager.image!
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+            StyledPhotoPicker {
+                UniversalText("Choose Image", size: Constants.UIDefaultTextSize, font: Constants.titleFont)
             }
                 
         }

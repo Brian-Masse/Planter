@@ -44,7 +44,7 @@ struct PlantPreviewView: View {
                 Rectangle()
                     .foregroundStyle(.black)
                 
-                if let coverImage = plant.getCoverImage() {
+                if let coverImage = PhotoManager.decodeImage(from: plant.coverImage) {
                     coverImage
                         .resizable()
                         .aspectRatio(contentMode: .fill)

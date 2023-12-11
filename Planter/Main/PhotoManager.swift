@@ -56,6 +56,13 @@ class PhotoManager: ObservableObject {
     func clearImage() {
         self.retrievedImage = nil
     }
+    
+    static func decodeImage(from data: Data) -> Image? {
+        if let uiImage = UIImage(data: data) {
+            return Image(uiImage: uiImage)
+        }
+        return nil
+    }
 }
 
 enum ImageError: Error {

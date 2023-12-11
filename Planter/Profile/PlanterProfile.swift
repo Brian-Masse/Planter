@@ -24,7 +24,11 @@ class PlanterProfile: Object {
     @Persisted var phoneNumber: Int = 0
     @Persisted var birthday: Date = .now
     
+    @Persisted var profileImage: Data = Data()
+    
     @Persisted var dateJoined: Date = .now
+    
+    @Persisted var friends: List<PlanterProfile>
     
     convenience init( ownerId: String, firstName: String, lastName: String, userName: String, email: String, phoneNumber: Int, birthday: Date ) {
         

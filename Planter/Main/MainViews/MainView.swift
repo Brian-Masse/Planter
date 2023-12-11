@@ -101,7 +101,7 @@ struct MainView: View {
                     .frame(maxWidth: geo.size.width)
             }
             .sheet(isPresented: $showingProfileView) {
-                ProfileView()
+                ProfileView( PlanterModel.profile )
                 
             }
         }

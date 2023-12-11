@@ -31,68 +31,17 @@ struct PlantView: View {
     init( plant: PlanterPlant ) {
         self.plant = plant
         
-        self.image = self.plant.getCoverImage() ?? Image("fern")
+        self.image = PhotoManager.decodeImage(from: plant.coverImage) ?? Image("fern")
     }
     
     @State var activePage: PlantPageTab = .comments
-    
-//    MARK: TabBar
-    @ViewBuilder
-    private func makeTabBarNode( tab: PlantPageTab ) -> some View {
-        
-        VStack(spacing: 0) {
-            Rectangle()
-                .frame(height: 5)
-                .cornerRadius(10)
-            
-            UniversalText( tab.rawValue,
-                           size: Constants.UISubHeaderTextSize,
-                           font: Constants.mainFont,
-                           case: .uppercase,
-                           wrap: false,
-                           scale: true)
-            .padding(.horizontal, 7)
-        }
-        .shadow(color: .black.opacity(0.7), radius: 20)
-        .foregroundStyle( tab == activePage ? PlanterModel.shared.activeColor : Colors.secondaryLight  )
-        .onTapGesture { withAnimation {
-            activePage = tab
-        } }
-    }
-    
-    @ViewBuilder
-    private func makeTabBar() -> some View {
-        
-        HStack {
-            ForEach( PlantPageTab.allCases, id: \.self ) { content in
-                makeTabBarNode(tab: content)
-            }
-        }
-    }
-    
-//    MARK: Background
-    @ViewBuilder
-    private func makeBackground() -> some View {
-        
-        ZStack {
-            self.image
-                .resizable()
-                .scaledToFill()
-                .blur(radius: 30)
-                .clipped()
-                .ignoresSafeArea()
-            
-            Colors.secondaryLight.opacity(0.55)
-                .ignoresSafeArea()
-        }
-    }
     
 //    MARK: Body
     var body: some View {
         GeometryReader { geo in
             VStack(spacing: 0) {
                 
-                makeTabBar()
+                HeaderTabBar(activeTab: $activePage)
                     .padding([.horizontal, .top], 7)
                 
                 TabView(selection: $activePage) {
@@ -110,18 +59,18 @@ struct PlantView: View {
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .ignoresSafeArea()
             }
-            .background { makeBackground() }
+            .universalImageBackground(self.image)
         }
     }
 }
 
 
-#Preview {
-    let plant = PlanterPlant(ownerID: "100",
-                             name: "Cactus",
-                             notes: "cool plant",
-                             wateringInterval: 7,
-                             coverImageData: Data())
-    
-    return PlantView(plant: plant)
-}
+//#Preview {
+//    let plant = PlanterPlant(ownerID: "100",
+//                             name: "Cactus",
+//                             notes: "cool plant",
+//                             wateringInterval: 7,
+//                             coverImageData: Data())
+//    
+//    return PlantView(plant: plant)
+//}

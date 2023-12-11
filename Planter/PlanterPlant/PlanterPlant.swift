@@ -136,12 +136,6 @@ class PlanterPlant: Object, Identifiable, Shareable {
     }
     
 //    MARK: Convenience Functions
-    func getCoverImage() -> Image? {
-        if let uiImage = UIImage(data: coverImage) {
-            return Image(uiImage: uiImage)
-        }
-        return nil
-    }
     
     func setRoom(to room: PlanterRoom?) {
         RealmManager.updateObject(self) { thawed in
