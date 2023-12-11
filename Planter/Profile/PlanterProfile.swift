@@ -7,15 +7,29 @@
 
 import Foundation
 import RealmSwift
+import SwiftUI
+import UIKit
 
-
-class PlanterProfile: Object {
+class PlanterProfile: Object, Identifiable {
+    
+    enum Publicity: String {
+        case publicProfile
+        case privateProfile
+        
+        func getDescriptionString() -> String {
+            switch self {
+            case .publicProfile: return "public"
+            case .privateProfile: return "private"
+            }
+        }
+    }
     
 //    MARK: Vars
     @Persisted(primaryKey: true) var _id: ObjectId
     
     @Persisted var ownerId: String = ""
-
+    @Persisted var publicity: String = Publicity.publicProfile.rawValue
+    
     @Persisted var firstName: String = ""
     @Persisted var lastName: String = ""
     @Persisted var userName: String = ""
@@ -28,13 +42,16 @@ class PlanterProfile: Object {
     
     @Persisted var dateJoined: Date = .now
     
-    @Persisted var friends: List<PlanterProfile>
+    @Persisted var pendingRequests: RealmSwift.List<String> = List()
+    @Persisted var friendRequests: RealmSwift.List<String> = List()
+    @Persisted var friends: RealmSwift.List<PlanterProfile> = List()
     
     convenience init( ownerId: String, firstName: String, lastName: String, userName: String, email: String, phoneNumber: Int, birthday: Date ) {
         
         self.init()
         
         self.ownerId = ownerId
+        self.publicity = Publicity.publicProfile.rawValue
         
         self.firstName = firstName
         self.lastName = lastName
@@ -51,7 +68,130 @@ class PlanterProfile: Object {
 //    MARK: Convenience Functions
     func fullName() -> String {
         "\(firstName) \(lastName)"
+    }
+    
+    func getProfilePicture() -> Image {
+        PhotoManager.decodeImage(from: self.profileImage) ?? Image("profile")
+    }
+    
+    func getPublicityString() -> String {
+        if let enumPublicity = Publicity(rawValue: self.publicity) {
+            return enumPublicity.getDescriptionString()
+        }
+        return ""
+    }
+    
+    static func getProfile(from ownerID: String) -> PlanterProfile? {
+        return RealmManager.retrieveObject() { query in
+            query.ownerId == ownerID
+        }.first
+    }
+    
+    func isFriends(with profile: PlanterProfile) -> Bool {
+        return self.friends.contains { prof in
+            prof.ownerId == profile.ownerId
+        }
+    }
+    
+    func isPending(_ profile: PlanterProfile) -> Bool {
+        self.pendingRequests.contains(profile.ownerId)
+    }
+    
+    func isRequestedBy(_ profile: PlanterProfile) -> Bool {
+        self.friendRequests.contains(profile.ownerId)
+    }
+    
+//    MARK: Class Methods
+    
+    func changePublicity( to publicity: Publicity ) {
+        RealmManager.updateObject(self) { thawed in
+            thawed.publicity = publicity.rawValue
+        }
+    }
+    
+    func setProfilePicture(to image: UIImage) {
+        let data = PlanterPlant.encodeImage(image)
+        
+        RealmManager.updateObject(self) { thawed in
+            thawed.profileImage = data
+        }
+    }
+    
+    static func searchProfiles(in text: String) async -> [PlanterProfile] {
+        
+        let _: PlanterProfile? = await PlanterModel.realmManager.addGenericSubcriptions(name: RealmManager.SubscriptionKey.planterProfile.rawValue) { query in
+            
+            query.publicity == Publicity.publicProfile.rawValue ||
+            query.ownerId == PlanterModel.shared.ownerID
+        }
+        
+        let results: [PlanterProfile] = await RealmManager.retrieveObjects { query in
+            query.firstName.contains( text ) ||
+            query.lastName.contains(text) ||
+            query.userName.contains(text)
+        }
+        
+        return results
         
     }
     
+    func requestFriend( _ profile: PlanterProfile ) {
+        RealmManager.updateObject(self) { thawed in
+            thawed.pendingRequests.append( profile.ownerId )
+        }
+        
+        profile.receiveFriendRequest(from: self)
+    }
+    
+    func unRequestFriend( _ profile: PlanterProfile ) {
+        if let index = pendingRequests.firstIndex(of: profile.ownerId) {
+            RealmManager.updateObject(self) { thawed in
+                thawed.pendingRequests.remove(at: index)
+            }
+        }
+        
+        profile.unReceiveFriendRequest(from: self)
+    }
+    
+    func receiveFriendRequest( from profile: PlanterProfile ) {
+        RealmManager.updateObject(self) { thawed in
+            thawed.friendRequests.append(profile.ownerId)
+        }
+    }
+    
+    func unReceiveFriendRequest(from profile: PlanterProfile) {
+        if let index = friendRequests.firstIndex(of: profile.ownerId) {
+            RealmManager.updateObject(self) { thawed in
+                thawed.friendRequests.remove(at: index)
+            }
+        }
+    }
+    
+    func acceptFriendRequest( ownerID: String ) {
+        if let _ = friendRequests.firstIndex(of: ownerID) {
+            if let friendProfile = PlanterProfile.getProfile(from: ownerID) {
+                
+                friendProfile.addFriend(self)
+                
+                self.addFriend(friendProfile)
+                
+            }
+        }
+    }
+    
+    private func addFriend( _ profile: PlanterProfile ) {
+        RealmManager.updateObject(self) { thawed in
+            if let pendingIndex = self.pendingRequests.firstIndex(of: profile.ownerId ) {
+                thawed.pendingRequests.remove(at: pendingIndex)
+            }
+            
+            if let requestIndex = thawed.friendRequests.firstIndex(of: profile.ownerId ) {
+                thawed.friendRequests.remove(at: requestIndex)
+            }
+            
+            if let thawedFriend = profile.thaw() {
+                thawed.friends.append( thawedFriend )
+            }
+        }
+    }
 }

@@ -184,36 +184,25 @@ struct TextFieldWithPrompt: View {
     @FocusState var focused: Bool
     @State var showingClearButton: Bool = false
     
+    @State var test: String = ""
+    
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 5) {
-            UniversalText(title, size: Constants.UIHeaderTextSize, font: Constants.titleFont)
-            
-            TextField("", text: binding)
+        VStack(alignment: .leading, spacing: 0) {
+            TextField(text: binding) {
+                UniversalText( title, size: Constants.UISubHeaderTextSize, font: Constants.mainFont, case: .uppercase )
+                    .opacity(0.75)
+            }
                 .focused($focused)
                 .lineLimit(10)
                 .padding( .trailing, 5 )
-                .secondaryOpaqueRectangularBackground()
+
                 .universalTextField()
-                .onChange(of: self.focused) { value in
-                    withAnimation { self.showingClearButton = value }
+                .onChange(of: self.focused) { oldValue, newValue in
+                    withAnimation { self.showingClearButton = newValue }
                 }
             
-            if showingClearButton && clearable && !binding.wrappedValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                VStack {
-                    HStack {
-                        Spacer()
-                        UniversalText( "clear", size: Constants.UIDefaultTextSize, font: Constants.mainFont )
-                        Image(systemName: "xmark")
-                        Spacer()
-                        
-                    }
-                    .secondaryOpaqueRectangularBackground()
-                    .onTapGesture {
-                        withAnimation { binding.wrappedValue = "" }
-                    }
-                }.transition(.opacity)
-            }
+            Divider()
         }
     }
 }

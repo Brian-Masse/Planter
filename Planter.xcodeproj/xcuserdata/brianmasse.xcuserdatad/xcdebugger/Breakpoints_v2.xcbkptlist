@@ -100,5 +100,53 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E7893E4F-C88A-42BD-ADB5-E0D26331A9B8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Planter/Profile/PlanterProfile.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "addFriend(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "E7893E4F-C88A-42BD-ADB5-E0D26331A9B8 - 18556ecd8be03f76"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Planter.PlanterProfile) -&gt; () in Planter.PlanterProfile.addFriend(Planter.PlanterProfile) -&gt; ()"
+                  moduleName = "Planter"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brianmasse/Developer/Xcode/Planter/Planter/Profile/PlanterProfile.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "175"
+                  endingLineNumber = "175"
+                  offsetFromSymbolStart = "588">
+               </Location>
+               <Location
+                  uuid = "E7893E4F-C88A-42BD-ADB5-E0D26331A9B8 - 18556ecd8be03f76"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Planter.PlanterProfile) -&gt; () in Planter.PlanterProfile.addFriend(Planter.PlanterProfile) -&gt; ()"
+                  moduleName = "Planter"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/brianmasse/Developer/Xcode/Planter/Planter/Profile/PlanterProfile.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "175"
+                  endingLineNumber = "175"
+                  offsetFromSymbolStart = "584">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

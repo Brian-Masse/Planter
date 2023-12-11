@@ -235,7 +235,10 @@ class RealmManager {
         }
         
         let _:PlanterProfile? = await addGenericSubcriptions(name: SubscriptionKey.planterProfile.rawValue) { query in
-            query.ownerId == ownerID
+            query.ownerId == ownerID ||
+            query.pendingRequests.contains(ownerID) ||
+            query.friendRequests.contains(ownerID) ||
+            query.publicity == PlanterProfile.Publicity.publicProfile.rawValue
         }
         
     }
