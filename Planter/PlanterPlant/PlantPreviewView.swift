@@ -27,15 +27,19 @@ struct PlantPreviewView: View {
     @State var showingPlantView: Bool = false
     
 //    MARK: ViewBuilders
+    
+    
+    
+//    MARK: Background
     @ViewBuilder
     private func makeBackground(height: CGFloat = 300) -> some View {
         
         let alignment: Alignment = .center
-        let normalBlurHeight: CGFloat = 2/5
+        let normalBlurHeight: CGFloat = 1/5
         
         let gradient = LinearGradient(stops: [
-            .init(color: .white, location: normalBlurHeight ),
-            .init(color: .clear, location: 1 ) ],
+            .init(color: .clear, location: 0 ),
+            .init(color: .white, location: 1 - normalBlurHeight ) ],
                                       startPoint: .bottom,
                                       endPoint: .top)
         
@@ -58,11 +62,15 @@ struct PlantPreviewView: View {
                                 .padding(-40)
                                 .frame(width: geo.size.width, height: height, alignment: alignment)
                                 .clipped()
-                                .mask(alignment: .bottom) {
+                                .mask(alignment: .top) {
                                     gradient
-                                        .frame(height: height / 1.5)
-//                                            .padding(.vertical, 20)
+                                        .frame(height: height )
                                 }
+                        }
+                        .overlay {
+                            gradient
+                                .frame(height: height)
+                                .opacity(0.2)
                         }
                         .allowsHitTesting(false)
                 }
@@ -73,36 +81,28 @@ struct PlantPreviewView: View {
     }
     
     @ViewBuilder
-    private func makeCheckmarkButton<T: ShapeStyle>(style: T) -> some View {
-        ZStack {
-            Rectangle()
-                .foregroundStyle(style)
-            
-            Image(systemName: "checkmark")
-        }
-        .frame(width: 120, height: 120)
-        .cornerRadius(Constants.UILargeCornerRadius)
-    }
-    
-    @ViewBuilder
     private func makeHeader() -> some View {
-        HStack {
-            VStack(alignment: .leading) {
-                UniversalText(plant.name, 
+        VStack(alignment: .leading, spacing: 0) {
+            
+            HStack {
+                UniversalText(plant.name,
                               size: Constants.UIHeaderTextSize,
                               font: Constants.titleFont,
+                              case: .uppercase,
                               wrap: false,
                               scale: false)
-                    .textCase(.uppercase)
-                
-                UniversalText(plant.notes, size: Constants.UIDefaultTextSize, font: Constants.mainFont, wrap: false)
+                Spacer()
             }
+                
+            Divider()
             
-            Spacer()
+            UniversalText(plant.room?.name ?? "No Room", size: Constants.UIDefaultTextSize,
+                          font: Constants.mainFont,
+                          case: .uppercase)
+            
         }
-        .foregroundStyle(.white)
+        .foregroundStyle(.black)
         .padding()
-        .padding(7)
     }
     
 //    MARK: Layouts
@@ -112,17 +112,23 @@ struct PlantPreviewView: View {
             makeBackground(height: PlantPreviewView.fullLayoutHeight)
             
             VStack {
-                HStack {
-                    Spacer()
+                ZStack(alignment: .topTrailing) {
                     
-                    makeCheckmarkButton(style: .ultraThinMaterial)
-                    makeCheckmarkButton(style: Colors.accent)
+                    makeHeader()
+                    
+                    LargeTextButton("Water Plant",
+                                    at: 30,
+                                    aspectRatio: 1.5,
+                                    verticalTextAlignment: .bottom,
+                                    arrowDirection: .up,
+                                    style: Colors.secondaryLight) {
+                        print("hello")
+                    }
+                                .scaleEffect(0.9)
+                                .opacity(0.85)
                 }
-                .padding(7)
-                
+
                 Spacer()
-                
-                makeHeader()
             }
         }
     }
@@ -135,8 +141,8 @@ struct PlantPreviewView: View {
             HStack {
                 makeHeader()
                 Spacer()
-                makeCheckmarkButton(style: .ultraThinMaterial)
-                    .padding(.trailing, 7)
+//                makeCheckmarkButton(style: .ultraThinMaterial)
+//                    .padding(.trailing, 7)
             }
         }
         

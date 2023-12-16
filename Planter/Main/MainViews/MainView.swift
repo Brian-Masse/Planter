@@ -55,6 +55,7 @@ struct MainView: View {
                 }
             }
             .scaleEffect(1.25)
+            .shadow(color: .black.opacity(0.4), radius: 10, y: 10)
             
         }
         
@@ -100,12 +101,13 @@ struct MainView: View {
                 TabBar(page: $page, showingProfileView: $showingProfileView)
                     .frame(maxWidth: geo.size.width)
             }
+            .ignoresSafeArea()
             .sheet(isPresented: $showingProfileView) {
                 ProfileView( PlanterModel.profile )
                 
             }
         }
-        .universalBackground()
+        .universalImageBackground( PlanterModel.profile.getProfilePicture() )
     }
 }
 

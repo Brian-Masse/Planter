@@ -30,22 +30,28 @@ struct CalendarPageView: View {
     let plants: [PlanterPlant]
     
 //    MARK: ViewBuilders
+    
+    
+    
+//    MARK: Header
     @ViewBuilder
     private func makeHeader()  -> some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
-                UniversalText( "Planter.", size: Constants.UITitleTextSize, font: Constants.titleFont )
-                    .textCase(.uppercase)
+                UniversalText( "Planter.", size: Constants.UITitleTextSize, font: Constants.titleFont, case: .uppercase )
                 Spacer()
             }
-            .padding(.horizontal, 7)
+            .padding(.bottom, -10)
             
-            UniversalText( PlanterModel.shared.ownerID, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
-                .padding(.horizontal, 7)
+            UniversalText( "\(PlanterModel.profile.fullName())'s plants", size: Constants.UIDefaultTextSize, font: Constants.mainFont )
+                .padding(.bottom, 7)
+            
+            Divider()
         }
     }
     
     
+//    MARK: TodayView
     @ViewBuilder
     private func makeTodayView(from plants: [PlanterPlant]) -> some View {
         ZStack {
@@ -61,12 +67,16 @@ struct CalendarPageView: View {
                         PlantPreviewView(plant: plants.first!, layout: .full)
                         
                         VerticalLayout() {
-                            UniversalText( "Today", size: Constants.UITitleTextSize, font: Constants.titleFont, wrap: false)
-                                .textCase(.uppercase)
+                            UniversalText( "Today", 
+                                           size: Constants.UITitleTextSize,
+                                           font: Constants.titleFont,
+                                           case: .uppercase,
+                                           wrap: false)
                         }
                         .rotationEffect(.degrees(90))
                         .padding(.horizontal, -10)
                     }
+                    .padding(.bottom, 7)
                     
                     VStack {
                         if plants.count > 1 {
@@ -82,6 +92,7 @@ struct CalendarPageView: View {
         .padding(.top)
     }
     
+//    MARK: UpNextView
     @ViewBuilder
     private func makeUpNextView(from plants: [PlanterPlant]) -> some View {
         VStack(alignment: .leading, spacing: 7 ) {
@@ -89,8 +100,11 @@ struct CalendarPageView: View {
                 HStack(alignment: .top) {
                     
                     VerticalLayout() {
-                        UniversalText( "Up Next", size: Constants.UITitleTextSize, font: Constants.titleFont, wrap: false)
-                            .textCase(.uppercase)
+                        UniversalText( "Up Next",
+                                       size: Constants.UITitleTextSize,
+                                       font: Constants.titleFont,
+                                       case: .uppercase,
+                                       wrap: false)
                     }
                     .rotationEffect(.degrees(-90))
                     .padding(.horizontal, -10)
@@ -111,7 +125,6 @@ struct CalendarPageView: View {
                 }
             }
         }
-        .padding(.horizontal, 7)
     }
     
 //    MARK: Body
@@ -119,34 +132,32 @@ struct CalendarPageView: View {
         
         VStack(alignment: .leading) {
             
-            let todayPlants = plants.filter { plant in
-                plant.getNextWateringDate().matches(.now, to: .day)
-            }
-            
+//            let todayPlants = plants.filter { plant in
+//                plant.getNextWateringDate().matches(.now, to: .day)
+//            }
+//            
             let upNextPlants = plants.filter { plant in
                 let date = plant.getNextWateringDate()
                 return !date.matches(.now, to: .day) && date > .now
             }
         
             makeHeader()
-            
-            LargeTextButton("hello world", at: 30, aspectRatio: 2) {
-                
-                print("jo")
-                
-            }
+                .padding(.horizontal, 7)
             
             VStack {
                 makeTodayView(from: plants)
                 
-                makeUpNextView(from: upNextPlants)
-                
-                Spacer()
-                
-                LargeRoundedButton("create plant", icon: "plus", wide: true) {
-                    showingPlantCreationView = true
+                VStack {
+                    makeUpNextView(from: upNextPlants)
+
+                    Divider()
+                    
+                    LargeRoundedButton("create plant", icon: "plus", wide: true) {
+                        showingPlantCreationView = true
+                    }
                 }
-                .padding(7)
+                .padding(.horizontal, 7)
+                .padding(.bottom, 50)
             }
             .blurScroll(20)
         }

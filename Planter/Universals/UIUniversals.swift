@@ -139,7 +139,7 @@ struct AsyncLoader<Content>: View where Content: View {
             } else if scenePhase != .background && scenePhase != .inactive { content }
         }
         .onBecomingVisible { loading = true }
-        .onChange(of: scenePhase) { newValue in
+    .onChange(of: scenePhase) { newValue in
             if newValue == .active { loading = true }
         }
     }
