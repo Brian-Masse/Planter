@@ -51,8 +51,9 @@ struct ProfileOverviewView: View {
             }
             
             UniversalText( "\(profile.userName) | \(profile.getPublicityString())",
-                           size: Constants.UIDefaultTextSize,
+                           size: Constants.UISmallTextSize,
                            font: Constants.titleFont )
+            .padding(.bottom, 7)
             
             Divider()
         }
@@ -144,6 +145,12 @@ struct ProfileOverviewView: View {
             makeOverviewBody()
             
             Spacer()
+            
+            HStack {
+                Spacer()
+                UniversalText( PlanterModel.shared.ownerID, size: Constants.UISmallTextSize, font: Constants.mainFont )
+                Spacer()
+            }
         }
         .sheet(isPresented: $showingEditingView) {
             

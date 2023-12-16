@@ -27,7 +27,7 @@ struct ProfileView: View {
     let profile: PlanterProfile
     let image: Image
     
-    @State var activePage: ProfileViewTab = .social
+    @State var activePage: ProfileViewTab = .overview
     
     init(_ profile: PlanterProfile? = nil) {
         self.profile = profile!
