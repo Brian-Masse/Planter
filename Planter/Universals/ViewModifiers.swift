@@ -220,73 +220,6 @@ private struct AccentBackground: ViewModifier {
     }
 }
 
-private struct ScrollOffsetPreferenceKey: PreferenceKey {
-    
-    static var defaultValue: CGPoint = .zero
-    
-    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) { }
-}
-
-private struct BlurScroll: ViewModifier {
-    
-    let blur: CGFloat
-    let coordinateSpaceName = "scroll"
-    
-    @State private var scrollPosition: CGPoint = .zero
-    
-    func body(content: Content) -> some View {
-        
-        let gradient = LinearGradient(stops: [
-            .init(color: .white, location: 0.10),
-            .init(color: .clear, location: 0.25)],
-                                      startPoint: .bottom,
-                                      endPoint: .top)
-        
-        let invertedGradient = LinearGradient(stops: [
-            .init(color: .clear, location: 0.10),
-            .init(color: .white, location: 0.25)],
-                                              startPoint: .bottom,
-                                              endPoint: .top)
-        
-        GeometryReader { topGeo in
-            ScrollView {
-                ZStack(alignment: .top) {
-                    content
-                        .mask(
-                            VStack {
-                                invertedGradient
-                                
-                                    .frame(height: topGeo.size.height, alignment: .top)
-                                    .offset(y:  -scrollPosition.y )
-                                Spacer()
-                            }
-                        )
-                    
-                    content
-                        .blur(radius: 15)
-                        .frame(height: topGeo.size.height, alignment: .top)
-                        .mask(gradient
-                            .frame(height: topGeo.size.height)
-                            .offset(y:  -scrollPosition.y )
-                        )
-                        .ignoresSafeArea()
-                }
-                .padding(.bottom, topGeo.size.height * 0.25)
-                .background(GeometryReader { geo in
-                    Color.clear
-                        .preference(key: ScrollOffsetPreferenceKey.self,
-                                    value: geo.frame(in: .named(coordinateSpaceName)).origin)
-                })
-                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                    self.scrollPosition = value
-                }
-            }
-            .coordinateSpace(name: coordinateSpaceName)
-        }
-        .ignoresSafeArea()
-    }
-}
-
 
 //MARK: Utitilities
 private struct BecomingVisible: ViewModifier {
@@ -336,7 +269,6 @@ private struct Developer: ViewModifier {
 }
 
 private struct DefaultAlert: ViewModifier {
-    
     @Binding var activate: Bool
     let title: String
     let description: String
@@ -346,9 +278,9 @@ private struct DefaultAlert: ViewModifier {
             .alert(title, isPresented: $activate) { } message: {
                 Text( description )
             }
-
     }
 }
+
 
 //MARK: Transitions
 private struct SlideTransition: ViewModifier {
@@ -430,10 +362,6 @@ extension View {
     
     func tintRectangularBackground(_ padding: CGFloat? = nil, cornerRadius: CGFloat? = nil) -> some View {
         modifier(TintBackground(padding: padding, radius: cornerRadius))
-    }
-    
-    func blurScroll(_ blur: CGFloat) -> some View {
-        modifier( BlurScroll(blur: blur) )
     }
     
     func onBecomingVisible(perform action: @escaping () -> Void) -> some View {

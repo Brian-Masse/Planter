@@ -278,3 +278,138 @@ struct Divider: View {
             .if(!vertical) { view in view.frame(height: 1) }
     }
 }
+
+//MARK: ScrollReader
+
+private struct SrollReaderPreferenceKey: PreferenceKey {
+    
+    static var defaultValue: CGPoint = .zero
+    
+    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) { }
+}
+
+
+struct ScrollReader<C: View>: View {
+    
+    var positionBinding: Binding<CGPoint>
+    let content: C
+    
+    init( _ position: Binding<CGPoint>, contentBuilder: () -> C ) {
+        self.positionBinding = position
+        self.content = contentBuilder()
+    }
+    
+    let coordinateSpaceName = "scrollReader"
+    
+    var body: some View {
+        ScrollView {
+            content
+                .background( GeometryReader { geo in
+                    Color.clear
+                        .preference(key: SrollReaderPreferenceKey.self,
+                                    value: geo.frame(in: .named(coordinateSpaceName)).origin)
+                } )
+                .onPreferenceChange(SrollReaderPreferenceKey.self) { value in
+                    self.positionBinding.wrappedValue = value
+                }
+        }
+        .coordinateSpace(name: coordinateSpaceName)
+    }
+}
+
+//MARK: Blur Scroll
+private struct ScrollOffsetPreferenceKey: PreferenceKey {
+    
+    static var defaultValue: CGPoint = .zero
+    
+    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) { }
+}
+
+struct BlurScroll<C: View>: View {
+    
+    let blur: CGFloat
+    let blurHeight: CGFloat
+    
+    let coordinateSpaceName = "scroll"
+    
+    let content: C
+    
+    var scrollPositionBinding: Binding<CGPoint>
+    @State var scrollPosition: CGPoint = .zero
+    
+    init(_ blur: CGFloat, blurHeight: CGFloat = 0.25, scrollPositionBinding: Binding<CGPoint>? = nil, contentBuilder: () -> C) {
+        
+        self.blur = blur
+        self.blurHeight = blurHeight
+        
+        self.content = contentBuilder()
+        self.scrollPositionBinding = Binding { .zero } set: { _ in }
+        self.scrollPositionBinding = scrollPositionBinding == nil ? defaultPositionBinding : scrollPositionBinding!
+        
+    }
+    
+    private var defaultPositionBinding: Binding<CGPoint> {
+        Binding { scrollPosition } set: { newValue
+            in scrollPosition = newValue
+        }
+    }
+    
+    private let gradient = LinearGradient(stops: [
+        .init(color: .white, location: 0.10),
+        .init(color: .clear, location: 0.25)],
+                                  startPoint: .bottom,
+                                  endPoint: .top)
+    
+    private let invertedGradient = LinearGradient(stops: [
+        .init(color: .clear, location: 0.10),
+        .init(color: .white, location: 0.25)],
+                                          startPoint: .bottom,
+                                          endPoint: .top)
+    
+    private var offset: CGFloat {
+        scrollPositionBinding.wrappedValue.y
+    }
+    
+    var body: some View {
+        
+        GeometryReader { topGeo in
+            
+            ScrollReader(scrollPositionBinding) {
+            
+                ZStack(alignment: .top) {
+                    content
+                        .mask(
+                            VStack {
+                                invertedGradient
+                                
+                                    .frame(height: topGeo.size.height, alignment: .top)
+                                    .offset(y:  -self.offset )
+                                Spacer()
+                            }
+                        )
+                    
+                    content
+                        .blur(radius: 15)
+                        .frame(height: topGeo.size.height, alignment: .top)
+                        .mask(gradient
+                            .frame(height: topGeo.size.height)
+                            .offset(y:  -self.offset )
+                        )
+                        .ignoresSafeArea()
+                }
+                .padding(.bottom, topGeo.size.height * 0.25)
+//                .background(GeometryReader { geo in
+//                    Color.clear
+//                        .preference(key: ScrollOffsetPreferenceKey.self,
+//                                    value: geo.frame(in: .named(coordinateSpaceName)).origin)
+//                })
+//                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+//                    self.scrollPosition = value
+//                }
+                
+            }
+        }
+        .ignoresSafeArea()
+    }
+}
+

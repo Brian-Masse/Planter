@@ -26,6 +26,7 @@ struct CalendarPageView: View {
     static let upNextPlantCount: Int = 100
     
     @State var showingPlantCreationView: Bool = false
+    @State var scrollViewPosition: CGPoint = .zero
     
     let plants: [PlanterPlant]
     
@@ -40,6 +41,8 @@ struct CalendarPageView: View {
             HStack {
                 UniversalText( "Planter.", size: Constants.UITitleTextSize, font: Constants.titleFont, case: .uppercase )
                 Spacer()
+                
+                Text("\(scrollViewPosition.y)")
             }
             .padding(.bottom, -10)
             
@@ -135,7 +138,7 @@ struct CalendarPageView: View {
 //            let todayPlants = plants.filter { plant in
 //                plant.getNextWateringDate().matches(.now, to: .day)
 //            }
-//            
+            
             let upNextPlants = plants.filter { plant in
                 let date = plant.getNextWateringDate()
                 return !date.matches(.now, to: .day) && date > .now
@@ -144,22 +147,26 @@ struct CalendarPageView: View {
             makeHeader()
                 .padding(.horizontal, 7)
             
-            VStack {
-                makeTodayView(from: plants)
-                
-                VStack {
-                    makeUpNextView(from: upNextPlants)
-
-                    Divider()
-                    
-                    LargeRoundedButton("create plant", icon: "plus", wide: true) {
-                        showingPlantCreationView = true
+            BlurScroll(10, scrollPositionBinding: $scrollViewPosition) {
+//                ScrollView {
+                    VStack {
+                        makeTodayView(from: plants)
+                        
+                        VStack {
+                            makeUpNextView(from: upNextPlants)
+                            
+                            Divider()
+                            
+                            LargeRoundedButton("create plant", icon: "plus", wide: true) {
+                                showingPlantCreationView = true
+                            }
+                        }
+                        .padding(.horizontal, 7)
+                        .padding(.bottom, 50)
                     }
-                }
-                .padding(.horizontal, 7)
-                .padding(.bottom, 50)
+//                }
             }
-            .blurScroll(20)
+//            .blurScroll(20, scrollPosition: $scrollViewPosition)
         }
         .sheet(isPresented: $showingPlantCreationView) { PlantCreationScene() }
     }
