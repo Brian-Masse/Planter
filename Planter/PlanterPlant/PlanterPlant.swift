@@ -146,6 +146,15 @@ class PlanterPlant: Object, Identifiable, Shareable {
             } else { thawed.room = nil }
         }
     }
+    
+    @MainActor
+    static func getPlants(on date: Date) -> [PlanterPlant] {
+        
+        RealmManager.retrieveObjects { query in
+            query.getNextWateringDate().matches(date, to: .day)
+        }
+        
+    }
 }
 
 //MARK: PlanterWateringNode

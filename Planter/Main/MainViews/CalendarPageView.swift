@@ -23,10 +23,15 @@ struct CalendarPageView: View {
     }
 
 //    MARK: Vars
+    @Namespace var calendarPageNameSpace
+    
     static let upNextPlantCount: Int = 100
+    static let calendarPageHeaderID: String = "calendarPageHeaderID"
     
     @State var showingPlantCreationView: Bool = false
     @State var scrollViewPosition: CGPoint = .zero
+    
+    @State var test: Bool = false
     
     let plants: [PlanterPlant]
     
@@ -38,18 +43,15 @@ struct CalendarPageView: View {
     @ViewBuilder
     private func makeHeader()  -> some View {
         VStack(alignment: .leading, spacing: 0) {
+            
             HStack {
                 UniversalText( "Planter.", size: Constants.UITitleTextSize, font: Constants.titleFont, case: .uppercase )
                 Spacer()
-                
-                Text("\(scrollViewPosition.y)")
             }
             .padding(.bottom, -10)
             
             UniversalText( "\(PlanterModel.profile.fullName())'s plants", size: Constants.UIDefaultTextSize, font: Constants.mainFont )
                 .padding(.bottom, 7)
-            
-            Divider()
         }
     }
     
@@ -143,30 +145,30 @@ struct CalendarPageView: View {
                 let date = plant.getNextWateringDate()
                 return !date.matches(.now, to: .day) && date > .now
             }
-        
+    
             makeHeader()
                 .padding(.horizontal, 7)
             
+            
             BlurScroll(10, scrollPositionBinding: $scrollViewPosition) {
-//                ScrollView {
-                    VStack {
-                        makeTodayView(from: plants)
-                        
-                        VStack {
-                            makeUpNextView(from: upNextPlants)
-                            
-                            Divider()
-                            
-                            LargeRoundedButton("create plant", icon: "plus", wide: true) {
-                                showingPlantCreationView = true
-                            }
-                        }
+                VStack {
+            
+                    Divider()
+                    
+                    makeTodayView(from: plants)
                         .padding(.horizontal, 7)
-                        .padding(.bottom, 50)
+                    
+                    VStack {
+                        makeUpNextView(from: upNextPlants)
+                        
+                        LargeRoundedButton("create plant", icon: "plus", wide: true) {
+                            showingPlantCreationView = true
+                        }
                     }
-//                }
+                    .padding(.horizontal, 7)
+                    .padding(.bottom, 50)
+                }
             }
-//            .blurScroll(20, scrollPosition: $scrollViewPosition)
         }
         .sheet(isPresented: $showingPlantCreationView) { PlantCreationScene() }
     }

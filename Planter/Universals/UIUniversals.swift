@@ -310,7 +310,7 @@ struct ScrollReader<C: View>: View {
                                     value: geo.frame(in: .named(coordinateSpaceName)).origin)
                 } )
                 .onPreferenceChange(SrollReaderPreferenceKey.self) { value in
-                    self.positionBinding.wrappedValue = value
+                    withAnimation { self.positionBinding.wrappedValue = value }
                 }
         }
         .coordinateSpace(name: coordinateSpaceName)
@@ -349,8 +349,8 @@ struct BlurScroll<C: View>: View {
     }
     
     private var defaultPositionBinding: Binding<CGPoint> {
-        Binding { scrollPosition } set: { newValue
-            in scrollPosition = newValue
+        Binding { scrollPosition } set: { newValue in
+            withAnimation { scrollPosition = newValue }
         }
     }
     
@@ -398,15 +398,6 @@ struct BlurScroll<C: View>: View {
                         .ignoresSafeArea()
                 }
                 .padding(.bottom, topGeo.size.height * 0.25)
-//                .background(GeometryReader { geo in
-//                    Color.clear
-//                        .preference(key: ScrollOffsetPreferenceKey.self,
-//                                    value: geo.frame(in: .named(coordinateSpaceName)).origin)
-//                })
-//                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-//                    self.scrollPosition = value
-//                }
-                
             }
         }
         .ignoresSafeArea()
