@@ -119,16 +119,6 @@ extension Date {
         Calendar.current.component(.day, from: self)
     }
     
-//    func round(to rounding: TimeRounding) -> Date {
-//        let comps = Calendar.current.dateComponents([.hour, .minute], from: self)
-//        
-//        let normalizedMinutes = Double(comps.minute ?? 0) / Constants.MinuteTime
-//        let roundedMinutes = (normalizedMinutes * Double(rounding.rawValue)).rounded(.down) / Double(rounding.rawValue) * Constants.MinuteTime
-//        let roundedHours =  roundedMinutes == 60 ? (comps.hour ?? 0) + 1 : (comps.hour ?? 0)
-//        
-//        return Calendar.current.date(bySettingHour: roundedHours, minute: Int(roundedMinutes), second: 0, of: self) ?? self
-//    }
-    
     func isFirstOfMonth() -> Bool {
         let components = Calendar.current.dateComponents([.day], from: self)
         return components.day == 1
@@ -136,6 +126,26 @@ extension Date {
     
     func isSunday() -> Bool {
         Calendar.current.component(.weekday, from: self) == 1
+    }
+    
+    func matches(dayOfWeek day: Int) -> Bool {
+        let component = Calendar.current.component(.weekday, from: self)
+        return component == day
+        
+    }
+    
+    func setMonth(to month: Int) -> Date {
+        var components = Calendar.current.dateComponents([.day, .month, .year], from: self)
+        components.month = month
+        return Calendar.current.date(from: components) ?? self
+    }
+    
+    func setDay(to day: Int) -> Date {
+        var components = Calendar.current.dateComponents([.year, .month, .day], from: self)
+        components.day = day
+        
+        return Calendar.current.date(from: components) ?? self 
+        
     }
 }
 

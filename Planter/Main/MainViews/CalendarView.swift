@@ -17,6 +17,28 @@ struct CalendarView: View {
     
     @State var activeDate: Date = .now
     
+    @State var dateToHighlight: Date = .now
+    
+//    MARK: Gestures
+    private func incremenetMonth(by value: Int) {
+        let newDate = Calendar.current.date(byAdding: .month, value: value, to: activeDate)
+        withAnimation {
+            self.activeDate = newDate ?? activeDate
+        }
+    }
+    
+    private var dragGesture: some Gesture {
+        DragGesture(minimumDistance: 10)
+            .onEnded { value in
+                
+                if value.translation.width > 0 {
+                    incremenetMonth(by: -1)
+                } else {
+                    incremenetMonth(by: 1)
+                }
+            }
+    }
+    
 //    MARK: ViewBuilders
     @ViewBuilder
     private func makeHeader() -> some View {
@@ -42,15 +64,13 @@ struct CalendarView: View {
                 Menu {
                     ForEach(0..<12) { i in
                         
-                        let newDate = Calendar.current.date(bySetting: .month,
-                                                            value: i + 1,
-                                                            of: activeDate)
+                        let newDate = activeDate.setMonth(to: i + 1)
                         
-                        let monthName = newDate?.formatted(.dateTime.month(.wide))
+                        let monthName = newDate.formatted(.dateTime.month(.wide))
                         
-                        Button( monthName ?? "") {
+                        Button( monthName) {
                             withAnimation {
-                                activeDate = newDate ?? activeDate
+                                activeDate = newDate
                             }
                         }
                     }
@@ -62,17 +82,14 @@ struct CalendarView: View {
                                     style: Colors.secondaryLight) {
                     }
                                     .foregroundStyle(.black)
+                                    .shadow(color: .black.opacity(0.3), radius: 10, y: 10)
                     
                 }
-                
-                
-                Spacer()
             }
             
             Divider()
-                .padding(.trailing, 20)
         }
-        .padding(.leading, 20)
+        .padding(.horizontal, 20)
     }
     
     
@@ -81,20 +98,110 @@ struct CalendarView: View {
     private func makeDayPreview(for day: Date) -> some View {
         
         let dayTitle = day.formatted(.dateTime.day(.twoDigits))
+        let isWeekend = day.matches(dayOfWeek: 1) || day.matches(dayOfWeek: 7)
         
         VStack {
+            Spacer()
             
-            if day.matches(.now, to: .day) {
-                Circle()
-                    .foregroundStyle(PlanterModel.shared.activeColor)
-                    .frame(width: 10, height: 10)
+            HStack {
+                Spacer()
+                if day.matches(.now, to: .day) {
+                    Circle()
+                        .foregroundStyle(PlanterModel.shared.activeColor)
+                        .frame(width: 10, height: 10)
+                }
+                Spacer()
             }
             
             UniversalText(dayTitle, size: Constants.UISubHeaderTextSize, font:
                             Constants.titleFont)
+            .opacity(isWeekend ? 0.5 : 1)
+            
         }
+        .frame(height: 60)
+        .onTapGesture { withAnimation {
+            dateToHighlight = day
+        } }
+        .background(
+            Rectangle()
+                .cornerRadius(Constants.UIDefaultCornerRadius)
+                .padding(-7)
+                .foregroundStyle( dateToHighlight.matches(day, to: .day) ? PlanterModel.shared.activeColor : .clear)
+        )
+    }
+    
+    private func getDateOffset() -> Int {
         
+        let componentDay = DateComponents(day: 1)
         
+        let firstDayOfMonth = Calendar.current.nextDate(after: activeDate,
+                                                        matching: componentDay, matchingPolicy: .previousTimePreservingSmallerComponents,
+                                                        direction: .backward)
+     
+        let weekDay = Calendar.current.component(.weekday, from: firstDayOfMonth ?? activeDate)
+        return weekDay - 1
+    }
+    
+    @ViewBuilder
+    private func makeDays() -> some View {
+        
+        let range = Calendar.current.range(of: .day, in: .month, for: activeDate)
+        let dayCount = range?.count ?? 30
+        
+        let coloumns: CGFloat = 7
+        let spacing: CGFloat = 7
+
+        GeometryReader { geo in
+            
+            let min = (geo.size.width - (coloumns - 1) * spacing ) / coloumns
+            let offset = getDateOffset()
+            
+            VStack(spacing: 0) {
+                
+                HStack {
+                    ForEach(1...7, id: \.self) { day in
+                        
+                        let date = Calendar.current.date(bySetting: .weekday, value: day, of: activeDate)
+                        
+                        let title = date?.formatted(.dateTime.weekday(.abbreviated))
+                        
+                        Spacer()
+                        UniversalText(title ?? "-",
+                                      size: Constants.UIDefaultTextSize,
+                                      font: Constants.titleFont,
+                                      case: .uppercase,
+                                      wrap: false,
+                                      scale: true)
+                        Spacer()
+                    }
+                }
+                
+                LazyVGrid(columns: [ .init(.adaptive(minimum: min, maximum: 100),
+                                           spacing: spacing) ],
+                          spacing: spacing) {
+                    
+                    ForEach( 1...dayCount + offset, id: \.self ) { day in
+                        
+                        if day <= offset {
+                            Rectangle()
+                                .foregroundStyle(.clear)
+                            
+                        } else {
+                            let date = activeDate.setDay(to: day - offset)
+                            
+                            makeDayPreview(for: date)
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.horizontal)
+        .background(
+            Rectangle()
+                .foregroundStyle(.clear)
+                .contentShape(Rectangle())
+                .gesture( dragGesture )
+        )
     }
     
     
@@ -107,10 +214,11 @@ struct CalendarView: View {
             
             Spacer()
             
-            makeDayPreview(for: .now)
-            
+            makeDays()
         }
+        .universalBackground()
     }
+        
     
 }
 
