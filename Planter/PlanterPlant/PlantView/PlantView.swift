@@ -34,7 +34,7 @@ struct PlantView: View {
         self.image = PhotoManager.decodeImage(from: plant.coverImage) ?? Image("fern")
     }
     
-    @State var activePage: PlantPageTab = .comments
+    @State var activePage: PlantPageTab = .overview
     
 //    MARK: Body
     var body: some View {

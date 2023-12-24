@@ -17,6 +17,7 @@ struct PlantOverviewView: View {
     let image: Image
     
     @State var showingWateringView: Bool = false
+    @State var showingEditingView: Bool = false
     
 //    MARK: Header
     
@@ -112,7 +113,7 @@ struct PlantOverviewView: View {
                     Spacer()
                     HStack {
                         LargeTextButton( "Edit Plant", at: -55, aspectRatio: 2.3, verticalTextAlignment: .top, arrowDirection: .down ) {
-                            print("hello")
+                            showingEditingView = true
                         }
                         .padding(.leading)
                         .offset(y: -5)
@@ -225,6 +226,9 @@ struct PlantOverviewView: View {
         .padding(.horizontal, 7)
         .sheet(isPresented: $showingWateringView) {
             PlantWateringScene(plant: plant)
+        }
+        .fullScreenCover(isPresented: $showingEditingView) {
+            PlantEditingView(plant: plant)
         }
     }
     

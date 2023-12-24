@@ -25,6 +25,7 @@
 		C91586FA2B1825F300444826 /* PlanterScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91586F92B1825F300444826 /* PlanterScene.swift */; };
 		C91586FC2B194AAF00444826 /* PlantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91586FB2B194AAF00444826 /* PlantView.swift */; };
 		C92968BF2B3529350089C83D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92968BE2B3529350089C83D /* CalendarView.swift */; };
+		C92968C12B36712A0089C83D /* PlantEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92968C02B36712A0089C83D /* PlantEditingView.swift */; };
 		C92B97D22B1413ED00A2D3F5 /* PlanterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92B97D12B1413ED00A2D3F5 /* PlanterModel.swift */; };
 		C92BD20C2B27938200AF6765 /* ProfileOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92BD20B2B27938200AF6765 /* ProfileOverviewView.swift */; };
 		C92BD20E2B2793F300AF6765 /* ProfileSocialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92BD20D2B2793F300AF6765 /* ProfileSocialView.swift */; };
@@ -88,6 +89,7 @@
 		C91586F92B1825F300444826 /* PlanterScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterScene.swift; sourceTree = "<group>"; };
 		C91586FB2B194AAF00444826 /* PlantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantView.swift; sourceTree = "<group>"; };
 		C92968BE2B3529350089C83D /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		C92968C02B36712A0089C83D /* PlantEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantEditingView.swift; sourceTree = "<group>"; };
 		C92B97D12B1413ED00A2D3F5 /* PlanterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterModel.swift; sourceTree = "<group>"; };
 		C92BD20B2B27938200AF6765 /* ProfileOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileOverviewView.swift; sourceTree = "<group>"; };
 		C92BD20D2B2793F300AF6765 /* ProfileSocialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSocialView.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				C906BDB82B141ECC0067B403 /* PlanterPlant.swift */,
 				C91586F92B1825F300444826 /* PlanterScene.swift */,
 				C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */,
+				C92968C02B36712A0089C83D /* PlantEditingView.swift */,
 				C911B8F62B24317C00F5986A /* PlanterWateringScene.swift */,
 				C911B9042B25239900F5986A /* PlantView */,
 				C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */,
@@ -482,6 +485,7 @@
 				C911B8FF2B25064400F5986A /* OpenFlexibleRealmView.swift in Sources */,
 				C96C7E502B1717B300FC2FB0 /* ViewModifiers.swift in Sources */,
 				C96C7E4D2B1717B300FC2FB0 /* Constants.swift in Sources */,
+				C92968C12B36712A0089C83D /* PlantEditingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -93,9 +93,7 @@ struct MainView: View {
         GeometryReader { geo in
             ZStack(alignment: .bottom) {
                 TabView(selection: $page) {
-//                    CalendarPageView(plants: arrPlants).tag( MainPage.calendarPageView )
-                    
-                    CalendarView(plants: []).tag(MainPage.calendarPageView)
+                    CalendarPageView(plants: arrPlants).tag( MainPage.calendarPageView )    
                     
                     RoomsPageView(rooms: arrRooms).tag( MainPage.roomsPageView )
                 }

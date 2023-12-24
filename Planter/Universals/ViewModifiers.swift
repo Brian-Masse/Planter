@@ -175,9 +175,13 @@ private struct SecondaryOpaqueRectangularBackground: ViewModifier {
         content
             .if(padding == nil) { view in view.padding() }
             .if(padding != nil) { view in view.padding(padding!) }
-            .background( colorScheme == .dark ? Colors.secondaryDark : Colors.secondaryLight )
-            .cornerRadius(Constants.UIDefaultCornerRadius)
-//            .shadow(color: Colors.tint.opacity( colorScheme == .dark ? 0.2 : 0.4), radius: 50)
+            .background(
+                Rectangle()
+                    .foregroundStyle(colorScheme == .dark ? Colors.secondaryDark : Colors.secondaryLight)
+                    .opacity(0.3)
+                    .cornerRadius(Constants.UIDefaultCornerRadius)
+                    .shadow(color: .black.opacity(0.4), radius: 10, y: 10)
+            )
     }
 }
 
