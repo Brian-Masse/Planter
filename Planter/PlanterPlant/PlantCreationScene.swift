@@ -57,9 +57,8 @@ struct PlantCreationScene: View {
         
         VStack(alignment: .leading) {
             
-            TextFieldWithPrompt(title: "What do you call this plant?", binding: $name)
-            TextFieldWithPrompt(title: "Add any additional notes on this plant", binding: $notes)
-            
+            StyledTextField($name, prompt: "name", question: "What do you call this plant?")
+            StyledTextField($notes, prompt: "notes", question: "add any additional notes on this plant")
         }
         .onChange(of: name) { oldValue, newValue in
             sceneComplete = !(newValue.isEmpty || notes.isEmpty)

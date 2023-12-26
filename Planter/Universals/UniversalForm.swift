@@ -169,43 +169,89 @@ struct BasicPicker<ListType:RandomAccessCollection, Content: View>: View where L
 
 //MARK: TextFieldWithPrompt
 
-struct TextFieldWithPrompt: View {
+struct StyledTextField: View {
     
-    let title: String
     let binding: Binding<String>
-    let clearable: Bool
+    let prompt: String
+    let question: String
     
-    init( title: String, binding: Binding<String>, clearable: Bool = false ) {
-        self.title = title
+    let fontSize: CGFloat
+    let uppercase: Bool
+    
+    let clearable: Bool
+    let privateField: Bool
+    
+    init( _ binding: Binding<String>, prompt: String, question: String = "", fontSize: CGFloat = Constants.UIHeaderTextSize, upperCase: Bool = false, privateField: Bool = false) {
+        
         self.binding = binding
-        self.clearable = clearable
+        self.prompt = prompt
+        self.question = question
+        
+        self.fontSize = fontSize
+        self.uppercase = upperCase
+        
+        self.clearable = false
+        self.privateField = privateField
+        
     }
     
     @FocusState var focused: Bool
+    @State var activeColor: Color = .black
+    
     @State var showingClearButton: Bool = false
     
-    @State var test: String = ""
+    private var textBinding: Binding<String> {
+        Binding {
+            self.uppercase ? binding.wrappedValue.uppercased() : binding.wrappedValue
+        } set: { value in binding.wrappedValue = value }
+    }
+    
+    @ViewBuilder
+    private func makeTextField() -> some View {
+        if privateField {
+            SecureField(text: textBinding) {
+                UniversalText( prompt, size: fontSize, font: Constants.mainFont, case: .uppercase )
+                    .foregroundStyle( activeColor.opacity(0.75) )
+            }
+        } else {
+            TextField(text: textBinding) {
+                UniversalText( prompt, size: fontSize, font: Constants.mainFont, case: .uppercase )
+                    .foregroundStyle( activeColor.opacity(0.75) )
+            }
+        }
+        
+    }
     
     var body: some View {
         
         VStack(alignment: .leading, spacing: 0) {
-            TextField(text: binding) {
-                UniversalText( title, size: Constants.UISubHeaderTextSize, font: Constants.mainFont, case: .uppercase )
-                    .opacity(0.75)
-            }
+
+            makeTextField()
+            .foregroundStyle(activeColor)
+            .font(.custom(Constants.mainFont.rawValue, size: fontSize))
                 .focused($focused)
                 .lineLimit(10)
                 .padding( .trailing, 5 )
-
                 .universalTextField()
                 .onChange(of: self.focused) { oldValue, newValue in
-                    withAnimation { self.showingClearButton = newValue }
+                    withAnimation {
+                        self.showingClearButton = newValue
+                        
+                        self.activeColor = newValue ? PlanterModel.shared.activeColor : .black
+                    }
                 }
             
-            Divider()
+            Divider(strokeWidth: 4, color: activeColor)
+            
+            if !question.isEmpty {
+                UniversalText(question, size: Constants.UIDefaultTextSize, font: Constants.mainFont)
+                    .padding(.trailing, 40)
+                    .foregroundStyle( activeColor )
+            }
         }
     }
 }
+
 
 //MARK: StyleSlider
 struct StyledSlider: View {
@@ -598,3 +644,4 @@ struct StyledPhotoPicker<C: View>: View {
     }
     
 }
+

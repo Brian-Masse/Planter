@@ -266,16 +266,20 @@ struct CircularProgressView: View {
 struct Divider: View {
     
     let vertical: Bool
+    let strokeWidth: CGFloat
+    let color: Color
     
-    init(vertical: Bool = false) {
+    init(vertical: Bool = false, strokeWidth: CGFloat = 1, color: Color = .black) {
         self.vertical = vertical
+        self.strokeWidth = strokeWidth
+        self.color = color
     }
     
     var body: some View {
         Rectangle()
-            .foregroundStyle(.black)
-            .if(vertical) { view in view.frame(width: 1) }
-            .if(!vertical) { view in view.frame(height: 1) }
+            .if(vertical) { view in view.frame(width: strokeWidth) }
+            .if(!vertical) { view in view.frame(height: strokeWidth) }
+            .foregroundStyle(color)
     }
 }
 

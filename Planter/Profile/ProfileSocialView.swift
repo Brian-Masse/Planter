@@ -127,7 +127,7 @@ struct ProfileSocialView: View {
                 VStack(alignment: .leading) {
                     UniversalText( "find \nbuddies", size: Constants.UIHeaderTextSize, font: Constants.titleFont, case: .uppercase, lineSpacing: -15 )
                     
-                    TextFieldWithPrompt(title: "search", binding: $profileSearchText)
+                    StyledTextField($profileSearchText, prompt: "search", question: "Search by first name, last name, or username")
                         .padding(.trailing)
                 }
                 

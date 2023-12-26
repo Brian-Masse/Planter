@@ -65,11 +65,11 @@ struct ProfileCreationScene: View {
     private func makeNameScene() -> some View {
         VStack(alignment: .leading) {
             
-            TextFieldWithPrompt(title: "First Name", binding: $firstName)
+            StyledTextField($firstName, prompt: "First Name")
             
-            TextFieldWithPrompt(title: "Last Name", binding: $lastName)
+            StyledTextField($lastName, prompt: "Last Name")
             
-            TextFieldWithPrompt(title: "userName", binding: $userName)
+            StyledTextField($userName, prompt: "userName")
             
         }
         .onChange(of: firstName) { sceneComplete = checkNameSceneCompletion() }
@@ -88,9 +88,9 @@ struct ProfileCreationScene: View {
                 }
             }()
             
-            TextFieldWithPrompt( title: "email", binding: $email )
+            StyledTextField($email, prompt: "email")
             
-            TextFieldWithPrompt( title: "phone number", binding: phoneBinding )
+            StyledTextField(phoneBinding, prompt: "phone number")
                 .keyboardType(.numberPad)
         }
         .onChange(of: email) { sceneComplete = checkContactSceneCompletion() }

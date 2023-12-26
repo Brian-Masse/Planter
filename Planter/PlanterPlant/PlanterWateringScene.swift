@@ -33,7 +33,7 @@ struct PlantWateringScene: View {
             }.padding(.bottom)
             
             
-            TextFieldWithPrompt(title: "comments", binding: $comments)
+            StyledTextField($comments, prompt: "comments")
             
             StyledDatePicker($date, title: "What day did you water this on?")
             

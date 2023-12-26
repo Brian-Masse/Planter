@@ -45,8 +45,8 @@ struct RoomCreationScene: View  {
         
         VStack(alignment: .leading) {
             
-            TextFieldWithPrompt(title: "name", binding: $name)
-            TextFieldWithPrompt(title: "notes", binding: $notes)
+            StyledTextField($name, prompt: "name")
+            StyledTextField($notes, prompt: "notes")
                 
             Spacer()
         }

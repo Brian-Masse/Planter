@@ -36,9 +36,8 @@ struct AuthenticationView: View {
                 
                 Spacer()
             }
-            
-            TextFieldWithPrompt(title: "email", binding: $email)
-            TextFieldWithPrompt(title: "password", binding: $password)
+            StyledTextField($email, prompt: "email", question: "What is your email?")
+            StyledTextField($password, prompt: "password", question: "", privateField: true)
             
             
             Spacer()

@@ -66,10 +66,10 @@ struct PlantEditingView: View {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading) {
                 
-                TextFieldWithPrompt(title: "Name", binding: $name)
+                StyledTextField($name, prompt: "name", question: "What do you call this plant")
                     .padding(.bottom)
                 
-                TextFieldWithPrompt(title: "Notes", binding: $name)
+                StyledTextField($notes, prompt: "notes", question: "Provide any additional notes on this plant")
             }
             .padding(.horizontal)
             .padding(.bottom)
@@ -84,6 +84,7 @@ struct PlantEditingView: View {
                     .rotationEffect(.degrees(-90))
             }
         }
+        .padding(.vertical)
         .secondaryOpaqueRectangularBackground()
         .padding(.vertical)
 
@@ -119,6 +120,7 @@ struct PlantEditingView: View {
                 .rotationEffect(.degrees(-90))
             }
         }
+        .padding(.vertical)
         .secondaryOpaqueRectangularBackground()
     }
     
