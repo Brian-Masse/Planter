@@ -45,7 +45,7 @@ class Constants {
     static let UIHeaderTextSize: CGFloat    = 40
     static let UISubHeaderTextSize: CGFloat = 30
     static let UIDefaultTextSize: CGFloat   = 20
-    static let UISmallTextSize: CGFloat     = 11
+    static let UISmallTextSize: CGFloat     = 15
     
     //    extra
     static let UIDefaultCornerRadius: CGFloat = 40

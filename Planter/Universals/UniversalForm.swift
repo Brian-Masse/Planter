@@ -244,8 +244,8 @@ struct StyledTextField: View {
             Divider(strokeWidth: 4, color: activeColor)
             
             if !question.isEmpty {
-                UniversalText(question, size: Constants.UIDefaultTextSize, font: Constants.mainFont)
-                    .padding(.trailing, 40)
+                UniversalText(question, size: Constants.UISmallTextSize, font: Constants.mainFont)
+                    .padding(.trailing, 30)
                     .foregroundStyle( activeColor )
             }
         }
@@ -645,3 +645,43 @@ struct StyledPhotoPicker<C: View>: View {
     
 }
 
+//MARK: StyledForm
+
+struct StyledFormSection<C: View>: View {
+    
+    let name: String
+    let content: C
+    
+    init( _ name: String, contentBuilder: () -> C ) {
+        self.name = name
+        self.content = contentBuilder()
+    }
+    
+    var body: some View {
+        HStack(alignment: .bottom, spacing: 0) {
+            
+            content
+                .padding(25)
+            
+            Spacer()
+            
+            VerticalLayout {
+                UniversalText(name,
+                              size: Constants.UIMainHeaderTextSize,
+                              font: Constants.titleFont,
+                              case: .uppercase,
+                              lineSpacing: -25 )
+                
+                    .rotationEffect(.degrees(-90))
+            }
+            .opacity(0.75)
+            .padding(.trailing, -20)
+            .mask {
+                Rectangle()
+                    .cornerRadius(Constants.UIDefaultCornerRadius, corners: [.topRight, .bottomRight])
+            }
+        }
+        .secondaryOpaqueRectangularBackground(0)
+    }
+    
+}

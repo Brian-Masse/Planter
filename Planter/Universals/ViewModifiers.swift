@@ -178,7 +178,7 @@ private struct SecondaryOpaqueRectangularBackground: ViewModifier {
             .background(
                 Rectangle()
                     .foregroundStyle(colorScheme == .dark ? Colors.secondaryDark : Colors.secondaryLight)
-                    .opacity(0.3)
+                    .opacity(0.5)
                     .cornerRadius(Constants.UIDefaultCornerRadius)
                     .shadow(color: .black.opacity(0.4), radius: 10, y: 10)
             )
