@@ -14,7 +14,6 @@ enum ProvidedFont: String {
     case renoMono = "RenoMono-Regular"
     case helvetica = "helvetica"
     case syneHeavy = "Syne-Bold"
-    
 }
 
 //MARK: UniversalText
