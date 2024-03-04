@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import RealmSwift
+import UIUniversals
 
 struct MainView: View {
     
@@ -50,7 +51,7 @@ struct MainView: View {
                                  at: 0,
                                  aspectRatio: 1,
                                  arrow: false,
-                                 style: self.page == page ? Colors.accent : Colors.secondaryLight) {
+                                 style: self.page == page ? .accent : .secondary) {
                     self.page = page
                 }
             }

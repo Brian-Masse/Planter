@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIUniversals
 
 struct PlantOverviewView: View {
     
@@ -36,7 +37,7 @@ struct PlantOverviewView: View {
                 
                 Spacer()
                 
-                LargeTextButton("", at: 0, aspectRatio: 1, verticalTextAlignment: .top, arrow: true, style: Colors.secondaryLight) {
+                LargeTextButton("", at: 0, aspectRatio: 1, verticalTextAlignment: .top, arrow: true, style: .secondary) {
                     presentationMode.wrappedValue.dismiss()
                 }
                 .scaleEffect(0.9)

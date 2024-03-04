@@ -7,12 +7,14 @@
 
 import Foundation
 import SwiftUI
-
+import UIUniversals
 
 
 struct CalendarView: View {
     
 //    MARK: Vars
+    @Environment(\.colorScheme) var colorScheme
+    
     let plants: [PlanterPlant]
     
     @State var activeDate: Date = .now
@@ -79,7 +81,7 @@ struct CalendarView: View {
                                     at: 0,
                                     aspectRatio: 1,
                                     arrow: false,
-                                    style: Colors.secondaryLight) {
+                                    style: .secondary) {
                     }
                                     .foregroundStyle(.black)
                                     .shadow(color: .black.opacity(0.3), radius: 10, y: 10)
@@ -107,7 +109,7 @@ struct CalendarView: View {
                 Spacer()
                 if day.matches(.now, to: .day) {
                     Circle()
-                        .foregroundStyle(PlanterModel.shared.activeColor)
+                        .universalStyledBackgrond(.accent)
                         .frame(width: 10, height: 10)
                 }
                 Spacer()
@@ -126,7 +128,7 @@ struct CalendarView: View {
             Rectangle()
                 .cornerRadius(Constants.UIDefaultCornerRadius)
                 .padding(-7)
-                .foregroundStyle( dateToHighlight.matches(day, to: .day) ? PlanterModel.shared.activeColor : .clear)
+                .foregroundStyle( dateToHighlight.matches(day, to: .day) ? Colors.getAccent(from: colorScheme) : .clear)
         )
     }
     
@@ -222,8 +224,8 @@ struct CalendarView: View {
     
 }
 
-#Preview {
-    CalendarView(plants: [])
-}
+//#Preview {
+//    CalendarView(plants: [])
+//}
 
 

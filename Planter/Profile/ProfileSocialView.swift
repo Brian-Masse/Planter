@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import RealmSwift
+import UIUniversals
 
 struct ProfileSocialView: View {
     
@@ -104,7 +105,7 @@ struct ProfileSocialView: View {
                                 aspectRatio: 1,
                                 verticalTextAlignment: .center,
                                 arrow: false,
-                                style: isFriends || isRequestedBy || isPending ? Colors.accent : Colors.secondaryLight) {
+                                style: isFriends || isRequestedBy || isPending ? .accent : .secondary) {
                     
                     searchResultFunction(result: result,
                                          isFriends: isFriends,
@@ -115,7 +116,7 @@ struct ProfileSocialView: View {
             }
         }
         .foregroundStyle(.black.opacity(0.7))
-        .transparentRectangularBackgorund()
+        .rectangularBackground(style: .transparent)
         .shadow(color: .black.opacity(0.1), radius: 10, y: 10)
     }
     
@@ -264,16 +265,16 @@ struct ProfileSocialView: View {
 
 
 
-#Preview {
-    
-    let profile = PlanterProfile(ownerId: "",
-                                 firstName: "Brian",
-                                 lastName: "Masse",
-                                 userName: "bmasse23",
-                                 email: "brianm25it@gmail.com",
-                                 phoneNumber: 7813153811,
-                                 birthday: .now)
-    
-    return ProfileView(profile)
-}
-
+//#Preview {
+//    
+//    let profile = PlanterProfile(ownerId: "",
+//                                 firstName: "Brian",
+//                                 lastName: "Masse",
+//                                 userName: "bmasse23",
+//                                 email: "brianm25it@gmail.com",
+//                                 phoneNumber: 7813153811,
+//                                 birthday: .now)
+//    
+//    return ProfileView(profile)
+//}
+//

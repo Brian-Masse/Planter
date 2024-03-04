@@ -8,6 +8,7 @@
 import Foundation
 import RealmSwift
 import SwiftUI
+import UIUniversals
 
 var inDev: Bool = true
 
@@ -23,8 +24,6 @@ class PlanterModel: ObservableObject {
     
     var ownerID: String { PlanterModel.realmManager.user?.id ?? "no user" }
     private(set) var activeProfile: PlanterProfile? = nil
-    
-    @Published var activeColor: Color = Colors.main
     
 //    MARK: State
     enum AppState: Int {

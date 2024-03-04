@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import RealmSwift
+import UIUniversals
 
 @MainActor
 struct CalendarPageView: View {
@@ -62,7 +63,7 @@ struct CalendarPageView: View {
         ZStack {
             if !plants.isEmpty {
                 Rectangle()
-                    .universalForegroundColor()
+                    .universalStyledBackgrond(.accent, onForeground: true)
                     .cornerRadius(Constants.UILargeCornerRadius, corners: [.topLeft, .bottomRight])
                     .ignoresSafeArea()
                     .padding(-7)

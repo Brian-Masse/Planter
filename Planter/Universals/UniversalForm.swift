@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import PhotosUI
+import UIUniversals
 
 //MARK: Basic
 
@@ -113,8 +114,8 @@ struct MultiPicker<ListType:Collection>: View where ListType:RangeReplaceableCol
                 }
             } label: {
                 Text( retrieveSelectionPreview())
-                ResizeableIcon(icon: "chevron.up.chevron.down", size: Constants.UIDefaultTextSize)
-            }.foregroundColor( Colors.tint )
+                ResizableIcon("chevron.up.chevron.down", size: Constants.UIDefaultTextSize)
+            }.universalStyledBackgrond(.accent, onForeground: true)
                 
             if #available(iOS 16.4, *) {
                 menu.menuActionDismissBehavior(.disabled)
@@ -161,7 +162,7 @@ struct BasicPicker<ListType:RandomAccessCollection, Content: View>: View where L
                     }
                     Image(systemName: "chevron.up.chevron.down")
                 }
-                .foregroundColor(Colors.tint)
+                .universalStyledBackgrond(.accent, onForeground: true)
             }
         }
     }
@@ -170,6 +171,8 @@ struct BasicPicker<ListType:RandomAccessCollection, Content: View>: View where L
 //MARK: TextFieldWithPrompt
 
 struct StyledTextField: View {
+    
+    @Environment(\.colorScheme) var colorScheme
     
     let binding: Binding<String>
     let prompt: String
@@ -228,7 +231,7 @@ struct StyledTextField: View {
 
             makeTextField()
             .foregroundStyle(activeColor)
-            .font(.custom(Constants.mainFont.rawValue, size: fontSize))
+            .font(.custom(Constants.mainFont.postScriptName, size: fontSize))
                 .focused($focused)
                 .lineLimit(10)
                 .padding( .trailing, 5 )
@@ -237,7 +240,7 @@ struct StyledTextField: View {
                     withAnimation {
                         self.showingClearButton = newValue
                         
-                        self.activeColor = newValue ? PlanterModel.shared.activeColor : .black
+                        self.activeColor = newValue ? Colors.getAccent(from: colorScheme) : .black
                     }
                 }
             
@@ -256,6 +259,8 @@ struct StyledTextField: View {
 //MARK: StyleSlider
 struct StyledSlider: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     let minValue: Float
     let maxValue: Float
     
@@ -267,10 +272,10 @@ struct StyledSlider: View {
     var body: some View {
         HStack {
             Slider(value: binding, in: minValue...maxValue )
-                .tint(Colors.tint)
+                .tint(Colors.getAccent(from: colorScheme))
             
             TextField("", text: strBinding)
-                .secondaryOpaqueRectangularBackground()
+                .rectangularBackground(style: .secondary)
                 .universalTextField()
                 .frame(width: textFieldWidth)
         }
@@ -556,6 +561,8 @@ struct LengthSelector: View {
 //MARK: StyledToggle
 struct StyledToggle<C: View>: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     let title: C
     let wide: Bool
     let binding: Binding<Bool>
@@ -575,7 +582,7 @@ struct StyledToggle<C: View>: View {
             if wide { Spacer() }
             
             Toggle("", isOn: binding)
-                .tint(Colors.tint)
+                .tint(Colors.getAccent(from: colorScheme))
         }
     }
 }
@@ -583,6 +590,8 @@ struct StyledToggle<C: View>: View {
 //MARK: StyledDatePicker
 
 struct StyledDatePicker: View {
+    
+    @Environment(\.colorScheme) var colorScheme
     
     @Binding var date: Date
     let title: String
@@ -600,8 +609,8 @@ struct StyledDatePicker: View {
             DatePicker(selection: $date, displayedComponents: .date) {
                 UniversalText( "select", size: Constants.UIDefaultTextSize, font: Constants.titleFont )
             }
-            .tint(Colors.tint)
-            .secondaryOpaqueRectangularBackground()
+            .tint(Colors.getAccent(from: colorScheme))
+            .rectangularBackground(style: .secondary)
         }
     }
     
@@ -681,7 +690,7 @@ struct StyledFormSection<C: View>: View {
                     .cornerRadius(Constants.UIDefaultCornerRadius, corners: [.topRight, .bottomRight])
             }
         }
-        .secondaryOpaqueRectangularBackground(0)
+        .rectangularBackground(0, style: .secondary)
     }
     
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIUniversals
 
 struct PlantPreviewView: View {
     
@@ -121,7 +122,7 @@ struct PlantPreviewView: View {
                                     aspectRatio: 1.5,
                                     verticalTextAlignment: .bottom,
                                     arrowDirection: .up,
-                                    style: Colors.secondaryLight) {
+                                    style: .secondary) {
                         print("hello")
                     }
                                 .scaleEffect(0.9)

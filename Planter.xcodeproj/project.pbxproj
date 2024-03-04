@@ -34,13 +34,12 @@
 		C96C7E4C2B1717B300FC2FB0 /* UniversalForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E442B1717B300FC2FB0 /* UniversalForm.swift */; };
 		C96C7E4D2B1717B300FC2FB0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E452B1717B300FC2FB0 /* Constants.swift */; };
 		C96C7E4F2B1717B300FC2FB0 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E472B1717B300FC2FB0 /* Animations.swift */; };
-		C96C7E502B1717B300FC2FB0 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E482B1717B300FC2FB0 /* ViewModifiers.swift */; };
-		C96C7E512B1717B300FC2FB0 /* UIUniversals.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E492B1717B300FC2FB0 /* UIUniversals.swift */; };
 		C96C7E522B1717B300FC2FB0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E4A2B1717B300FC2FB0 /* Extensions.swift */; };
 		C96C7E532B1717B300FC2FB0 /* UniversalButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */; };
 		C96C7E582B18338500FC2FB0 /* PlantCreationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */; };
 		C96C7E5A2B183E8300FC2FB0 /* PlantPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */; };
 		C96C7E5D2B183FD900FC2FB0 /* MadeTommy.otf in Resources */ = {isa = PBXBuildFile; fileRef = C96C7E5C2B183FD900FC2FB0 /* MadeTommy.otf */; };
+		C96D56F22B966349009744BB /* UIUniversals in Frameworks */ = {isa = PBXBuildFile; productRef = C96D56F12B966349009744BB /* UIUniversals */; };
 		C996EFC22B19C84500392C4E /* PlanterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C996EFC12B19C84500392C4E /* PlanterSheet.swift */; };
 		C996EFC52B1BA71300392C4E /* RoomsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C996EFC42B1BA71300392C4E /* RoomsPageView.swift */; };
 		C9B981422B140FCF0045D4A6 /* PlanterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981412B140FCF0045D4A6 /* PlanterApp.swift */; };
@@ -96,8 +95,6 @@
 		C96C7E442B1717B300FC2FB0 /* UniversalForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniversalForm.swift; sourceTree = "<group>"; };
 		C96C7E452B1717B300FC2FB0 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C96C7E472B1717B300FC2FB0 /* Animations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
-		C96C7E482B1717B300FC2FB0 /* ViewModifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
-		C96C7E492B1717B300FC2FB0 /* UIUniversals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUniversals.swift; sourceTree = "<group>"; };
 		C96C7E4A2B1717B300FC2FB0 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniversalButtons.swift; sourceTree = "<group>"; };
 		C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantCreationScene.swift; sourceTree = "<group>"; };
@@ -127,6 +124,7 @@
 			files = (
 				C96C7E422B1712F700FC2FB0 /* RealmSwift in Frameworks */,
 				C96C7E402B1712F700FC2FB0 /* Realm in Frameworks */,
+				C96D56F22B966349009744BB /* UIUniversals in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,10 +206,8 @@
 				C96C7E472B1717B300FC2FB0 /* Animations.swift */,
 				C96C7E452B1717B300FC2FB0 /* Constants.swift */,
 				C96C7E4A2B1717B300FC2FB0 /* Extensions.swift */,
-				C96C7E492B1717B300FC2FB0 /* UIUniversals.swift */,
 				C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */,
 				C96C7E442B1717B300FC2FB0 /* UniversalForm.swift */,
-				C96C7E482B1717B300FC2FB0 /* ViewModifiers.swift */,
 			);
 			path = Universals;
 			sourceTree = "<group>";
@@ -331,6 +327,7 @@
 			packageProductDependencies = (
 				C96C7E3F2B1712F700FC2FB0 /* Realm */,
 				C96C7E412B1712F700FC2FB0 /* RealmSwift */,
+				C96D56F12B966349009744BB /* UIUniversals */,
 			);
 			productName = Planter;
 			productReference = C9B9813E2B140FCF0045D4A6 /* Planter.app */;
@@ -406,6 +403,7 @@
 			mainGroup = C9B981352B140FCF0045D4A6;
 			packageReferences = (
 				C96C7E3E2B1712F700FC2FB0 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				C96D56F02B966349009744BB /* XCRemoteSwiftPackageReference "UIUniversals" */,
 			);
 			productRefGroup = C9B9813F2B140FCF0045D4A6 /* Products */;
 			projectDirPath = "";
@@ -469,7 +467,6 @@
 				C91586F82B17E9CB00444826 /* CalendarPageView.swift in Sources */,
 				C92BD20C2B27938200AF6765 /* ProfileOverviewView.swift in Sources */,
 				C911B8F52B23FC9400F5986A /* PhotoManager.swift in Sources */,
-				C96C7E512B1717B300FC2FB0 /* UIUniversals.swift in Sources */,
 				C96C7E5A2B183E8300FC2FB0 /* PlantPreviewView.swift in Sources */,
 				C911B9082B25254900F5986A /* PlantCommentsView.swift in Sources */,
 				C96C7E522B1717B300FC2FB0 /* Extensions.swift in Sources */,
@@ -483,7 +480,6 @@
 				C911B9012B2519FC00F5986A /* PlanterRoom.swift in Sources */,
 				C91586FA2B1825F300444826 /* PlanterScene.swift in Sources */,
 				C911B8FF2B25064400F5986A /* OpenFlexibleRealmView.swift in Sources */,
-				C96C7E502B1717B300FC2FB0 /* ViewModifiers.swift in Sources */,
 				C96C7E4D2B1717B300FC2FB0 /* Constants.swift in Sources */,
 				C92968C12B36712A0089C83D /* PlantEditingView.swift in Sources */,
 			);
@@ -854,6 +850,14 @@
 				kind = branch;
 			};
 		};
+		C96D56F02B966349009744BB /* XCRemoteSwiftPackageReference "UIUniversals" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Brian-Masse/UIUniversals";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -866,6 +870,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C96C7E3E2B1712F700FC2FB0 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
+		};
+		C96D56F12B966349009744BB /* UIUniversals */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C96D56F02B966349009744BB /* XCRemoteSwiftPackageReference "UIUniversals" */;
+			productName = UIUniversals;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

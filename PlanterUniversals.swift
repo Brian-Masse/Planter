@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIUniversals
 
 //    MARK: TabBar
 struct HeaderTabBar<T: CaseIterable>: View where T: RawRepresentable, T: Hashable, T.AllCases: RandomAccessCollection, T.RawValue == String {
@@ -28,7 +29,8 @@ struct HeaderTabBar<T: CaseIterable>: View where T: RawRepresentable, T: Hashabl
             .padding(.horizontal, 7)
         }
         .shadow(color: .black.opacity(0.7), radius: 20)
-        .foregroundStyle( tab == activeTab ? PlanterModel.shared.activeColor : Colors.secondaryLight  )
+        .if( tab == activeTab ) { view in view.universalStyledBackgrond(.accent, onForeground: true) }
+        .if( tab != activeTab ) { view in view.universalStyledBackgrond(.secondary, onForeground: true)}
         .onTapGesture { withAnimation {
             activeTab = tab
         } }
@@ -44,5 +46,17 @@ struct HeaderTabBar<T: CaseIterable>: View where T: RawRepresentable, T: Hashabl
             }
             
         }
+    }
+}
+
+//MARK: Vertical Layout
+struct VerticalLayout: Layout {
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let size = subviews.first!.sizeThatFits(.unspecified)
+        return .init(width: size.height, height: size.width)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        subviews.first!.place(at: .init(x: bounds.midX, y: bounds.midY), anchor: .center, proposal: .unspecified)
     }
 }

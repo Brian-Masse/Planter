@@ -17,6 +17,15 @@
         "branch" : "master",
         "revision" : "95cb711d60801e82542b866d16d75608c40d7b2e"
       }
+    },
+    {
+      "identity" : "uiuniversals",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Brian-Masse/UIUniversals",
+      "state" : {
+        "branch" : "main",
+        "revision" : "d3a9fb057a68995969de2c3756be66b2c09a26c9"
+      }
     }
   ],
   "version" : 2

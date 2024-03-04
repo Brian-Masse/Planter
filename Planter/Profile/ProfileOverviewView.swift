@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIUniversals
 
 struct ProfileOverviewView: View {
     
@@ -33,7 +34,7 @@ struct ProfileOverviewView: View {
                 Spacer()
                 
                 Rectangle()
-                    .foregroundStyle(Colors.accent)
+                    .foregroundStyle(Colors.lightAccent)
                     .frame(width: 100, height: 120)
                     .overlay {
                         image

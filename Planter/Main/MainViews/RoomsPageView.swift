@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIUniversals
 
 struct RoomsPageView: View {
     
@@ -46,7 +47,7 @@ struct RoomsPageView: View {
                     }
                     
                 }
-                .secondaryOpaqueRectangularBackground()
+                .rectangularBackground(style: .secondary)
                 
             }
             

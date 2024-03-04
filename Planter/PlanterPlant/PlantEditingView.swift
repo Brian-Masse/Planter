@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+import UIUniversals
 
 struct PlantEditingView: View {
     
@@ -52,7 +52,7 @@ struct PlantEditingView: View {
                                 aspectRatio: 1,
                                 verticalTextAlignment: .top,
                                 arrowDirection: .down,
-                                style: Colors.secondaryLight) {
+                                style: .secondary) {
                     
                     presentationMode.wrappedValue.dismiss()
                 }
@@ -119,7 +119,7 @@ struct PlantEditingView: View {
                 Spacer()
             }
             .foregroundStyle(.black)
-            .transparentRectangularBackgorund()
+            .rectangularBackground(style: .transparent)
             .padding()
             
             VerticalLayout {
@@ -132,7 +132,7 @@ struct PlantEditingView: View {
             }
         }
         .padding(.vertical)
-        .secondaryOpaqueRectangularBackground()
+        .rectangularBackground(style: .secondary)
     }
     
     
@@ -181,15 +181,15 @@ struct PlantEditingView: View {
 
 
 
-#Preview {
-    
-    let plant = PlanterPlant(ownerID: "",
-                             name: "Cactus",
-                             notes: "These are some great plant notes",
-                             wateringInterval: 8,
-                             coverImageData: Data())
-    
-    return PlantEditingView(plant: plant)
-    
-    
-}
+//#Preview {
+//    
+//    let plant = PlanterPlant(ownerID: "",
+//                             name: "Cactus",
+//                             notes: "These are some great plant notes",
+//                             wateringInterval: 8,
+//                             coverImageData: Data())
+//    
+//    return PlantEditingView(plant: plant)
+//    
+//    
+//}

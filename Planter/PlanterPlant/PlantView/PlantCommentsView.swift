@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import RealmSwift
+import UIUniversals
 
 struct PlantCommentsView: View {
     
@@ -31,7 +32,7 @@ struct PlantCommentsView: View {
             
             UniversalText( "\(room.plants.count) plants", size: Constants.UIDefaultTextSize, font: Constants.mainFont )
         }
-        .secondaryOpaqueRectangularBackground()
+        .rectangularBackground(style: .secondary)
         .onTapGesture {
             showingRoomSelectionView = false
             
@@ -57,7 +58,7 @@ struct PlantCommentsView: View {
             Spacer()
         }
         .padding(7)
-        .universalAccentBackground()
+        .universalStyledBackgrond(.accent)
         
     }
     
