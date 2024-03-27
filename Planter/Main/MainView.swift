@@ -12,19 +12,16 @@ import UIUniversals
 
 struct MainView: View {
     
+//    MARK: MainPage Enum
     enum MainPage: String, CaseIterable, Identifiable {
-        case calendarPageView
-        case roomsPageView
+        case plants
+        case calendar
+        case social
+        case profile
+        
         
         var id: String {
             self.rawValue
-        }
-        
-        func getDisplayString() -> String {
-            switch self {
-            case .calendarPageView: return "Cale ndar"
-            case .roomsPageView: return "Roo ms"
-            }
         }
     }
 
@@ -34,7 +31,7 @@ struct MainView: View {
     
     var model: PlanterModel = PlanterModel()
 
-    @State var page: MainPage = .calendarPageView
+    @State var page: MainPage = .calendar
     @State var showingProfileView: Bool = false
     
 //    MARK: TabBar
@@ -47,13 +44,13 @@ struct MainView: View {
         private func makeTabBarButton(page: MainPage ) -> some View {
             
             VStack {
-                LargeTextButton( page.getDisplayString(),
-                                 at: 0,
-                                 aspectRatio: 1,
-                                 arrow: false,
-                                 style: self.page == page ? .accent : .secondary) {
-                    self.page = page
-                }
+//                LargeTextButton( page.getDisplayString(),
+//                                 at: 0,
+//                                 aspectRatio: 1,
+//                                 arrow: false,
+//                                 style: self.page == page ? .accent : .secondary) {
+//                    self.page = page
+//                }
             }
             .scaleEffect(1.25)
             .shadow(color: .black.opacity(0.4), radius: 10, y: 10)
@@ -66,9 +63,9 @@ struct MainView: View {
             ZStack(alignment: .bottom) {
                 HStack(alignment: .bottom, spacing: 5) {
 
-                    makeTabBarButton(page: .calendarPageView)
+                    makeTabBarButton(page: .calendar)
                     Spacer()
-                    makeTabBarButton(page: .roomsPageView)
+                    makeTabBarButton(page: .calendar)
                 }
                 .padding(.horizontal)
                 
@@ -94,14 +91,17 @@ struct MainView: View {
         GeometryReader { geo in
             ZStack(alignment: .bottom) {
                 TabView(selection: $page) {
-                    CalendarPageView(plants: arrPlants).tag( MainPage.calendarPageView )    
                     
-                    RoomsPageView(rooms: arrRooms).tag( MainPage.roomsPageView )
+                    PlantsPageView()        .tag( MainPage.plants )
+                    CalendarPageView()      .tag( MainPage.calendar )
+                    SocialPageView()        .tag( MainPage.social )
+                    ProfilePageView()       .tag( MainPage.profile )
+                    
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 
-                TabBar(page: $page, showingProfileView: $showingProfileView)
-                    .frame(maxWidth: geo.size.width)
+//                TabBar(page: $page, showingProfileView: $showingProfileView)
+//                    .frame(maxWidth: geo.size.width)
             }
             .ignoresSafeArea()
             .sheet(isPresented: $showingProfileView) {
