@@ -13,14 +13,14 @@ struct PlanterApp: App {
     
     private func setupUIUniversals() {
         
-        Colors.setColors(baseLight:         .init(245, 234, 208),
-                         secondaryLight:    .init(220, 207, 188),
+        Colors.setColors(baseLight:         .init(255, 247, 240),
+                         secondaryLight:    .init(224, 216, 206),
                          baseDark:          .init(0, 0, 0),
-                         secondaryDark:     .init(25, 25, 25),
+                         secondaryDark:     .init(30, 30, 30),
                          lightAccent:       .init(245, 87, 66),
                          darkAccent:        .init(245, 87, 66))
         
-        Constants.UIDefaultCornerRadius = 40
+        Constants.UIDefaultCornerRadius = 25
         
         Constants.setFontSizes(UILargeTextSize:         130,
                                UITitleTextSize:         80,
@@ -31,8 +31,8 @@ struct PlanterApp: App {
                                UISmallTextSize:         15)
         
         FontProvider.registerFonts()
-        Constants.titleFont = FontProvider[.madeTommyRegular]
-        Constants.mainFont = FontProvider[.madeTommyRegular]
+        Constants.titleFont = SpaceGroteskMedium.shared
+        Constants.mainFont = SpaceGroteskRegular.shared
         
         UITabBar.appearance().isHidden = true
     }
@@ -44,4 +44,19 @@ struct PlanterApp: App {
             PlanterView ()
         }
     }
+}
+
+struct SpaceGroteskMedium: UniversalFont {
+    var postScriptName: String = "SpaceGrotesk-Medium"
+    
+    var fontExtension: String = "ttf"
+    
+    static var shared: any UIUniversals.UniversalFont = SpaceGroteskMedium()
+}
+
+struct SpaceGroteskRegular: UniversalFont {
+    var postScriptName: String = "SpaceGrotesk-Regular"
+    var fontExtension: String = "ttf"
+    
+    static var shared: any UIUniversals.UniversalFont = SpaceGroteskRegular()
 }

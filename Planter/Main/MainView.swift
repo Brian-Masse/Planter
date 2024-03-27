@@ -19,7 +19,6 @@ struct MainView: View {
         case social
         case profile
         
-        
         var id: String {
             self.rawValue
         }
@@ -31,7 +30,7 @@ struct MainView: View {
     
     var model: PlanterModel = PlanterModel()
 
-    @State var page: MainPage = .calendar
+    @State var page: MainPage = .plants
     @State var showingProfileView: Bool = false
     
 //    MARK: TabBar

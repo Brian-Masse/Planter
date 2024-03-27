@@ -32,8 +32,11 @@
 		C945C3C62BB4AEFB00EC9547 /* PlantsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C945C3C52BB4AEFB00EC9547 /* PlantsPageView.swift */; };
 		C945C3C92BB4B02700EC9547 /* ProfilePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C945C3C82BB4B02700EC9547 /* ProfilePageView.swift */; };
 		C945C3CC2BB4B07F00EC9547 /* SocialPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C945C3CB2BB4B07F00EC9547 /* SocialPageView.swift */; };
-		C96C7E402B1712F700FC2FB0 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = C96C7E3F2B1712F700FC2FB0 /* Realm */; };
-		C96C7E422B1712F700FC2FB0 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C96C7E412B1712F700FC2FB0 /* RealmSwift */; };
+		C945C3CE2BB4B28800EC9547 /* SpaceGrotesk-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C945C3CD2BB4B28800EC9547 /* SpaceGrotesk-Medium.ttf */; };
+		C945C3D02BB4B29200EC9547 /* SpaceGrotesk-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C945C3CF2BB4B29200EC9547 /* SpaceGrotesk-Regular.ttf */; };
+		C945C3D32BB4CAA700EC9547 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = C945C3D22BB4CAA700EC9547 /* Realm */; };
+		C945C3D52BB4CAA700EC9547 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C945C3D42BB4CAA700EC9547 /* RealmSwift */; };
+		C945C3D82BB4CAB800EC9547 /* UIUniversals in Frameworks */ = {isa = PBXBuildFile; productRef = C945C3D72BB4CAB800EC9547 /* UIUniversals */; };
 		C96C7E4C2B1717B300FC2FB0 /* UniversalForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E442B1717B300FC2FB0 /* UniversalForm.swift */; };
 		C96C7E4D2B1717B300FC2FB0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E452B1717B300FC2FB0 /* Constants.swift */; };
 		C96C7E4F2B1717B300FC2FB0 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E472B1717B300FC2FB0 /* Animations.swift */; };
@@ -41,7 +44,6 @@
 		C96C7E532B1717B300FC2FB0 /* UniversalButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */; };
 		C96C7E582B18338500FC2FB0 /* PlantCreationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */; };
 		C96C7E5A2B183E8300FC2FB0 /* PlantPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */; };
-		C96D56F22B966349009744BB /* UIUniversals in Frameworks */ = {isa = PBXBuildFile; productRef = C96D56F12B966349009744BB /* UIUniversals */; };
 		C996EFC22B19C84500392C4E /* PlanterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C996EFC12B19C84500392C4E /* PlanterSheet.swift */; };
 		C996EFC52B1BA71300392C4E /* RoomsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C996EFC42B1BA71300392C4E /* RoomsPageView.swift */; };
 		C9B981422B140FCF0045D4A6 /* PlanterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981412B140FCF0045D4A6 /* PlanterApp.swift */; };
@@ -97,6 +99,8 @@
 		C945C3C52BB4AEFB00EC9547 /* PlantsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantsPageView.swift; sourceTree = "<group>"; };
 		C945C3C82BB4B02700EC9547 /* ProfilePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePageView.swift; sourceTree = "<group>"; };
 		C945C3CB2BB4B07F00EC9547 /* SocialPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialPageView.swift; sourceTree = "<group>"; };
+		C945C3CD2BB4B28800EC9547 /* SpaceGrotesk-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Medium.ttf"; sourceTree = "<group>"; };
+		C945C3CF2BB4B29200EC9547 /* SpaceGrotesk-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Regular.ttf"; sourceTree = "<group>"; };
 		C96C7E442B1717B300FC2FB0 /* UniversalForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniversalForm.swift; sourceTree = "<group>"; };
 		C96C7E452B1717B300FC2FB0 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C96C7E472B1717B300FC2FB0 /* Animations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
@@ -126,9 +130,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C96C7E422B1712F700FC2FB0 /* RealmSwift in Frameworks */,
-				C96C7E402B1712F700FC2FB0 /* Realm in Frameworks */,
-				C96D56F22B966349009744BB /* UIUniversals in Frameworks */,
+				C945C3D52BB4CAA700EC9547 /* RealmSwift in Frameworks */,
+				C945C3D32BB4CAA700EC9547 /* Realm in Frameworks */,
+				C945C3D82BB4CAB800EC9547 /* UIUniversals in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +259,8 @@
 		C96C7E5B2B183FA800FC2FB0 /* fonts */ = {
 			isa = PBXGroup;
 			children = (
+				C945C3CD2BB4B28800EC9547 /* SpaceGrotesk-Medium.ttf */,
+				C945C3CF2BB4B29200EC9547 /* SpaceGrotesk-Regular.ttf */,
 			);
 			path = fonts;
 			sourceTree = "<group>";
@@ -363,9 +369,9 @@
 			);
 			name = Planter;
 			packageProductDependencies = (
-				C96C7E3F2B1712F700FC2FB0 /* Realm */,
-				C96C7E412B1712F700FC2FB0 /* RealmSwift */,
-				C96D56F12B966349009744BB /* UIUniversals */,
+				C945C3D22BB4CAA700EC9547 /* Realm */,
+				C945C3D42BB4CAA700EC9547 /* RealmSwift */,
+				C945C3D72BB4CAB800EC9547 /* UIUniversals */,
 			);
 			productName = Planter;
 			productReference = C9B9813E2B140FCF0045D4A6 /* Planter.app */;
@@ -440,8 +446,8 @@
 			);
 			mainGroup = C9B981352B140FCF0045D4A6;
 			packageReferences = (
-				C96C7E3E2B1712F700FC2FB0 /* XCRemoteSwiftPackageReference "realm-swift" */,
-				C96D56F02B966349009744BB /* XCRemoteSwiftPackageReference "UIUniversals" */,
+				C945C3D12BB4CAA700EC9547 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				C945C3D62BB4CAB800EC9547 /* XCRemoteSwiftPackageReference "UIUniversals" */,
 			);
 			productRefGroup = C9B9813F2B140FCF0045D4A6 /* Products */;
 			projectDirPath = "";
@@ -461,6 +467,8 @@
 			files = (
 				C9B9814A2B140FD10045D4A6 /* Preview Assets.xcassets in Resources */,
 				C9B981462B140FD10045D4A6 /* Assets.xcassets in Resources */,
+				C945C3D02BB4B29200EC9547 /* SpaceGrotesk-Regular.ttf in Resources */,
+				C945C3CE2BB4B28800EC9547 /* SpaceGrotesk-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -882,7 +890,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		C96C7E3E2B1712F700FC2FB0 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+		C945C3D12BB4CAA700EC9547 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift";
 			requirement = {
@@ -890,7 +898,7 @@
 				kind = branch;
 			};
 		};
-		C96D56F02B966349009744BB /* XCRemoteSwiftPackageReference "UIUniversals" */ = {
+		C945C3D62BB4CAB800EC9547 /* XCRemoteSwiftPackageReference "UIUniversals" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Brian-Masse/UIUniversals";
 			requirement = {
@@ -901,19 +909,19 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		C96C7E3F2B1712F700FC2FB0 /* Realm */ = {
+		C945C3D22BB4CAA700EC9547 /* Realm */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C96C7E3E2B1712F700FC2FB0 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			package = C945C3D12BB4CAA700EC9547 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = Realm;
 		};
-		C96C7E412B1712F700FC2FB0 /* RealmSwift */ = {
+		C945C3D42BB4CAA700EC9547 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C96C7E3E2B1712F700FC2FB0 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			package = C945C3D12BB4CAA700EC9547 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
 		};
-		C96D56F12B966349009744BB /* UIUniversals */ = {
+		C945C3D72BB4CAB800EC9547 /* UIUniversals */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C96D56F02B966349009744BB /* XCRemoteSwiftPackageReference "UIUniversals" */;
+			package = C945C3D62BB4CAB800EC9547 /* XCRemoteSwiftPackageReference "UIUniversals" */;
 			productName = UIUniversals;
 		};
 /* End XCSwiftPackageProductDependency section */

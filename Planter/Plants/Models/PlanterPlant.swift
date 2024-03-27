@@ -26,6 +26,7 @@ class PlanterPlant: Object, Identifiable, Shareable {
 
     @Persisted var name: String = ""
     @Persisted var notes: String = ""
+    @Persisted var isFavorite: Bool = false
     
     @Persisted var wateringHistory: RealmSwift.List<PlanterWateringNode> = List()
     
@@ -83,6 +84,12 @@ class PlanterPlant: Object, Identifiable, Shareable {
         }
     }
     
+    func toggleFavorite() {
+        RealmManager.updateObject(self) { thawed in
+            thawed.isFavorite.toggle()
+        }
+    }
+    
     
 //    MARK: Permissions
     func compileOwnerId() -> String {
@@ -136,6 +143,25 @@ class PlanterPlant: Object, Identifiable, Shareable {
     }
     
 //    MARK: Convenience Functions
+    
+    func getDaysUntilNextWateringDate() -> Int {
+        let nextWateringDate = self.getNextWateringDate()
+        
+        return Int((nextWateringDate.timeIntervalSince(Date.now) / Constants.DayTime))
+    }
+    
+//    This gets the text of format: "The fern needs to be watered in 5 days"
+    func getWateringMessage() -> String {
+        let days = getDaysUntilNextWateringDate()
+        let dayMessage = days == 1 ? "day" : "days"
+        let base = "The \(self.name) needs\nto be watered\n"
+        
+        if days > 0 { return base + "in \(days) \(dayMessage)" }
+        if days == 0 { return base + "today" }
+        if days < 0 { return base + "\(-days) \(dayMessage) ago" }
+        
+        return ""
+    }
     
     func setRoom(to room: PlanterRoom?) {
         RealmManager.updateObject(self) { thawed in

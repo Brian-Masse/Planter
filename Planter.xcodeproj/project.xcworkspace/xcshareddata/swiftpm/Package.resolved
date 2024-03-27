@@ -1,4 +1,5 @@
 {
+  "originHash" : "234fcaf7ff321bb9c1d5e56f35fa708588f1dd8882514f18f854221515f335b6",
   "pins" : [
     {
       "identity" : "realm-core",
@@ -24,9 +25,9 @@
       "location" : "https://github.com/Brian-Masse/UIUniversals",
       "state" : {
         "branch" : "main",
-        "revision" : "d3a9fb057a68995969de2c3756be66b2c09a26c9"
+        "revision" : "08851146261f2fff703c7e86d2984172a5388258"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

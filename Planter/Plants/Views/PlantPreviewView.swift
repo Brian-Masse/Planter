@@ -8,161 +8,73 @@
 import Foundation
 import SwiftUI
 import UIUniversals
+import RealmSwift
 
-struct PlantPreviewView: View {
+struct PlantFullPreviewView: View {
     
-//    MARK: Vars
-    enum Layout {
-        case full
-        case half
+//    MARK: Constants
+    private struct ViewConstants {
+        static let width: CGFloat = 300
+        static let padding: CGFloat = 20
     }
     
-    @Environment(\.presentationMode) var presentationMode
-    
-    static let fullLayoutHeight: CGFloat = 300
-    static let halfLayoutHeight: CGFloat = 150
-    
-    let plant: PlanterPlant
-    let layout: Layout
-     
-    @State var showingPlantView: Bool = false
-    
-//    MARK: ViewBuilders
-    
-    
-    
-//    MARK: Background
-    @ViewBuilder
-    private func makeBackground(height: CGFloat = 300) -> some View {
-        
-        let alignment: Alignment = .center
-        let normalBlurHeight: CGFloat = 1/5
-        
-        let gradient = LinearGradient(stops: [
-            .init(color: .clear, location: 0 ),
-            .init(color: .white, location: 1 - normalBlurHeight ) ],
-                                      startPoint: .bottom,
-                                      endPoint: .top)
-        
-        GeometryReader { geo in
-            ZStack {
-                Rectangle()
-                    .foregroundStyle(.black)
-                
-                if let coverImage = PhotoManager.decodeImage(from: plant.coverImage) {
-                    coverImage
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: geo.size.width, height: height, alignment: alignment)
-                        .clipped()
-                        .overlay {
-                            coverImage
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .blur(radius: 40)
-                                .padding(-40)
-                                .frame(width: geo.size.width, height: height, alignment: alignment)
-                                .clipped()
-                                .mask(alignment: .top) {
-                                    gradient
-                                        .frame(height: height )
-                                }
-                        }
-                        .overlay {
-                            gradient
-                                .frame(height: height)
-                                .opacity(0.2)
-                        }
-                        .allowsHitTesting(false)
-                }
-            }
-            .frame(height: height, alignment: alignment)
-            .cornerRadius(Constants.UIDefaultCornerRadius)
-        }.frame(height: height)
-    }
-    
-    @ViewBuilder
-    private func makeHeader() -> some View {
-        VStack(alignment: .leading, spacing: 0) {
-            
-            HStack {
-                UniversalText(plant.name,
-                              size: Constants.UIHeaderTextSize,
-                              font: Constants.titleFont,
-                              case: .uppercase,
-                              wrap: false,
-                              scale: false)
-                Spacer()
-            }
-                
-            Divider()
-            
-            UniversalText(plant.room?.name ?? "No Room", size: Constants.UIDefaultTextSize,
-                          font: Constants.mainFont,
-                          case: .uppercase)
-            
-        }
-        .foregroundStyle(.black)
-        .padding()
-    }
-    
-//    MARK: Layouts
-    @ViewBuilder
-    private func makeFullSizedLayout() -> some View {
-        ZStack(alignment: .bottom) {
-            makeBackground(height: PlantPreviewView.fullLayoutHeight)
-            
-            VStack {
-                ZStack(alignment: .topTrailing) {
-                    
-                    makeHeader()
-                    
-                    LargeTextButton("Water Plant",
-                                    at: 30,
-                                    aspectRatio: 1.5,
-                                    verticalTextAlignment: .bottom,
-                                    arrowDirection: .up,
-                                    style: .secondary) {
-                        print("hello")
-                    }
-                                .scaleEffect(0.9)
-                                .opacity(0.85)
-                }
+//    MARK: vars
+    @ObservedRealmObject var plant: PlanterPlant
 
-                Spacer()
-            }
-        }
-    }
+    let image: Image
     
-    @ViewBuilder
-    private func makeHalfSizedLayout() -> some View {
-        ZStack {
-            makeBackground(height: PlantPreviewView.halfLayoutHeight)
-            
-            HStack {
-                makeHeader()
-                Spacer()
-//                makeCheckmarkButton(style: .ultraThinMaterial)
-//                    .padding(.trailing, 7)
-            }
-        }
-        
+    init(plant: PlanterPlant) {
+        self.plant = plant
+
+        self.image = PhotoManager.decodeImage(from: plant.coverImage) ?? Image("fern")
     }
     
 //    MARK: Body
     var body: some View {
         
-        Group {
-            
-            switch layout {
-            case .full: makeFullSizedLayout()
-            case .half: makeHalfSizedLayout()
+        let favoriteMessage =  !plant.isFavorite ? "Favorite \nthis plant" : "Favorite\nplant"
+        
+        ZStack(alignment: .bottomLeading) {
+            VStack() {
+                UniversalText(plant.getWateringMessage(),
+                              size: Constants.UISubHeaderTextSize,
+                              font: Constants.titleFont,
+                              case: .uppercase,
+                              lineSpacing: -10)
+                .padding(.trailing, Constants.UISubPadding)
+                
+                self.image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: ViewConstants.width - (2 * ViewConstants.padding), height: 116)
+                    .clipped()
+                
+                VStack(alignment: .trailing, spacing: 0) {
+                    
+                    ResizableIcon(plant.isFavorite ? "staroflife.fill" : "staroflife", size: Constants.UISubHeaderTextSize)
+                    
+                    UniversalText( favoriteMessage,
+                                   size: Constants.UISubHeaderTextSize,
+                                   font: Constants.titleFont,
+                                   case: .uppercase,
+                                   textAlignment: .trailing,
+                                   lineSpacing: -10)
+                    .padding(.leading, 90)
+                }.onTapGesture { plant.toggleFavorite() }
             }
             
+            LargeTextButton("WA TER", at: 30, aspectRatio: 1.4,
+                            cornerRadius: Constants.UILargeCornerRadius,
+                            arrowDirection: .up,
+                            style: .secondary,
+                            reverseStyle: true) {
+                RealmManager.updateObject(plant) { thawed in
+                    thawed.dateLastWatered = Date.now - ( 5 * Constants.DayTime )
+                }
+            }.offset(x: -15)
         }
-        .onTapGesture { withAnimation { showingPlantView = true }}
-        .fullScreenCover(isPresented: $showingPlantView) {
-            PlantView(plant: plant)
-        }
+        .universalTextStyle(reversed: true)
+        .frame(minWidth: ViewConstants.width - (2 * ViewConstants.padding))
+        .rectangularBackground(ViewConstants.padding, style: .primary, reverseStyle: true)
     }
 }

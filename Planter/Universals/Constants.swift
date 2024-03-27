@@ -18,8 +18,9 @@ extension Colors {
 extension Constants {
     
     //    extra
-    static let UILargeCornerRadius: CGFloat = 55
+    static let UILargeCornerRadius: CGFloat = 50
     static let UIBottomOfPagePadding: CGFloat = 130
+    static let UISubPadding: CGFloat = 7
     
     //    forms
     static let UIFormSpacing      : CGFloat = 10
