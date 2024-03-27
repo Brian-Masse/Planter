@@ -244,6 +244,9 @@
 				C96C7E452B1717B300FC2FB0 /* Constants.swift */,
 				C96C7E4A2B1717B300FC2FB0 /* Extensions.swift */,
 				C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */,
+				C911B8F42B23FC9400F5986A /* PhotoManager.swift */,
+				C911B90D2B267D0F00F5986A /* PlanterUniversals.swift */,
+				C996EFC12B19C84500392C4E /* PlanterSheet.swift */,
 				C96C7E442B1717B300FC2FB0 /* UniversalForm.swift */,
 			);
 			path = Universals;
@@ -268,8 +271,6 @@
 		C9B981352B140FCF0045D4A6 = {
 			isa = PBXGroup;
 			children = (
-				C911B90D2B267D0F00F5986A /* PlanterUniversals.swift */,
-				C996EFC12B19C84500392C4E /* PlanterSheet.swift */,
 				C9B981402B140FCF0045D4A6 /* Planter */,
 				C9B981522B140FD20045D4A6 /* PlanterTests */,
 				C9B9815C2B140FD20045D4A6 /* PlanterUITests */,
@@ -341,7 +342,6 @@
 				C9B9816D2B14107F0045D4A6 /* RealmManager.swift */,
 				C911B8F82B24F22E00F5986A /* Authentication */,
 				C91586F62B17E9BD00444826 /* MainViews */,
-				C911B8F42B23FC9400F5986A /* PhotoManager.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
