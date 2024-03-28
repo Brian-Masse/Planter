@@ -13,17 +13,16 @@ import RealmSwift
 struct PlantsPageView: View {
     
 //    MARK: Vars
-    
     @ObservedResults(PlanterPlant.self) var plants
+    
+    @State var srollPosition: CGPoint = .zero
+    
     
 //    MARK: ViewBuilders
     @ViewBuilder
     private func makeUpcomingPlantsView() -> some View {
-        VStack(alignment: .leading, spacing: 0) {
-            UniversalText("Upcomng", size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase)
-                .universalTextStyle()
-            
-            ScrollView(.horizontal) {
+        RoundedContainer("Upcoming", halfCut: true) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack() {
                     ForEach(plants) { plant in
                         PlantFullPreviewView( plant: plant)
@@ -33,20 +32,38 @@ struct PlantsPageView: View {
             }
             .scrollTargetBehavior(.viewAligned)
         }
-        .rectangularBackground(10, style: .secondary, corners: [.topLeft, .bottomLeft])
+    }
+    
+    @ViewBuilder
+    private func makeAllPlants() -> some View {
+        RoundedContainer("All Plants") {
+            VStack {
+                ForEach(plants) { plant in
+                    PlantSmallPreviewView(plant: plant)
+                }
+            }
+        }
+        
     }
     
 //    MARK: Body
     var body: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
-            UniversalText("Plants", size: Constants.UITitleTextSize, font: SpaceGroteskMedium.shared)
+            UniversalText("Planter", size: Constants.UITitleTextSize, font: SpaceGroteskMedium.shared, case: .uppercase)
                 .padding(.leading, 10)
             
-            makeUpcomingPlantsView()
-            
+//            BlurScroll(10, scrollPositionBinding: $srollPosition)
+            ScrollView
+            {
+                VStack(spacing: Constants.UISubPadding) {
+                    makeUpcomingPlantsView()
+                    
+                    makeAllPlants()
+                }
+            }
             Spacer()
         }
+        .ignoresSafeArea(edges: .bottom)
         
         
         

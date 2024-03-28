@@ -150,7 +150,7 @@ class PlanterPlant: Object, Identifiable, Shareable {
         return Int((nextWateringDate.timeIntervalSince(Date.now) / Constants.DayTime))
     }
     
-//    This gets the text of format: "The fern needs to be watered in 5 days"
+///    "The fern needs to be watered in 5 days"
     func getWateringMessage() -> String {
         let days = getDaysUntilNextWateringDate()
         let dayMessage = days == 1 ? "day" : "days"
@@ -161,6 +161,11 @@ class PlanterPlant: Object, Identifiable, Shareable {
         if days < 0 { return base + "\(-days) \(dayMessage) ago" }
         
         return ""
+    }
+    
+///    "last watered: 03/27/2024"
+    func getLastWateredMessage() -> String {
+        "Last watered: \( self.dateLastWatered.formatted(date: .numeric, time: .omitted) )"
     }
     
     func setRoom(to room: PlanterRoom?) {

@@ -11,7 +11,6 @@ import UIUniversals
 
 //    MARK: TabBar
 struct HeaderTabBar<T: CaseIterable>: View where T: RawRepresentable, T: Hashable, T.AllCases: RandomAccessCollection, T.RawValue == String {
-    
     @ViewBuilder
     private func makeTabBarNode( tab: T ) -> some View {
         
@@ -59,4 +58,31 @@ struct VerticalLayout: Layout {
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         subviews.first!.place(at: .init(x: bounds.midX, y: bounds.midY), anchor: .center, proposal: .unspecified)
     }
+}
+
+//MARK: RoundedContainer
+struct RoundedContainer<C: View>: View {
+    
+    let title: String
+    let halfCut: Bool
+    let content: C
+    
+    init( _ title: String, halfCut: Bool = false, @ViewBuilder content: () -> C ) {
+        self.title = title
+        self.content = content()
+        self.halfCut = halfCut
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            UniversalText(title, size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase)
+                .universalTextStyle()
+                .padding(.leading, 10)
+            
+            content
+        }
+        .rectangularBackground(10, style: .secondary, corners: halfCut ? [.topLeft, .bottomLeft] : .allCorners)
+        
+    }
+    
 }

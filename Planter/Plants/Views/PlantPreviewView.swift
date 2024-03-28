@@ -10,6 +10,30 @@ import SwiftUI
 import UIUniversals
 import RealmSwift
 
+//MARK: Convenience Structs
+struct PlantFavoriteToggle: View {
+    
+    let plant: PlanterPlant
+    
+    var body: some View {
+        VStack(alignment: .trailing, spacing: 0) {
+            
+            let favoriteMessage =  !plant.isFavorite ? "Favorite \nthis plant" : "Favorite\nplant"
+            
+            ResizableIcon(plant.isFavorite ? "staroflife.fill" : "staroflife", size: Constants.UISubHeaderTextSize)
+            
+            UniversalText( favoriteMessage,
+                           size: Constants.UISubHeaderTextSize,
+                           font: Constants.titleFont,
+                           case: .uppercase,
+                           textAlignment: .trailing,
+                           lineSpacing: -10)
+            .padding(.leading, 90)
+        }.onTapGesture { plant.toggleFavorite() }
+    }
+}
+
+//MARK: PlantFullPreviewView
 struct PlantFullPreviewView: View {
     
 //    MARK: Constants
@@ -19,7 +43,7 @@ struct PlantFullPreviewView: View {
     }
     
 //    MARK: vars
-    @ObservedRealmObject var plant: PlanterPlant
+    let plant: PlanterPlant
 
     let image: Image
     
@@ -31,9 +55,6 @@ struct PlantFullPreviewView: View {
     
 //    MARK: Body
     var body: some View {
-        
-        let favoriteMessage =  !plant.isFavorite ? "Favorite \nthis plant" : "Favorite\nplant"
-        
         ZStack(alignment: .bottomLeading) {
             VStack() {
                 UniversalText(plant.getWateringMessage(),
@@ -49,18 +70,7 @@ struct PlantFullPreviewView: View {
                     .frame(width: ViewConstants.width - (2 * ViewConstants.padding), height: 116)
                     .clipped()
                 
-                VStack(alignment: .trailing, spacing: 0) {
-                    
-                    ResizableIcon(plant.isFavorite ? "staroflife.fill" : "staroflife", size: Constants.UISubHeaderTextSize)
-                    
-                    UniversalText( favoriteMessage,
-                                   size: Constants.UISubHeaderTextSize,
-                                   font: Constants.titleFont,
-                                   case: .uppercase,
-                                   textAlignment: .trailing,
-                                   lineSpacing: -10)
-                    .padding(.leading, 90)
-                }.onTapGesture { plant.toggleFavorite() }
+                PlantFavoriteToggle(plant: plant)
             }
             
             LargeTextButton("WA TER", at: 30, aspectRatio: 1.4,
@@ -76,5 +86,34 @@ struct PlantFullPreviewView: View {
         .universalTextStyle(reversed: true)
         .frame(minWidth: ViewConstants.width - (2 * ViewConstants.padding))
         .rectangularBackground(ViewConstants.padding, style: .primary, reverseStyle: true)
+    }
+}
+
+
+//MARK: PlantSmallPreviewView
+struct PlantSmallPreviewView: View {
+    
+    let plant: PlanterPlant
+    
+    var body: some View {
+        
+        ZStack(alignment: .bottomTrailing) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading) {
+                    UniversalText( plant.name, size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase )
+                    
+                    UniversalText( plant.getLastWateredMessage(), size: Constants.UISmallTextSize, font: Constants.mainFont )
+                    
+                    Spacer()
+                }
+                
+                Spacer()
+            }
+            
+            PlantFavoriteToggle(plant: plant)
+        }
+        .universalTextStyle(reversed: true)
+        .padding(.horizontal, 10)
+        .rectangularBackground(10, style: .primary, reverseStyle: true)
     }
 }
