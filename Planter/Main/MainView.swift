@@ -97,8 +97,8 @@ struct MainView: View {
                         SocialPageView()        .tag( MainPage.social )
                         ProfilePageView()       .tag( MainPage.profile )
                         
-                    }
-//                    .tabViewStyle(.automatic)
+                    }   
+                    .tabViewStyle(.automatic)
                 }
 //                TabBar(page: $page, showingProfileView: $showingProfileView)
 //                    .frame(maxWidth: geo.size.width)

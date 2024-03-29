@@ -75,9 +75,12 @@ struct RoundedContainer<C: View>: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            UniversalText(title, size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase)
-                .universalTextStyle()
-                .padding(.leading, 10)
+            
+            if !title.isEmpty {
+                UniversalText(title, size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase)
+                    .universalTextStyle()
+                    .padding(.leading, 10)
+            }
             
             content
         }
