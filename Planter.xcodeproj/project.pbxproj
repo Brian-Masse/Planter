@@ -54,6 +54,7 @@
 		C9B9815E2B140FD20045D4A6 /* PlanterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B9815D2B140FD20045D4A6 /* PlanterUITests.swift */; };
 		C9B981602B140FD20045D4A6 /* PlanterUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B9815F2B140FD20045D4A6 /* PlanterUITestsLaunchTests.swift */; };
 		C9B9816E2B1410800045D4A6 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B9816D2B14107F0045D4A6 /* RealmManager.swift */; };
+		C9DBF14D2BBB33DF006C5236 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DBF14C2BBB33DF006C5236 /* TabBarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +124,7 @@
 		C9B9815D2B140FD20045D4A6 /* PlanterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterUITests.swift; sourceTree = "<group>"; };
 		C9B9815F2B140FD20045D4A6 /* PlanterUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C9B9816D2B14107F0045D4A6 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		C9DBF14C2BBB33DF006C5236 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				C996EFC42B1BA71300392C4E /* RoomsPageView.swift */,
+				C9DBF14C2BBB33DF006C5236 /* TabBarView.swift */,
 			);
 			path = MainViews;
 			sourceTree = "<group>";
@@ -499,6 +502,7 @@
 				C911B9032B251D5700F5986A /* RoomCreationScene.swift in Sources */,
 				C996EFC52B1BA71300392C4E /* RoomsPageView.swift in Sources */,
 				C9B981442B140FCF0045D4A6 /* PlanterView.swift in Sources */,
+				C9DBF14D2BBB33DF006C5236 /* TabBarView.swift in Sources */,
 				C911B8F72B24317C00F5986A /* PlanterWateringScene.swift in Sources */,
 				C91586FC2B194AAF00444826 /* PlantView.swift in Sources */,
 				C92BD20E2B2793F300AF6765 /* ProfileSocialView.swift in Sources */,

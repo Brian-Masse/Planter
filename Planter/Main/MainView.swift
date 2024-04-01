@@ -100,6 +100,8 @@ struct MainView: View {
                     }   
                     .tabViewStyle(.automatic)
                 }
+                
+                TabBarView(page: $page)
 //                TabBar(page: $page, showingProfileView: $showingProfileView)
 //                    .frame(maxWidth: geo.size.width)
             }
