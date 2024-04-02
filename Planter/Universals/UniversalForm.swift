@@ -18,6 +18,7 @@ struct TempView: View {
     
     @State var text: String = ""
     @State var wateringAmount: Int = 3
+    @State var wateringInterval: Int = 5
     
     var body: some View {
     
@@ -29,14 +30,57 @@ struct TempView: View {
                             prompt: "What is the name of this plant?",
                             question: "Consider giving it a descriptive name, especially if you have multiple of the same plants")
             
-            WaterSelector($wateringAmount,
-                          prompt: "How much water does this plant get",
-                          description: "when it gets watered should it just get a spray or be watered until it can't accept it")
+            StyledFormComponentTemplate(prompt: "How much water does this plant get",
+                                        description: "when it gets watered should it just get a spray or be watered until it can't accept it") {
+                WaterSelector(wateringAmount: $wateringAmount)
+            }
+            
+            StyledFormComponentTemplate(prompt: "How frequently should this plant be watered",
+                                        description: "This wil schedule the plant watering at regular intervals") {
+                StyledTimeIntervalSelector(interval: $wateringInterval)
+            }
             
             Spacer()
         }
         .background(Colors.lightAccent)
         .tapHidesKeyboard()
+    }
+    
+}
+
+//MARK: StyledFormComponentTemplate
+
+struct StyledFormComponentTemplate<C: View>: View {
+    
+    let form: C
+    
+    let prompt: String
+    let description: String
+    
+    let fontSize: Double
+    
+    init( prompt: String, description: String, fontSize: Double = Constants.UISubHeaderTextSize, @ViewBuilder contentBuilder: () -> C ) {
+        self.prompt = prompt
+        self.description = description
+        self.fontSize = fontSize
+        self.form = contentBuilder()
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            UniversalText( prompt, size: fontSize, font: Constants.titleFont, case: .uppercase )
+                .padding(.trailing, 50)
+                
+            form
+                .padding(.bottom, Constants.UISubPadding)
+                .padding(.top, -Constants.UISubPadding)
+            
+            UniversalText( description, size: Constants.UISmallTextSize, font: Constants.mainFont )
+                .opacity(Constants.formDescriptionTextOpacity)
+                .padding(.trailing, 50)
+        }
+        .padding()
+        .rectangularBackground(0, style: .primary)
     }
     
 }
@@ -138,18 +182,6 @@ struct WaterSelector: View {
 
     @Binding var wateringAmount: Int
     
-    let prompt: String
-    let description: String
-    
-    let fontSize: Double
-    
-    init( _ binding: Binding<Int>, prompt: String, description: String, fontSize: Double = Constants.UISubHeaderTextSize) {
-        self._wateringAmount = binding
-        self.prompt = prompt
-        self.description = description
-        self.fontSize = fontSize
-    }
-    
     var slideGesture: some Gesture {
         DragGesture()
             .onChanged { value in
@@ -164,8 +196,7 @@ struct WaterSelector: View {
             .onTapGesture { withAnimation { wateringAmount = amount } }
     }
     
-    @ViewBuilder
-    private func makeSelector() -> some View {
+    var body: some View {
         HStack {
             ForEach( 1...5, id: \.self ) { i in
                 ZStack {
@@ -177,30 +208,43 @@ struct WaterSelector: View {
             }
             Spacer()
         }.gesture(slideGesture)
-        
-    }
-    
-    var body: some View {
-    
-        VStack(alignment: .leading) {
-            UniversalText( prompt, size: fontSize, font: Constants.titleFont, case: .uppercase )
-                .padding(.trailing, 50)
-                
-            makeSelector()
-                .padding(.bottom, Constants.UISubPadding)
-                .padding(.top, -Constants.UISubPadding)
-            
-            UniversalText( description, size: Constants.UISmallTextSize, font: Constants.mainFont )
-                .opacity(Constants.formDescriptionTextOpacity)
-                .padding(.trailing, 50)
-        }
-        .padding()
-        .rectangularBackground(0, style: .primary)
     }
 }
 
-
-//MARK: Time Selector
+//MARK: StyledTimeIntervalSelector
+struct StyledTimeIntervalSelector: View {
+    
+    @Environment( \.colorScheme ) var colorScheme
+    
+    @Binding var interval: Int
+    
+    var floatBinding: Binding<Float> {
+        Binding { Float(interval) } set: { newValue in
+            interval = Int(newValue)
+        }
+    }
+    
+    var stringBinding: Binding<String> {
+        Binding { "\(interval)"} set: { newValue in
+            interval = Int( newValue ) ?? 0
+        }
+    }
+    
+    var body: some View {
+        HStack {
+            Slider(value: floatBinding, in: 1...14)
+                .tint(Colors.getBase(from: colorScheme, reversed: true))
+            
+            TextField("", text: stringBinding)
+                .frame(width: CGFloat("\(interval)".count) * 10)
+                .keyboardType(.numberPad)
+                .rectangularBackground(style: .secondary)
+                .tint(Colors.getAccent(from: colorScheme))
+        }
+    }
+    
+    
+}
 
 //MARK: StyledToggle
 struct StyledToggle<C: View>: View {
