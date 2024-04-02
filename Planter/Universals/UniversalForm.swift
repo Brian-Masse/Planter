@@ -16,8 +16,8 @@ import UIUniversals
 
 struct TempView: View {
     
-    
     @State var text: String = ""
+    @State var wateringAmount: Int = 3
     
     var body: some View {
     
@@ -29,6 +29,10 @@ struct TempView: View {
                             prompt: "What is the name of this plant?",
                             question: "Consider giving it a descriptive name, especially if you have multiple of the same plants")
             
+            WaterSelector($wateringAmount,
+                          prompt: "How much water does this plant get",
+                          description: "when it gets watered should it just get a spray or be watered until it can't accept it")
+            
             Spacer()
         }
         .background(Colors.lightAccent)
@@ -37,8 +41,6 @@ struct TempView: View {
     
 }
 
-
-        
 
 //MARK: StyledTextField
 struct StyledTextField: View {
@@ -121,7 +123,7 @@ struct StyledTextField: View {
             if !question.isEmpty {
                 UniversalText(question, size: Constants.UISmallTextSize, font: Constants.mainFont)
                     .padding(.trailing, 30)
-                    .opacity(0.5)
+                    .opacity(Constants.formDescriptionTextOpacity)
             }
         }
         .foregroundStyle(showingClearButton ? Colors.getAccent(from: colorScheme) : Colors.getBase(from: colorScheme, reversed: true))
@@ -131,6 +133,71 @@ struct StyledTextField: View {
     }
 }
 
+//MARK: Water Selector
+struct WaterSelector: View {
+
+    @Binding var wateringAmount: Int
+    
+    let prompt: String
+    let description: String
+    
+    let fontSize: Double
+    
+    init( _ binding: Binding<Int>, prompt: String, description: String, fontSize: Double = Constants.UISubHeaderTextSize) {
+        self._wateringAmount = binding
+        self.prompt = prompt
+        self.description = description
+        self.fontSize = fontSize
+    }
+    
+    var slideGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                wateringAmount = Int( (value.location.x - 20) / 52 )
+            }
+    }
+    
+    @ViewBuilder
+    private func makeSelectorNode(amount: Int, filled: Bool = false) -> some View {
+        ResizableIcon(filled ? "drop.fill" : "drop", size: Constants.UISubHeaderTextSize)
+            .padding(.horizontal)
+            .onTapGesture { withAnimation { wateringAmount = amount } }
+    }
+    
+    @ViewBuilder
+    private func makeSelector() -> some View {
+        HStack {
+            ForEach( 1...5, id: \.self ) { i in
+                ZStack {
+                    if i <= wateringAmount {
+                        makeSelectorNode(amount: i, filled: true)
+                    }
+                    makeSelectorNode( amount: i )
+                }
+            }
+            Spacer()
+        }.gesture(slideGesture)
+        
+    }
+    
+    var body: some View {
+    
+        VStack(alignment: .leading) {
+            UniversalText( prompt, size: fontSize, font: Constants.titleFont, case: .uppercase )
+                .padding(.trailing, 50)
+                
+            makeSelector()
+                .padding(.bottom, Constants.UISubPadding)
+                .padding(.top, -Constants.UISubPadding)
+            
+            UniversalText( description, size: Constants.UISmallTextSize, font: Constants.mainFont )
+                .opacity(Constants.formDescriptionTextOpacity)
+                .padding(.trailing, 50)
+        }
+        .padding()
+        .rectangularBackground(0, style: .primary)
+    }
+}
 
 
 //MARK: Time Selector

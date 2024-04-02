@@ -23,9 +23,7 @@ extension Constants {
     static let UISubPadding: CGFloat = 7
     
     //    forms
-    static let UIFormSpacing      : CGFloat = 10
-    static let UIFormPagePadding: CGFloat = 5
-    static let UIFormSliderTextFieldWidth: CGFloat = 60
+    static let formDescriptionTextOpacity: Double = 0.5
     
     //    if there are any variables that need to be computed at the start, run their setup code here
     @MainActor
