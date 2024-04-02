@@ -217,6 +217,12 @@ struct StyledTimeIntervalSelector: View {
     @Environment( \.colorScheme ) var colorScheme
     
     @Binding var interval: Int
+    let unit: String
+    
+    init( interval: Binding<Int>, unit: String = "days" ) {
+        self._interval = interval
+        self.unit = unit
+    }
     
     var floatBinding: Binding<Float> {
         Binding { Float(interval) } set: { newValue in
@@ -235,11 +241,16 @@ struct StyledTimeIntervalSelector: View {
             Slider(value: floatBinding, in: 1...14)
                 .tint(Colors.getBase(from: colorScheme, reversed: true))
             
-            TextField("", text: stringBinding)
-                .frame(width: CGFloat("\(interval)".count) * 10)
-                .keyboardType(.numberPad)
-                .rectangularBackground(style: .secondary)
-                .tint(Colors.getAccent(from: colorScheme))
+            HStack {
+                TextField("", text: stringBinding)
+                    .frame(width: CGFloat("\(interval)".count) * 10)
+                    .keyboardType(.numberPad)
+                    .tint(Colors.getAccent(from: colorScheme))
+                
+                if !unit.isEmpty {
+                    UniversalText( unit, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
+                }
+            }.rectangularBackground(style: .secondary)
         }
     }
     
