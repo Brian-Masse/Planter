@@ -15,8 +15,8 @@ class PlanterPlant: Object, Identifiable, Shareable {
     
 //    MARK: Vars
     @Persisted(primaryKey: true) var _id: ObjectId
-    var id: String { name }
     
+//    Sharing
     @Persisted private var ownerID: String = ""
     @Persisted var secondaryOwners: RealmSwift.List<String> = List()
     var primaryOwnerId: String {
@@ -24,18 +24,24 @@ class PlanterPlant: Object, Identifiable, Shareable {
         set { self.updateOwnerId(to: newValue) }
     }
 
+//    Overview
     @Persisted var name: String = ""
+    @Persisted var roomName: String = ""
     @Persisted var notes: String = ""
     @Persisted var isFavorite: Bool = false
     
-    @Persisted var wateringHistory: RealmSwift.List<PlanterWateringNode> = List()
-    
     @Persisted var coverImage: Data = Data()
     private var image: SwiftUI.Image? = nil
+
+    @Persisted var wateringInstructions:    String = ""
+    @Persisted var wateringAmount:          Int = 0
     
     @Persisted var dateLastWatered: Date = .now
     @Persisted var wateringInterval: Double = Constants.DayTime * 7
     
+    @Persisted var wateringHistory: RealmSwift.List<PlanterWateringNode> = List()
+    
+//    archive
     @Persisted var room: PlanterRoom? = nil
     
 //    MARK: init

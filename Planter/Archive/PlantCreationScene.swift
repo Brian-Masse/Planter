@@ -88,12 +88,12 @@ struct PlantCreationScene: View {
         
         VStack(alignment: .leading) {
             
-            SliderWithPrompt(label: "How often would you like to water this plant",
-                             minValue: 1,
-                             maxValue: 31,
-                             binding: wateringIntervalBinding,
-                             strBinding: wateringIntervalLabelBinding,
-                             textFieldWidth: 120)
+//            SliderWithPrompt(label: "How often would you like to water this plant",
+//                             minValue: 1,
+//                             maxValue: 31,
+//                             binding: wateringIntervalBinding,
+//                             strBinding: wateringIntervalLabelBinding,
+//                             textFieldWidth: 120)
             
         }
         .onAppear { sceneComplete = true }

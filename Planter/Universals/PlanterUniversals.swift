@@ -84,7 +84,10 @@ struct RoundedContainer<C: View>: View {
             
             content
         }
-        .rectangularBackground(10, style: .secondary, corners: halfCut ? [.topLeft, .bottomLeft] : .allCorners)
+        .padding([.vertical, .leading], 10)
+        .padding( .trailing, halfCut ? 0 : 10 )
+        
+        .rectangularBackground(0, style: .secondary, corners: halfCut ? [.topLeft, .bottomLeft] : .allCorners)
         
     }
     

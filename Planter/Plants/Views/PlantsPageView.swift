@@ -97,7 +97,7 @@ struct PlantsPageView: View {
             .padding(.vertical, Constants.UISubPadding)
             .padding(.horizontal)
             .if(filterIsActive) {   view in view.rectangularBackground( 0, style: .accent ) }
-            .if(!filterIsActive) {  view in view.rectangularBackground( 0, style: .secondary, reverseStyle: true ) }
+            .if(!filterIsActive) {  view in view.rectangularBackground( 0, style: .primary, reverseStyle: true ) }
             .onTapGesture { withAnimation { toggleFilterItem(filter) }}
     }
 
