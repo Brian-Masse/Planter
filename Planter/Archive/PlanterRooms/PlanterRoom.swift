@@ -41,7 +41,7 @@ class PlanterRoom: Object, Shareable, Identifiable {
             room.removePlant(plant, setsRoomToNil: false)
         }
         
-        plant.setRoom(to: self)
+//        plant.setRoom(to: self)
         
         if let _ = self.plants.first(where: { node in
             node == plant
@@ -59,7 +59,7 @@ class PlanterRoom: Object, Shareable, Identifiable {
     
     func removePlant(_ plant: PlanterPlant, setsRoomToNil: Bool = true) {
         
-        if setsRoomToNil { plant.setRoom(to: nil) }
+//        if setsRoomToNil { plant.setRoom(to: nil) }
         
         if let index = self.plants.firstIndex(where: { node in
             node == plant

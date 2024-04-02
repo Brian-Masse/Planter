@@ -31,6 +31,7 @@ class PlanterPlant: Object, Identifiable, Shareable {
     @Persisted var wateringHistory: RealmSwift.List<PlanterWateringNode> = List()
     
     @Persisted var coverImage: Data = Data()
+    private var image: SwiftUI.Image? = nil
     
     @Persisted var dateLastWatered: Date = .now
     @Persisted var wateringInterval: Double = Constants.DayTime * 7
@@ -144,6 +145,9 @@ class PlanterPlant: Object, Identifiable, Shareable {
     
 //    MARK: Convenience Functions
     
+    
+    
+//    MARK: Messages
     func getDaysUntilNextWateringDate() -> Int {
         let nextWateringDate = self.getNextWateringDate()
         
@@ -168,14 +172,11 @@ class PlanterPlant: Object, Identifiable, Shareable {
         "Last watered: \( self.dateLastWatered.formatted(date: .numeric, time: .omitted) )"
     }
     
-    func setRoom(to room: PlanterRoom?) {
-        RealmManager.updateObject(self) { thawed in
-            if let room {
-                if let thawedRoom = room.thaw() {
-                    thawed.room = thawedRoom
-                }
-            } else { thawed.room = nil }
-        }
+//    MARK: General
+    func getImage() -> SwiftUI.Image {
+        if let image = self.image { return image }
+        self.image = PhotoManager.decodeImage(from: self.coverImage) ?? Image("fern")
+        return self.image!
     }
     
     @MainActor

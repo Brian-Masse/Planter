@@ -62,7 +62,7 @@ struct TabBarView: View {
     @ViewBuilder
     private func makeGradient() -> some View {
         LinearGradient(stops: [.init(color: Colors.getBase(from: colorScheme), location: 0),
-                               .init(color: Colors.getBase(from: colorScheme).opacity(0.75), location: 0.75),
+                               .init(color: Colors.getBase(from: colorScheme).opacity(0.75), location: 0.65),
                                .init(color: .clear, location: 1)
                               ],
                        startPoint: .bottom, endPoint: .top)

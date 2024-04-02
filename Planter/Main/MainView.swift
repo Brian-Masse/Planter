@@ -84,7 +84,7 @@ struct MainView: View {
 //    MARK: Body
     var body: some View {
         
-//        let arrPlants = Array( plants )
+        let arrPlants = Array( plants )
 //        let arrRooms = Array(rooms)
         
         GeometryReader { geo in
@@ -92,7 +92,7 @@ struct MainView: View {
                 NavigationView {
                     TabView(selection: $page) {
                         
-                        PlantsPageView()        .tag( MainPage.plants )
+                        PlantsPageView(plants: arrPlants)        .tag( MainPage.plants )
                         CalendarPageView()      .tag( MainPage.calendar )
                         SocialPageView()        .tag( MainPage.social )
                         ProfilePageView()       .tag( MainPage.profile )

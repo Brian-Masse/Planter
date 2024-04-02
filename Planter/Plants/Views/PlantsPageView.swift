@@ -19,48 +19,37 @@ struct PlantsPageView: View {
         case favorite = "favorite"
         
         var id: String { self.rawValue }
-    }
-    
-//    MARK: Vars
-    @ObservedResults(PlanterPlant.self) var plants
-    
-    @State var activeFilter: [PlantFilter] = []
-    @State var filteredPlants: [PlanterPlant] = []
-    
-    @State var srollPosition: CGPoint = .zero
-    
-    @MainActor
-    init() {
-        self.filteredPlants = Array(plants)
-    }
-    
-//    MARK: Struct Methods
-    
-    @MainActor
-    private func updateFilter( to filter: PlantFilter ) async {
-        let activeFilter    = await toggleFilterItem(filter)
-        let newPlants       = await getNewPlants(to: activeFilter)
-
-        self.activeFilter = activeFilter
-        self.filteredPlants = newPlants
-    }
-    
-    private func getNewPlants(to filter: [PlantFilter]) async -> [PlanterPlant] {
-        if filter.count == 0 { return Array(plants) }
-        else {
-            let filterFavorite = filter.contains(where: { filter in filter == .favorite })
-            
-            return plants.compactMap { plant in
-                (plant.isFavorite && filterFavorite) ? plant : nil
+        
+        func filterFunction(plant: PlanterPlant) -> Bool {
+            switch self {
+            case .favorite: return plant.isFavorite
+            case .myPlants: return true
+            case .sharedPlants: return true
             }
         }
     }
     
-    private func toggleFilterItem(_ filter: PlantFilter) async -> [PlantFilter] {
-        var filterCopy = activeFilter
-        if let index = self.filterIsActive( filter ) { filterCopy.remove(at: index)
-        } else { filterCopy.append(filter) }
-        return filterCopy
+//    MARK: Vars
+    let plants: [PlanterPlant]
+    
+    @State var activeFilter: [PlantFilter] = []
+    
+    @State var srollPosition: CGPoint = .zero
+    
+//    MARK: Filter Methods
+    private var filteredPlants: [PlanterPlant] {
+        if activeFilter.isEmpty { return Array(plants) }
+        return plants.filter { plant in
+            for filter in activeFilter {
+                if !filter.filterFunction(plant: plant) { return false }
+            }
+            return true
+        }
+    }
+
+    private func toggleFilterItem(_ filter: PlantFilter) {
+        if let index = self.filterIsActive( filter ) { activeFilter.remove(at: index) }
+        else { activeFilter.append(filter) }
     }
     
     private func filterIsActive(_ item: PlantFilter) -> Int? {
@@ -109,11 +98,9 @@ struct PlantsPageView: View {
             .padding(.horizontal)
             .if(filterIsActive) {   view in view.rectangularBackground( 0, style: .accent ) }
             .if(!filterIsActive) {  view in view.rectangularBackground( 0, style: .secondary, reverseStyle: true ) }
-            .onTapGesture {
-                Task { await updateFilter(to: filter) }
-            }
+            .onTapGesture { withAnimation { toggleFilterItem(filter) }}
     }
-    
+
     @ViewBuilder
     private func makeFilterSelector() -> some View {
         RoundedContainer("", halfCut: true) {
@@ -130,7 +117,7 @@ struct PlantsPageView: View {
 //    MARK: Body
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            UniversalText("Planter", size: Constants.UITitleTextSize, font: SpaceGroteskMedium.shared, case: .uppercase)
+            UniversalText("Planter", size: Constants.UIHeaderTextSize, font: SpaceGroteskMedium.shared, case: .uppercase)
                 .padding(.leading, 10)
             
 //            BlurScroll(10, scrollPositionBinding: $srollPosition)
@@ -143,13 +130,10 @@ struct PlantsPageView: View {
                     
                     makeAllPlants()
                 }
+                .padding(.bottom, Constants.UIBottomOfPagePadding)
             }
             Spacer()
         }
         .ignoresSafeArea(edges: .bottom)
-        
-        
-        
     }
-    
 }

@@ -49,8 +49,7 @@ struct PlantFullPreviewView: View {
     
     init(plant: PlanterPlant) {
         self.plant = plant
-
-        self.image = PhotoManager.decodeImage(from: plant.coverImage) ?? Image("fern")
+        self.image = plant.getImage()
     }
     
 //    MARK: Body
