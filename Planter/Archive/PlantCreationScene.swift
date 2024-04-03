@@ -105,9 +105,9 @@ struct PlantCreationScene: View {
         
         VStack(alignment: .leading) {
             
-            StyledPhotoPicker {
-                UniversalText("Choose Image", size: Constants.UIDefaultTextSize, font: Constants.titleFont)
-            }
+//            StyledPhotoPicker {
+//                UniversalText("Choose Image", size: Constants.UIDefaultTextSize, font: Constants.titleFont)
+//            }
                 
         }
     }

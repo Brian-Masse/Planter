@@ -100,7 +100,7 @@ struct ProfileCreationScene: View {
     private func makeBirthdayScene() -> some View {
         VStack(alignment: .leading) {
             
-            StyledDatePicker($birthday, title: "birthay")
+//            StyledDatePicker($birthday, title: "birthay")
             
         }
         .onAppear { sceneComplete = true }

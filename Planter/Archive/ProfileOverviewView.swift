@@ -155,9 +155,9 @@ struct ProfileOverviewView: View {
         }
         .sheet(isPresented: $showingEditingView) {
             
-            StyledPhotoPicker {
-                Text("choose")
-            }
+//            StyledPhotoPicker {
+//                Text("choose")
+//            }
             
             Text("submit")
                 .onTapGesture {

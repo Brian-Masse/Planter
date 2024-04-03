@@ -73,31 +73,31 @@ struct PlantEditingView: View {
                           case: .uppercase)
             .opacity(0.75)
             
-            StyledFormSection("name & \nnotes") {
-                VStack(alignment: .leading) {
-                    
-                    StyledTextField($name, prompt: "name", question: "What do you call this plant",  fontSize: Constants.UISubHeaderTextSize)
-                        .padding(.bottom)
-                    
-                    Spacer()
-                    
-                    StyledTextField($notes, prompt: "notes", question: "Provide any additional notes on this plant", fontSize: Constants.UISubHeaderTextSize)
-                }
-                .padding(.vertical)
-            }
-            .padding(.bottom)
-            
-            StyledFormSection("Plant \nInfo") {
-                VStack(alignment: .leading) {
-                    
-                    StyledTextField($instruction, prompt: "instructions", question: "how should this plant be watered?", fontSize: Constants.UISubHeaderTextSize)
-                    
-                    Spacer()
-                    
-                    StyledTextField($instruction, prompt: "Watering Can", question: "What do you use to water this plant?", fontSize: Constants.UISubHeaderTextSize)
-                }
-            }
-            .padding(.bottom)
+//            StyledFormSection("name & \nnotes") {
+//                VStack(alignment: .leading) {
+//                    
+//                    StyledTextField($name, prompt: "name", question: "What do you call this plant",  fontSize: Constants.UISubHeaderTextSize)
+//                        .padding(.bottom)
+//                    
+//                    Spacer()
+//                    
+//                    StyledTextField($notes, prompt: "notes", question: "Provide any additional notes on this plant", fontSize: Constants.UISubHeaderTextSize)
+//                }
+//                .padding(.vertical)
+//            }
+//            .padding(.bottom)
+//            
+//            StyledFormSection("Plant \nInfo") {
+//                VStack(alignment: .leading) {
+//                    
+//                    StyledTextField($instruction, prompt: "instructions", question: "how should this plant be watered?", fontSize: Constants.UISubHeaderTextSize)
+//                    
+//                    Spacer()
+//                    
+//                    StyledTextField($instruction, prompt: "Watering Can", question: "What do you use to water this plant?", fontSize: Constants.UISubHeaderTextSize)
+//                }
+//            }
+//            .padding(.bottom)
         }
     }
     

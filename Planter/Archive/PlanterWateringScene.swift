@@ -35,7 +35,7 @@ struct PlantWateringScene: View {
             
             StyledTextField($comments, prompt: "comments")
             
-            StyledDatePicker($date, title: "What day did you water this on?")
+//            StyledDatePicker($date, title: "What day did you water this on?")
             
             Spacer()
             
