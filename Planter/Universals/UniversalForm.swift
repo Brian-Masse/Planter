@@ -9,10 +9,10 @@ import Foundation
 import SwiftUI
 import PhotosUI
 import UIUniversals
-
-#Preview {
-    TempView()
-}
+//
+//#Preview {
+//    TempView()
+//}
 
 struct TempView: View {
     

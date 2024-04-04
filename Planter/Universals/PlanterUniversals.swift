@@ -117,17 +117,20 @@ struct IconButton: View {
                     }
                     .zIndex(1000)
             }
-        
-//        UniversalButton {
-//            ResizableIcon(icon, size: size)
-//                .frame(width: 30, height: 30)
-//        } action: { action()}
     }
-    
 }
 
-#Preview {
-    IconButton("arrow.forward") {
-        print("hi")
+struct DismissButton: View {
+    
+    @Environment(\.dismiss) var dismiss
+    
+    var body: some View {
+        
+        ResizableIcon("chevron.down", size: Constants.UIDefaultTextSize)
+            .frame(width: 30, height: 30)
+            .foregroundStyle(.black)
+            .rectangularBackground(style: .accent)
+            .onTapGesture { dismiss()}
     }
+    
 }

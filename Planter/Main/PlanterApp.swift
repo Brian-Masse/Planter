@@ -26,7 +26,7 @@ struct PlanterApp: App {
                                UITitleTextSize:         80,
                                UIMainHeaderTextSize:    60,
                                UIHeaderTextSize:        40,
-                               UISubHeaderTextSize:     30,
+                               UISubHeaderTextSize:     27  ,
                                UIDefeaultTextSize:      20,
                                UISmallTextSize:         15)
         

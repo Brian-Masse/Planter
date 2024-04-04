@@ -10,10 +10,6 @@ import SwiftUI
 import PhotosUI
 import UIUniversals
 
-#Preview {
-    PlantCreationScene()
-}
-
 struct PlantCreationScene: View {
 //    MARK: Scenes
     enum PlantCreationScenes: Int, PlanterSceneEnum {
@@ -57,8 +53,12 @@ struct PlantCreationScene: View {
     @State var statusImageFrequency: Int = 3
     @State var statusNotesFrequency: Int = 10
     
-    @State var image: UIImage? = nil
+    @State var image: UIImage?
 
+    init( image: UIImage? = nil ) {
+        self.image = image
+    }
+    
 //    MARK: Constants
     struct LocalConstants {
 //        static let

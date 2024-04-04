@@ -73,16 +73,3 @@ struct ProfileView: View {
     }
     
 }
-//
-//#Preview {
-//    
-//    let profile = PlanterProfile(ownerId: "",
-//                                 firstName: "Brian",
-//                                 lastName: "Masse",
-//                                 userName: "bmasse23",
-//                                 email: "brianm25it@gmail.com",
-//                                 phoneNumber: 7813153811,
-//                                 birthday: .now)
-//    
-//    return ProfileView(profile)
-//}

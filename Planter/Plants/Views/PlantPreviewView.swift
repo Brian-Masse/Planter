@@ -14,9 +14,19 @@ import RealmSwift
 struct PlantFavoriteToggle: View {
     
     let plant: PlanterPlant
+    let alignment: HorizontalAlignment
+    
+    init( plant: PlanterPlant, alignment: HorizontalAlignment = .trailing ) {
+        self.plant = plant
+        self.alignment = alignment
+    }
+    
+    private func getTextAlignment() -> TextAlignment {
+        alignment == .trailing ? .trailing : .leading
+    }
     
     var body: some View {
-        VStack(alignment: .trailing, spacing: 0) {
+        VStack(alignment: alignment, spacing: 0) {
             
             let favoriteMessage =  !plant.isFavorite ? "Favorite \nthis plant" : "Favorite\nplant"
             
@@ -26,9 +36,9 @@ struct PlantFavoriteToggle: View {
                            size: Constants.UISubHeaderTextSize,
                            font: Constants.titleFont,
                            case: .uppercase,
-                           textAlignment: .trailing,
+                           textAlignment: getTextAlignment(),
                            lineSpacing: -10)
-            .padding(.leading, 90)
+//            .padding(.leading, 90)
         }.onTapGesture { plant.toggleFavorite() }
     }
 }
@@ -43,6 +53,8 @@ struct PlantFullPreviewView: View {
     }
     
 //    MARK: vars
+    @State var showingPlantView: Bool = false
+    
     let plant: PlanterPlant
 
     let image: Image
@@ -56,12 +68,15 @@ struct PlantFullPreviewView: View {
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             VStack() {
-                UniversalText(plant.getWateringMessage(),
-                              size: Constants.UISubHeaderTextSize,
-                              font: Constants.titleFont,
-                              case: .uppercase,
-                              lineSpacing: -10)
-                .padding(.trailing, Constants.UISubPadding)
+                HStack {
+                    UniversalText(plant.getWateringMessage(),
+                                  size: Constants.UISubHeaderTextSize,
+                                  font: Constants.titleFont,
+                                  case: .uppercase,
+                                  lineSpacing: -10)
+                    .padding(.trailing, Constants.UISubPadding)
+                    Spacer()
+                }
                 
                 self.image
                     .resizable()
@@ -69,7 +84,10 @@ struct PlantFullPreviewView: View {
                     .frame(width: ViewConstants.width - (2 * ViewConstants.padding), height: 116)
                     .clipped()
                 
-                PlantFavoriteToggle(plant: plant)
+                HStack {
+                    Spacer()
+                    PlantFavoriteToggle(plant: plant)
+                }
             }
             
             LargeTextButton("WA TER", at: 30, aspectRatio: 1.4,
@@ -85,6 +103,10 @@ struct PlantFullPreviewView: View {
         .universalTextStyle(reversed: true)
         .frame(minWidth: ViewConstants.width - (2 * ViewConstants.padding))
         .rectangularBackground(ViewConstants.padding, style: .primary, reverseStyle: true)
+        .onTapGesture { showingPlantView = true }
+        .fullScreenCover(isPresented: $showingPlantView) {
+            PlantView(plant: plant)
+        }
     }
 }
 

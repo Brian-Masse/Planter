@@ -88,6 +88,7 @@ struct TabBarView: View {
                     makeTabBarButton(.social)
                 }
             }
+            .scaleEffect(0.9, anchor: .bottomTrailing)
         }
         .padding(Constants.UISubPadding )
         .padding(.bottom)

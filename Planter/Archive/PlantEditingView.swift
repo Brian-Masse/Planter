@@ -178,18 +178,3 @@ struct PlantEditingView: View {
     }
     
 }
-
-
-
-//#Preview {
-//    
-//    let plant = PlanterPlant(ownerID: "",
-//                             name: "Cactus",
-//                             notes: "These are some great plant notes",
-//                             wateringInterval: 8,
-//                             coverImageData: Data())
-//    
-//    return PlantEditingView(plant: plant)
-//    
-//    
-//}

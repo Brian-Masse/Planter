@@ -223,9 +223,3 @@ struct CalendarView: View {
         
     
 }
-
-//#Preview {
-//    CalendarView(plants: [])
-//}
-
-

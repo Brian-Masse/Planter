@@ -24,6 +24,8 @@ class PlanterPlant: Object, Identifiable, Shareable {
         set { self.updateOwnerId(to: newValue) }
     }
 
+    @Persisted var primaryWaterer: String = ""
+    
 //    Overview
     @Persisted var name: String = ""
     @Persisted var roomName: String = ""
@@ -60,6 +62,7 @@ class PlanterPlant: Object, Identifiable, Shareable {
         self.init()
         
         self.ownerID = ownerID
+//        self.primaryWaterer = ownerID
         
         self.name = name
         self.roomName = roomName
@@ -195,7 +198,28 @@ class PlanterPlant: Object, Identifiable, Shareable {
         "Last watered: \( self.dateLastWatered.formatted(date: .numeric, time: .omitted) )"
     }
     
+///    This plant needs to be watered every 2 days
+    func getWaterIntervalMessage() -> String {
+        let day = wateringInterval == 1 ? "" : "\(Int(wateringInterval / Constants.DayTime))"
+        
+        return "this plant needs to be watered every \(day) days"
+    }
+    
+//    TODO: create a message for when someone else is the primary waterer
+///    Brian is the primary Waterer
+    func getPrimaryWatererMessage() -> String {
+        if isPrimaryWaterer() { return "You are the primary Waterer" }
+        else {
+            return "You are the primary Waterer"
+        }
+    }
+    
 //    MARK: General
+    func isPrimaryWaterer() -> Bool {
+//        primaryWaterer == ownerID
+        true
+    }
+    
     func getImage() -> SwiftUI.Image {
         if let image = self.image { return image }
         self.image = PhotoManager.decodeImage(from: self.coverImage) ?? Image("fern")
@@ -208,7 +232,6 @@ class PlanterPlant: Object, Identifiable, Shareable {
         RealmManager.retrieveObjects { query in
             query.getNextWateringDate().matches(date, to: .day)
         }
-        
     }
 }
 
