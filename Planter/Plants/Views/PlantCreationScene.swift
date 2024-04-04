@@ -42,7 +42,7 @@ struct PlantCreationScene: View {
     @ObservedObject var photoManager = PlanterModel.photoManager
     
     @State var scene: PlantCreationScenes = .overview
-    @State var sceneComplete: Bool = true
+    @State var sceneComplete: Bool = false
     
     @State var name: String = ""
     @State var room: String = ""
@@ -73,7 +73,10 @@ struct PlantCreationScene: View {
         presentationMode.wrappedValue.dismiss()
     }
     
-//    MARK: ViewBuilders
+//    MARK: Overview
+    private func checkOverviewSceneCompletion() {
+        sceneComplete = !name.isEmpty && !room.isEmpty
+    }
     
     @ViewBuilder
     private func makeOverviewScene() -> some View {
@@ -90,10 +93,18 @@ struct PlantCreationScene: View {
                 StyledTextField($description, prompt: "provide any additional notes", question: "Provide any other relevant details, such as proximity to sunlight or soil quality")
             }
         }
+        .onChange(of: name) { checkOverviewSceneCompletion() }
+        .onChange(of: room) { checkOverviewSceneCompletion() }
+        
         .onChange(of: name) { oldValue, newValue in
-            sceneComplete = !(newValue.isEmpty)
+            sceneComplete = false
         }
     }
+    
+////    MARK: Schedule
+//    @ViewBuilder
+//    private func makeWateringSchedule
+    
     
     private var wateringIntervalBinding: Binding<Float> {
         Binding { Float( wateringInterval / Constants.DayTime )

@@ -84,6 +84,7 @@ struct PlanterScene<Content: View, Scene: PlanterSceneEnum>: View {
             Spacer()
             
             ResizableIcon("arrow.backward", size: Constants.UIDefaultTextSize)
+                .opacity( sceneState.rawValue > 0 ? 1 : 0.4 )
                 .onTapGesture { regressScene() }
             
             VStack {
@@ -92,6 +93,7 @@ struct PlanterScene<Content: View, Scene: PlanterSceneEnum>: View {
             }
             
             ResizableIcon("arrow.forward", size: Constants.UIDefaultTextSize)
+                .opacity( sceneComplete ? 1 : 0.4 )
                 .onTapGesture { progressScene() }
             
             Spacer()
@@ -117,6 +119,7 @@ struct PlanterScene<Content: View, Scene: PlanterSceneEnum>: View {
             .padding(Constants.UISubPadding)
             .rectangularBackground(0, style: .secondary)
         }
+        .tapHidesKeyboard()
         .ignoresSafeArea()
         .padding(.vertical)
         

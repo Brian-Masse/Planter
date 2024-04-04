@@ -122,6 +122,7 @@ struct StyledTextField: View {
     @State var highlighted: Bool = false
     
     @State var showingClearButton: Bool = false
+    @State private var textIsEmpty: Bool = true
     
     private var textBinding: Binding<String> {
         Binding {
@@ -132,7 +133,7 @@ struct StyledTextField: View {
     @ViewBuilder
     private func makeTextField() -> some View {
         ZStack(alignment: .bottomLeading ) {
-            if textBinding.wrappedValue.isEmpty {
+            if textIsEmpty {
                 UniversalText( prompt, size: fontSize, font: Constants.titleFont, case: .uppercase, wrap: true )
                     .padding(.trailing, 50)
             }
@@ -149,7 +150,6 @@ struct StyledTextField: View {
     var body: some View {
         
         VStack(alignment: .leading, spacing: 0) {
-
             makeTextField()
             .font(.custom(Constants.mainFont.postScriptName, size: fontSize))
                 .focused($focused)
@@ -163,10 +163,19 @@ struct StyledTextField: View {
                         self.highlighted = newValue
                     }
                 }
+                .onChange(of: textBinding.wrappedValue) { oldValue, newValue in withAnimation {
+                    textIsEmpty = newValue.isEmpty
+                } }
                 .padding(.bottom, Constants.UISubPadding)
+                .foregroundStyle(showingClearButton ? Colors.getAccent(from: colorScheme) : Colors.getBase(from: colorScheme, reversed: true))
             
             Divider(strokeWidth: 3)
                 .padding(.bottom, Constants.UISubPadding)
+                .foregroundStyle(showingClearButton ? Colors.getAccent(from: colorScheme) : Colors.getBase(from: colorScheme, reversed: true))
+            
+            if !textIsEmpty {
+                UniversalText( prompt, size: Constants.UIDefaultTextSize, font: Constants.titleFont, case: .uppercase, wrap: true )
+            }
             
             if !question.isEmpty {
                 UniversalText(question, size: Constants.UISmallTextSize, font: Constants.mainFont)
@@ -174,7 +183,6 @@ struct StyledTextField: View {
                     .opacity(Constants.formDescriptionTextOpacity)
             }
         }
-        .foregroundStyle(showingClearButton ? Colors.getAccent(from: colorScheme) : Colors.getBase(from: colorScheme, reversed: true))
         .padding()
         .padding(.trailing)
         .rectangularBackground(0, style: .primary)
