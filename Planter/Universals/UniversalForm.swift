@@ -29,7 +29,7 @@ struct TempView: View {
                 
                 Spacer()
                 
-                StyledPhotoPicker($image)
+                StyledPhotoPicker($image, description: "Give this plant a great cover photo")
                 
                 StyledTextField($text,
                                 prompt: "What is the name of this plant?",
@@ -274,10 +274,12 @@ struct StyledPhotoPicker: View {
     
     @ObservedObject var photoManager = PlanterModel.photoManager
     
+    let description: String
     let shouldCrop: Bool
     
-    init(_ image: Binding<Image?>, shouldCrop: Bool = true) {
+    init(_ image: Binding<Image?>, description: String, shouldCrop: Bool = true) {
         self._croppedImage = image
+        self.description = description
         self.shouldCrop = shouldCrop
     }
     
@@ -346,6 +348,10 @@ struct StyledPhotoPicker: View {
         VStack(alignment: .leading, spacing: Constants.UISubPadding) {
             
             UniversalText( "Select Image", size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase )
+                .padding(.bottom, -Constants.UISubPadding)
+            
+            UniversalText( description, size: Constants.UISmallTextSize, font: Constants.mainFont )
+                .opacity(Constants.formDescriptionTextOpacity)
             
             if let image = croppedImage {
                 HStack {
