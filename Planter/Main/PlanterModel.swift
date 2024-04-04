@@ -42,6 +42,14 @@ class PlanterModel: ObservableObject {
         self.activeProfile = profile
     }
     
+    static func wait(for seconds: Double) async {
+        do {
+            try await Task.sleep(nanoseconds: UInt64( seconds * pow( 10, 9 )) )
+        } catch {
+            print("failed to complete the wait: \(error.localizedDescription)")
+        }
+    }
+    
 //    MARK: Flow
 //    These functions will be called after the work of either authentication or open realm is performed
 //    Their value will be used to progress the app state accordingly

@@ -20,6 +20,8 @@ struct TempView: View {
     @State var wateringAmount: Int = 3
     @State var wateringInterval: Int = 5
     
+    @State var image: Image? = nil
+    
     var body: some View {
 
         ScrollView {
@@ -27,7 +29,7 @@ struct TempView: View {
                 
                 Spacer()
                 
-//                StyledPhotoPicker()
+                StyledPhotoPicker($image)
                 
                 StyledTextField($text,
                                 prompt: "What is the name of this plant?",
@@ -282,7 +284,29 @@ struct StyledPhotoPicker: View {
     @State private var showPhotoPicker: Bool = false
     @State private var showCropView: Bool = false
     
+    @State private var uiImage: UIImage? = nil
     @Binding var croppedImage: Image?
+    
+    @ViewBuilder
+    private func makePhotoPicker() -> some View {
+        Menu {
+            ContextMenuButton("from camera", icon: "camera.metering.multispot") {
+                photoManager.sourceType = .camera
+                self.showPhotoPicker = true
+            }
+            ContextMenuButton("from photo library", icon: "photo.on.rectangle") {
+                photoManager.sourceType = .photoLibrary
+                self.showPhotoPicker = true
+            }
+            
+        } label: { Group {
+            if croppedImage == nil {
+                makeFullImageUploader()
+            } else {
+                makeSmallImageUploader()
+            }
+        } }.buttonStyle(PlainButtonStyle())
+    }
     
     @ViewBuilder
     private func makeFullImageUploader() -> some View {
@@ -335,25 +359,24 @@ struct StyledPhotoPicker: View {
                 }.rectangularBackground(Constants.UISubPadding, style: .secondary)
             }
             
-            if croppedImage == nil {
-                makeFullImageUploader()
-            } else {
-                makeSmallImageUploader()
-            }
+            makePhotoPicker()
         }
-        .photosPicker(isPresented: $showPhotoPicker, selection: $photoManager.imageSelection)
-        .onChange(of: photoManager.retrievedImage) { oldValue, newValue in
-            if newValue != nil {
+        .rectangularBackground(style: .primary)
+        .sheet(isPresented: $showPhotoPicker) {
+            ImagePickerView(sourceType: photoManager.sourceType) { uiImage in
+                photoManager.retrievedImage = uiImage
+                
                 if shouldCrop { showCropView = true }
-                else { self.croppedImage = photoManager.image! }
+                else { self.croppedImage = Image(uiImage: uiImage) }
             }
+            .ignoresSafeArea()
         }
         .fullScreenCover(isPresented: $showCropView) {
-            CropView(image: photoManager.image!) { image in
+            let uiImage = self.photoManager.retrievedImage!
+            CropView(image: Image(uiImage: uiImage)) { image in
                 self.croppedImage = Image(uiImage: image)
             }
         }
-        .rectangularBackground(style: .primary)
     }
 }
 
@@ -383,6 +406,8 @@ fileprivate struct CropView: View {
     @State private var showingGrid: Bool = true
     
     private func saveImage(geo: GeometryProxy) {
+        
+        print("running")
         
         let renderer = ImageRenderer(content: makeImage(showGrid: false, geo: geo) )
         renderer.proposedSize = ProposedViewSize(CGSize( width: geo.size.width * 4, height: geo.size.width * 4 ))
@@ -440,14 +465,21 @@ fileprivate struct CropView: View {
     @ViewBuilder
     private func makeHeader(geo: GeometryProxy) -> some View {
         HStack {
-            ResizableIcon("xmark", size: Constants.UIDefaultTextSize)
-                .onTapGesture { dismiss() }
+            UniversalButton { ResizableIcon("xmark", size: Constants.UIDefaultTextSize).frame(width: 50, height: 50) } action: {
+                dismiss()
+            }
             Spacer()
             UniversalText("Crop", size: Constants.UISubHeaderTextSize, font: Constants.mainFont, case: .uppercase)
             Spacer()
 
-            ResizableIcon("checkmark", size: Constants.UIDefaultTextSize)
-                .onTapGesture { self.saveImage(geo: geo) }
+            UniversalButton { 
+                ResizableIcon("checkmark", size: Constants.UIDefaultTextSize)
+                    .background(Rectangle()
+                        .frame(width: 50, height: 50)
+                        .opacity(0.0001))
+            } action: {
+                self.saveImage(geo: geo)
+            }
         }
     }
     
