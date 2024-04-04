@@ -187,9 +187,8 @@
 			children = (
 				C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */,
 				C945C3C52BB4AEFB00EC9547 /* PlantsPageView.swift */,
+				C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */,
 				C91586FB2B194AAF00444826 /* PlantView.swift */,
-				C911B9072B25254900F5986A /* PlantCommentsView.swift */,
-				C911B9052B2523AA00F5986A /* PlantOverviewView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -214,14 +213,15 @@
 		C945C3C42BB4AE9600EC9547 /* Archive */ = {
 			isa = PBXGroup;
 			children = (
+				C996EFC12B19C84500392C4E /* PlanterSheet.swift */,
 				C911B8FC2B24F97900F5986A /* ProfileView.swift */,
 				C92BD20B2B27938200AF6765 /* ProfileOverviewView.swift */,
 				C92BD20D2B2793F300AF6765 /* ProfileSocialView.swift */,
 				C911B90B2B26505000F5986A /* ProfileCreationScene.swift */,
 				C92968BE2B3529350089C83D /* CalendarView.swift */,
 				C996EFC32B1BA6F300392C4E /* PlanterRooms */,
-				C91586F92B1825F300444826 /* PlanterScene.swift */,
-				C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */,
+				C911B9052B2523AA00F5986A /* PlantOverviewView.swift */,
+				C911B9072B25254900F5986A /* PlantCommentsView.swift */,
 				C92968C02B36712A0089C83D /* PlantEditingView.swift */,
 				C911B8F62B24317C00F5986A /* PlanterWateringScene.swift */,
 			);
@@ -247,13 +247,10 @@
 		C96C7E432B17177300FC2FB0 /* Universals */ = {
 			isa = PBXGroup;
 			children = (
-				C96C7E472B1717B300FC2FB0 /* Animations.swift */,
-				C96C7E452B1717B300FC2FB0 /* Constants.swift */,
-				C96C7E4A2B1717B300FC2FB0 /* Extensions.swift */,
-				C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */,
+				C9DBF14E2BBE042E006C5236 /* UIUniversals */,
 				C911B8F42B23FC9400F5986A /* PhotoManager.swift */,
 				C911B90D2B267D0F00F5986A /* PlanterUniversals.swift */,
-				C996EFC12B19C84500392C4E /* PlanterSheet.swift */,
+				C91586F92B1825F300444826 /* PlanterScene.swift */,
 				C96C7E442B1717B300FC2FB0 /* UniversalForm.swift */,
 			);
 			path = Universals;
@@ -353,6 +350,17 @@
 				C91586F62B17E9BD00444826 /* MainViews */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		C9DBF14E2BBE042E006C5236 /* UIUniversals */ = {
+			isa = PBXGroup;
+			children = (
+				C96C7E472B1717B300FC2FB0 /* Animations.swift */,
+				C96C7E452B1717B300FC2FB0 /* Constants.swift */,
+				C96C7E4A2B1717B300FC2FB0 /* Extensions.swift */,
+				C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */,
+			);
+			path = UIUniversals;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

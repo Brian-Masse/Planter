@@ -111,19 +111,20 @@ struct ProfileCreationScene: View {
 //    MARK: Body
     var body: some View {
         
-        PlanterScene($scene,
-                     sceneComplete: $sceneComplete,
-                     canRegressScene: true,
-                     submit: submit) { scene in
-            
-            VStack {
-                switch scene {
-                case .name: makeNameScene()
-                case .contact: makeContactScene()
-                case .birthday: makeBirthdayScene()
-                    
-                }
-            }
-        }
+        Text("hello")
+//        PlanterScene($scene,
+//                     sceneComplete: $sceneComplete,
+//                     canRegressScene: true,
+//                     submit: submit) { scene in
+//            
+//            VStack {
+//                switch scene {
+//                case .name: makeNameScene()
+//                case .contact: makeContactScene()
+//                case .birthday: makeBirthdayScene()
+//                    
+//                }
+//            }
+//        }
     }
 }

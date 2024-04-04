@@ -36,8 +36,13 @@ class PlanterPlant: Object, Identifiable, Shareable {
     @Persisted var wateringInstructions:    String = ""
     @Persisted var wateringAmount:          Int = 0
     
+    @Persisted var statusImageFrequency: Double = 5
+    @Persisted var statusCommentFrequency: Double = 5
+    
     @Persisted var dateLastWatered: Date = .now
     @Persisted var wateringInterval: Double = Constants.DayTime * 7
+    
+    
     
     @Persisted var wateringHistory: RealmSwift.List<PlanterWateringNode> = List()
     

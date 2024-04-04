@@ -62,16 +62,16 @@ struct RoomCreationScene: View  {
         
         VStack(alignment: .leading) {
         
-            PlanterScene($scene,
-                         sceneComplete: $sceneComplete,
-                         canRegressScene: true,
-                         submit: submit) { scene in
-                
-                switch scene {
-                case.overview:
-                    makeOverviewScene()
-                }
-            }
+//            PlanterScene($scene,
+//                         sceneComplete: $sceneComplete,
+//                         canRegressScene: true,
+//                         submit: submit) { scene in
+//                
+//                switch scene {
+//                case.overview:
+//                    makeOverviewScene()
+//                }
+//            }
         }
     }
 }

@@ -27,7 +27,7 @@ struct TempView: View {
                 
                 Spacer()
                 
-                StyledPhotoPicker()
+//                StyledPhotoPicker()
                 
                 StyledTextField($text,
                                 prompt: "What is the name of this plant?",
@@ -266,14 +266,15 @@ struct StyledPhotoPicker: View {
     
     let shouldCrop: Bool
     
-    init(shouldCrop: Bool = true) {
+    init(_ image: Binding<Image?>, shouldCrop: Bool = true) {
+        self._croppedImage = image
         self.shouldCrop = shouldCrop
     }
     
     @State private var showPhotoPicker: Bool = false
     @State private var showCropView: Bool = false
     
-    @State private var croppedImage: Image? = nil
+    @Binding var croppedImage: Image?
     
     @ViewBuilder
     private func makeFullImageUploader() -> some View {

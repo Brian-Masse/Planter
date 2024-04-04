@@ -63,11 +63,7 @@ struct PlantFullPreviewView: View {
                               lineSpacing: -10)
                 .padding(.trailing, Constants.UISubPadding)
                 
-                self.image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: ViewConstants.width - (2 * ViewConstants.padding), height: 116)
-                    .clipped()
+                
                 
                 PlantFavoriteToggle(plant: plant)
             }

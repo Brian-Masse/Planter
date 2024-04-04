@@ -24,7 +24,6 @@ struct PlantView: View {
 //    MARK: Vars
     @Environment( \.colorScheme ) var colorScheme
     @Environment( \.presentationMode ) var presentationMode
-    @Environment( \.planterSheetDismiss ) var planterSheetDismiss
     
     let plant: PlanterPlant
     let image: Image

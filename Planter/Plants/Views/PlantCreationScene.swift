@@ -10,31 +10,53 @@ import SwiftUI
 import PhotosUI
 import UIUniversals
 
+#Preview {
+    PlantCreationScene()
+}
+
 struct PlantCreationScene: View {
-    
-//    MARK: Vars
-    enum PlantCreationScene: Int, CaseIterable, Identifiable {
-        case basicInfo
-        case waterScheduling
-        case coverPhoto
+//    MARK: Scenes
+    enum PlantCreationScenes: Int, PlanterSceneEnum {
+        func getTitle() -> String {
+            switch self {
+            case .overview:         return "Overview"
+            case .scheduling:       return "Schedule"
+            case .wateringNotes:    return "Watering Notes"
+            case .sharing:          return "Sharing"
+            }
+        }
+        
+        case overview
+        case scheduling
+        case wateringNotes
+        case sharing
         
         var id: Int {
             self.rawValue
         }
     }
     
+    //    MARK: Vars
     @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject var photoManager = PlanterModel.photoManager
     
-    @State var scene: PlantCreationScene = .basicInfo
+    @State var scene: PlantCreationScenes = .overview
     @State var sceneComplete: Bool = true
     
     @State var name: String = ""
-    @State var notes: String = ""
+    @State var room: String = ""
+    @State var description: String = ""
+    
+    @State var image: Image? = nil
     
     @State var wateringInterval: Double = Constants.DayTime * 7
 
+//    MARK: Constants
+    struct LocalConstants {
+//        static let
+        
+    }
     
 //    MARK: Struct Methods
     private func submit() {
@@ -42,7 +64,7 @@ struct PlantCreationScene: View {
         
         let plant = PlanterPlant(ownerID: PlanterModel.shared.ownerID,
                                  name: name,
-                                 notes: notes,
+                                 notes: description,
                                  wateringInterval: wateringInterval,
                                  coverImageData: coverImageData)
         
@@ -54,18 +76,22 @@ struct PlantCreationScene: View {
 //    MARK: ViewBuilders
     
     @ViewBuilder
-    private func makeBasicInformationScene() -> some View {
-        
-        VStack(alignment: .leading) {
-            
-            StyledTextField($name, prompt: "name", question: "What do you call this plant?")
-            StyledTextField($notes, prompt: "notes", question: "add any additional notes on this plant")
+    private func makeOverviewScene() -> some View {
+        ScrollView {
+            VStack(alignment: .leading) {
+                StyledTextField($name,
+                                prompt: "What is the name of this plant?",
+                                question: "Consider giving it a descriptive name, especially if you have multiple of the same plants")
+                
+                StyledTextField($room,
+                                prompt: "Where is this plant?",
+                                question: "Consider the room its in, which self it is on, or what plant its in")
+                
+                StyledTextField($description, prompt: "provide any additional notes", question: "Provide any other relevant details, such as proximity to sunlight or soil quality")
+            }
         }
         .onChange(of: name) { oldValue, newValue in
-            sceneComplete = !(newValue.isEmpty || notes.isEmpty)
-        }
-        .onChange(of: notes) { oldValue, newValue in
-            sceneComplete = !(newValue.isEmpty || name.isEmpty)
+            sceneComplete = !(newValue.isEmpty)
         }
     }
     
@@ -122,9 +148,10 @@ struct PlantCreationScene: View {
                      submit: submit) { scene in
             VStack {
                 switch scene {
-                case .basicInfo: makeBasicInformationScene()
-                case .waterScheduling: makeWateringScheduleScene()
-                case .coverPhoto: makePhotoPickerScene()
+                case .overview: makeOverviewScene()
+                case .scheduling: makeWateringScheduleScene()
+                default: Text("hello")
+//                case .coverPhoto: makePhotoPickerScene()
                 }
             }
         }

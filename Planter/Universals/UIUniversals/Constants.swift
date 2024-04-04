@@ -20,7 +20,9 @@ extension Constants {
     //    extra
     static let UILargeCornerRadius: CGFloat = 50
     static let UIBottomOfPagePadding: CGFloat = 250
+    
     static let UISubPadding: CGFloat = 7
+    static let UIHeaderPadding: CGFloat = 30
     
     //    forms
     static let formDescriptionTextOpacity: Double = 0.5

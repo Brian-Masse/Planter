@@ -13,7 +13,7 @@ struct PlanterApp: App {
     
     private func setupUIUniversals() {
         
-        Colors.setColors(baseLight:         .init(255, 247, 240),
+        Colors.setColors(baseLight:         .init(255, 255, 255),
                          secondaryLight:    .init(224, 216, 206),
                          baseDark:          .init(0, 0, 0),
                          secondaryDark:     .init(30, 30, 30),
