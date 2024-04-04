@@ -85,17 +85,16 @@ struct PlanterScene<Content: View, Scene: PlanterSceneEnum>: View {
         HStack(alignment: .bottom, spacing: Constants.UIHeaderPadding) {
             Spacer()
             
-            ResizableIcon( sceneState.rawValue == 0 ? "arrow.down" : "arrow.backward", size: Constants.UIDefaultTextSize)
-                .onTapGesture { regressScene() }
+            IconButton(sceneState.rawValue == 0 ? "arrow.down" : "arrow.backward") { regressScene() }
             
             VStack {
                 makeSceneCompletionIndicators()
                 UniversalText( sceneState.getTitle(), size: Constants.UIDefaultTextSize, font: Constants.titleFont, case: .uppercase )
             }
             
-            ResizableIcon( sceneState.rawValue != Scene.allCases.count - 1 ? "arrow.forward" : "checkmark", size: Constants.UIDefaultTextSize)
+            IconButton( sceneState.rawValue != Scene.allCases.count - 1 ? "arrow.forward" : "checkmark" ) { progressScene() }
                 .opacity( sceneComplete ? 1 : 0.4 )
-                .onTapGesture { progressScene() }
+                
             
             Spacer()
         }
@@ -117,12 +116,14 @@ struct PlanterScene<Content: View, Scene: PlanterSceneEnum>: View {
             }
             .padding(Constants.UISubPadding)
             .rectangularBackground(0, style: .secondary)
+            .padding(.bottom, -60)
         }
-        .tapHidesKeyboard()
+//        .scrollDismissesKeyboard(.immediately)
         .ignoresSafeArea()
         .padding(.vertical)
         
         .universalBackground(style: .accent)
+//        .ignoresSafeArea(.keyboard)
         
     }
     

@@ -118,13 +118,15 @@ struct StyledTextField: View {
         
         self.clearable = false
         self.privateField = privateField
+        
+        textIsEmpty = binding.wrappedValue.isEmpty
     }
     
     @FocusState var focused: Bool
     @State var highlighted: Bool = false
     
     @State var showingClearButton: Bool = false
-    @State private var textIsEmpty: Bool = true
+    @State private var textIsEmpty: Bool
     
     private var textBinding: Binding<String> {
         Binding {

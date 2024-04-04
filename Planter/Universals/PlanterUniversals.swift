@@ -92,4 +92,42 @@ struct RoundedContainer<C: View>: View {
     }
 }
 
-//struct ButtonIcon: View
+struct IconButton: View {
+    let icon: String
+    let size: Double
+    let action: () -> Void
+    
+    init( _ icon: String, size: Double = Constants.UIDefaultTextSize, action: @escaping () -> Void ) {
+        self.icon = icon
+        self.size = size
+        self.action = action
+    }
+    
+    var body: some View {
+        
+        ResizableIcon(icon, size: size)
+            .overlay {
+                Rectangle()
+                    .fill(.clear)
+                    .contentShape(Rectangle())
+                    .frame(width: 70, height: 70)
+                    .onTapGesture {
+                        action()
+                        self.hideKeyboard()
+                    }
+                    .zIndex(1000)
+            }
+        
+//        UniversalButton {
+//            ResizableIcon(icon, size: size)
+//                .frame(width: 30, height: 30)
+//        } action: { action()}
+    }
+    
+}
+
+#Preview {
+    IconButton("arrow.forward") {
+        print("hi")
+    }
+}
