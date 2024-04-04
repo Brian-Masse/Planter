@@ -16,12 +16,13 @@ protocol PlanterSceneEnum: CaseIterable, RawRepresentable, Hashable, Identifiabl
 
 struct PlanterScene<Content: View, Scene: PlanterSceneEnum>: View {
     
-    let contentBuilder: ( Scene ) -> Content
-    
 //    MARK: Vars
+    @Environment(\.dismiss) var dismiss
+    
     @Binding var sceneState: Scene
     @Binding var sceneComplete: Bool
     
+    let contentBuilder: ( Scene ) -> Content
     let submit: () -> Void
     
     let allowsSceneRegression: Bool
@@ -53,6 +54,7 @@ struct PlanterScene<Content: View, Scene: PlanterSceneEnum>: View {
     }
     
     private func regressScene() {
+        if sceneState.rawValue == 0 { dismiss() }
         if allowsSceneRegression { withAnimation {
             sceneState = Scene( rawValue: sceneState.rawValue - 1 ) ?? sceneState
         } }
@@ -83,8 +85,7 @@ struct PlanterScene<Content: View, Scene: PlanterSceneEnum>: View {
         HStack(alignment: .bottom, spacing: Constants.UIHeaderPadding) {
             Spacer()
             
-            ResizableIcon("arrow.backward", size: Constants.UIDefaultTextSize)
-                .opacity( sceneState.rawValue > 0 ? 1 : 0.4 )
+            ResizableIcon( sceneState.rawValue == 0 ? "arrow.down" : "arrow.backward", size: Constants.UIDefaultTextSize)
                 .onTapGesture { regressScene() }
             
             VStack {
@@ -92,7 +93,7 @@ struct PlanterScene<Content: View, Scene: PlanterSceneEnum>: View {
                 UniversalText( sceneState.getTitle(), size: Constants.UIDefaultTextSize, font: Constants.titleFont, case: .uppercase )
             }
             
-            ResizableIcon("arrow.forward", size: Constants.UIDefaultTextSize)
+            ResizableIcon( sceneState.rawValue != Scene.allCases.count - 1 ? "arrow.forward" : "checkmark", size: Constants.UIDefaultTextSize)
                 .opacity( sceneComplete ? 1 : 0.4 )
                 .onTapGesture { progressScene() }
             
@@ -104,8 +105,6 @@ struct PlanterScene<Content: View, Scene: PlanterSceneEnum>: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            
-//            UniversalText( "new plant", size: Constants.UIHeaderPadding, font: Constants.titleFont, case: .uppercase )
             
             makeHeader()
                 .padding(.bottom, Constants.UISubPadding)

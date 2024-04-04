@@ -41,7 +41,7 @@ struct PlanterApp: App {
     
     var body: some Scene {
         WindowGroup {
-            TempView()
+            PlanterView()
         }
     }
 }

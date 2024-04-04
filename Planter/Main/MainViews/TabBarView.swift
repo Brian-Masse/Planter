@@ -15,6 +15,8 @@ struct TabBarView: View {
     
     @Binding var page: MainView.MainPage
     
+    @State var showingPlantCreationScene: Bool = false
+    
     private func getPageTitle(from page: MainView.MainPage) -> String {
         switch page {
         case .plants:   return "pla nts"
@@ -52,10 +54,10 @@ struct TabBarView: View {
                         arrowDirection: .up,
                         fontSize: Constants.UIHeaderTextSize,
                         style: .accent) {
-            print("hello")
+            showingPlantCreationScene = true
         }
                         .padding(.leading)
-                        .shadow(color: page == self.page ? Colors.lightAccent.opacity(0.75) : .clear, radius: 20, x: 0, y: 0)
+                        .shadow(color: page == self.page ? Colors.lightAccent.opacity(0.55) : .clear, radius: 20, x: 0, y: 0)
         
     }
     
@@ -90,5 +92,8 @@ struct TabBarView: View {
         .padding(Constants.UISubPadding )
         .padding(.bottom)
         .background( makeGradient() )
+        .fullScreenCover(isPresented: $showingPlantCreationScene) {
+            PlantCreationScene()
+        }
     }
 }

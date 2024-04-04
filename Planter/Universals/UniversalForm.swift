@@ -20,7 +20,7 @@ struct TempView: View {
     @State var wateringAmount: Int = 3
     @State var wateringInterval: Int = 5
     
-    @State var image: Image? = nil
+    @State var image: UIImage? = nil
     
     var body: some View {
 
@@ -232,9 +232,14 @@ struct StyledTimeIntervalSelector: View {
     
     @Binding var interval: Int
     let unit: String
+    let preText: String
     
-    init( interval: Binding<Int>, unit: String = "days" ) {
+    let maxInterval: Int
+    
+    init( interval: Binding<Int>, maxInterval: Int = 14, preText: String = "", unit: String = "days" ) {
         self._interval = interval
+        self.maxInterval = maxInterval
+        self.preText = preText
         self.unit = unit
     }
     
@@ -252,17 +257,21 @@ struct StyledTimeIntervalSelector: View {
     
     var body: some View {
         HStack {
-            Slider(value: floatBinding, in: 1...14)
+            Slider(value: floatBinding, in: 1...Float(maxInterval))
                 .tint(Colors.getBase(from: colorScheme, reversed: true))
             
             HStack {
+                if !preText.isEmpty {
+                    UniversalText( preText, size: Constants.UIDefaultTextSize, font: Constants.mainFont, wrap: false, scale: true )
+                }
+                
                 TextField("", text: stringBinding)
                     .frame(width: CGFloat("\(interval)".count) * 10)
                     .keyboardType(.numberPad)
                     .tint(Colors.getAccent(from: colorScheme))
                 
                 if !unit.isEmpty {
-                    UniversalText( unit, size: Constants.UIDefaultTextSize, font: Constants.mainFont )
+                    UniversalText( unit, size: Constants.UIDefaultTextSize, font: Constants.mainFont, wrap: false, scale: true )
                 }
             }.rectangularBackground(style: .secondary)
         }
@@ -275,19 +284,20 @@ struct StyledPhotoPicker: View {
     @ObservedObject var photoManager = PlanterModel.photoManager
     
     let description: String
+    let maxPhotoWidth: CGFloat
     let shouldCrop: Bool
     
-    init(_ image: Binding<Image?>, description: String, shouldCrop: Bool = true) {
+    init(_ image: Binding<UIImage?>, description: String, maxPhotoWidth: CGFloat = 120, shouldCrop: Bool = true) {
         self._croppedImage = image
         self.description = description
+        self.maxPhotoWidth = maxPhotoWidth
         self.shouldCrop = shouldCrop
     }
     
     @State private var showPhotoPicker: Bool = false
     @State private var showCropView: Bool = false
     
-    @State private var uiImage: UIImage? = nil
-    @Binding var croppedImage: Image?
+    @Binding var croppedImage: UIImage?
     
     @ViewBuilder
     private func makePhotoPicker() -> some View {
@@ -356,13 +366,14 @@ struct StyledPhotoPicker: View {
             if let image = croppedImage {
                 HStack {
                     Spacer()
-                    image
+                    Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(Constants.UIDefaultCornerRadius)
-                        .frame(height: 120)
+                        .frame(maxWidth: maxPhotoWidth)
                     Spacer()
-                }.rectangularBackground(Constants.UISubPadding, style: .secondary)
+                }
+//                .rectangularBackground(Constants.UISubPadding, style: .secondary)
             }
             
             makePhotoPicker()
@@ -373,14 +384,14 @@ struct StyledPhotoPicker: View {
                 photoManager.retrievedImage = uiImage
                 
                 if shouldCrop { showCropView = true }
-                else { self.croppedImage = Image(uiImage: uiImage) }
+                else { self.croppedImage = uiImage }
             }
             .ignoresSafeArea()
         }
         .fullScreenCover(isPresented: $showCropView) {
             let uiImage = self.photoManager.retrievedImage!
             CropView(image: Image(uiImage: uiImage)) { image in
-                self.croppedImage = Image(uiImage: image)
+                self.croppedImage = image
             }
         }
     }

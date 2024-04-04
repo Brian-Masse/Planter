@@ -90,5 +90,6 @@ struct RoundedContainer<C: View>: View {
         .rectangularBackground(0, style: .secondary, corners: halfCut ? [.topLeft, .bottomLeft] : .allCorners)
         
     }
-    
 }
+
+//struct ButtonIcon: View

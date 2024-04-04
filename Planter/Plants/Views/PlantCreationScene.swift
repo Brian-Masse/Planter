@@ -20,16 +20,18 @@ struct PlantCreationScene: View {
         func getTitle() -> String {
             switch self {
             case .overview:         return "Overview"
-            case .scheduling:       return "Schedule"
-            case .wateringNotes:    return "Watering Notes"
-            case .sharing:          return "Sharing"
+            case .scheduling:       return "Watering"
+            case .wateringNotes:    return "Recording"
+            case .photo:            return "Cover Photo"
+//            case .sharing:          return "Sharing"
             }
         }
         
         case overview
         case scheduling
         case wateringNotes
-        case sharing
+//        case sharing
+        case photo
         
         var id: Int {
             self.rawValue
@@ -47,10 +49,15 @@ struct PlantCreationScene: View {
     @State var name: String = ""
     @State var room: String = ""
     @State var description: String = ""
+
+    @State var wateringInterval: Int = 7
+    @State var wateringAmount: Int = 3
+    @State var wateringInstructions: String = ""
+
+    @State var statusImageFrequency: Int = 3
+    @State var statusNotesFrequency: Int = 10
     
-    @State var image: Image? = nil
-    
-    @State var wateringInterval: Double = Constants.DayTime * 7
+    @State var image: UIImage? = nil
 
 //    MARK: Constants
     struct LocalConstants {
@@ -60,14 +67,22 @@ struct PlantCreationScene: View {
     
 //    MARK: Struct Methods
     private func submit() {
-        let coverImageData = PlanterPlant.encodeImage( photoManager.retrievedImage )
+        let coverImageData = PlanterPlant.encodeImage( image )
+        
+        print(coverImageData)
+        print(image == nil)
         
         let plant = PlanterPlant(ownerID: PlanterModel.shared.ownerID,
                                  name: name,
+                                 roomName: room,
                                  notes: description,
-                                 wateringInterval: wateringInterval,
+                                 wateringInstructions: wateringInstructions,
+                                 wateringAmount: wateringAmount,
+                                 wateringInterval: Double(wateringInterval) * Constants.DayTime,
+                                 statusImageFrequency: statusImageFrequency,
+                                 statusNotesFrequency: wateringInterval,
                                  coverImageData: coverImageData)
-        
+
         RealmManager.addObject(plant)
         
         presentationMode.wrappedValue.dismiss()
@@ -101,52 +116,56 @@ struct PlantCreationScene: View {
         }
     }
     
-////    MARK: Schedule
-//    @ViewBuilder
-//    private func makeWateringSchedule
-    
-    
-    private var wateringIntervalBinding: Binding<Float> {
-        Binding { Float( wateringInterval / Constants.DayTime )
-            
-        } set: { newValue in
-            wateringInterval = Double( newValue.rounded(.down) ) * Constants.DayTime
-        }
-    }
-    
-    private var wateringIntervalLabelBinding: Binding<String> {
-        Binding { "\(wateringInterval / Constants.DayTime) days"
-        } set: { _ in }
-
-    }
-    
+//    MARK: Schedule
     @ViewBuilder
     private func makeWateringScheduleScene() -> some View {
-        
-        VStack(alignment: .leading) {
-            
-//            SliderWithPrompt(label: "How often would you like to water this plant",
-//                             minValue: 1,
-//                             maxValue: 31,
-//                             binding: wateringIntervalBinding,
-//                             strBinding: wateringIntervalLabelBinding,
-//                             textFieldWidth: 120)
-            
+        ScrollView {
+            VStack(alignment: .leading) {
+                
+                StyledFormComponentTemplate(prompt: "How Frequently Should this plant be watered?",
+                                            description: "This will automatically schedule the plant to be watered at the interval you select") {
+                    StyledTimeIntervalSelector(interval: $wateringInterval)
+                }
+                
+                StyledFormComponentTemplate(prompt: "How much water should this plant get?",
+                                            description: "") {
+                    WaterSelector(wateringAmount: $wateringAmount)
+                }
+                
+                StyledTextField($wateringInstructions,
+                                prompt: "Add additional instructions",
+                                question: "are there any special requirements for watering this plant?" )
+            }
+        }.onAppear { sceneComplete = true }
+    }
+    
+//    MARK: Recording
+    @ViewBuilder
+    private func makeRecordingScene() -> some View {
+        ScrollView {
+            VStack(alignment: .leading) {
+                
+                StyledFormComponentTemplate(prompt: "Status Picture Frequency",
+                                            description: "How frequently would you like to provide a status picture when watering this plant") {
+                    StyledTimeIntervalSelector(interval: $statusImageFrequency, maxInterval: 10, preText: "every", unit: "times")
+                }
+                
+                StyledFormComponentTemplate(prompt: "Status notes Frequency",
+                                            description: "How frequently would you like to provide a status update when watering this plant") {
+                    StyledTimeIntervalSelector(interval: $statusNotesFrequency, maxInterval: 14, preText: "every", unit: "times")
+                }
+            }
         }
         .onAppear { sceneComplete = true }
-        
     }
     
     @ViewBuilder
     private func makePhotoPickerScene() -> some View {
-        
-        VStack(alignment: .leading) {
-            
-//            StyledPhotoPicker {
-//                UniversalText("Choose Image", size: Constants.UIDefaultTextSize, font: Constants.titleFont)
-//            }
-                
-        }
+        StyledPhotoPicker($image, 
+                          description: "choose a great photo to display for this plant",
+                          maxPhotoWidth: .infinity,
+                          shouldCrop: false)
+        .onAppear { sceneComplete = true }
     }
     
     
@@ -159,10 +178,10 @@ struct PlantCreationScene: View {
                      submit: submit) { scene in
             VStack {
                 switch scene {
-                case .overview: makeOverviewScene()
-                case .scheduling: makeWateringScheduleScene()
-                default: Text("hello")
-//                case .coverPhoto: makePhotoPickerScene()
+                case .overview:         makeOverviewScene()
+                case .scheduling:       makeWateringScheduleScene()
+                case .wateringNotes:    makeRecordingScene()
+                case .photo:            makePhotoPickerScene()
                 }
             }
         }

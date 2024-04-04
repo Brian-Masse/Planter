@@ -35,33 +35,45 @@ class PlanterPlant: Object, Identifiable, Shareable {
 
     @Persisted var wateringInstructions:    String = ""
     @Persisted var wateringAmount:          Int = 0
-    
-    @Persisted var statusImageFrequency: Double = 5
-    @Persisted var statusCommentFrequency: Double = 5
-    
-    @Persisted var dateLastWatered: Date = .now
     @Persisted var wateringInterval: Double = Constants.DayTime * 7
     
+    @Persisted var statusImageFrequency: Int = 5
+    @Persisted var statusCommentFrequency: Int = 5
     
-    
+    @Persisted var dateLastWatered: Date = .now
     @Persisted var wateringHistory: RealmSwift.List<PlanterWateringNode> = List()
     
 //    archive
     @Persisted var room: PlanterRoom? = nil
     
 //    MARK: init
-    convenience init( ownerID: String, name: String, notes: String, wateringInterval: Double, coverImageData: Data) {
+    convenience init( ownerID: String,
+                      name: String,
+                      roomName: String,
+                      notes: String,
+                      wateringInstructions: String,
+                      wateringAmount: Int,
+                      wateringInterval: Double,
+                      statusImageFrequency: Int,
+                      statusNotesFrequency: Int,
+                      coverImageData: Data) {
         self.init()
         
         self.ownerID = ownerID
         
         self.name = name
+        self.roomName = roomName
         self.notes = notes
-        self.dateLastWatered = .now
+        
+        self.wateringInstructions = wateringInstructions
+        self.wateringAmount = wateringAmount
         self.wateringInterval = wateringInterval
         
-        self.coverImage = coverImageData
+        self.statusImageFrequency = statusImageFrequency
+        self.statusCommentFrequency = statusNotesFrequency
         
+        self.dateLastWatered = .now
+        self.coverImage = coverImageData
     }
 
 //    MARK: Class Methods
