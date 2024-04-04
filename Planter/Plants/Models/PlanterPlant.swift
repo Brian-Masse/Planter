@@ -215,6 +215,10 @@ class PlanterPlant: Object, Identifiable, Shareable {
     }
     
 //    MARK: General
+    func wateringToday() -> Bool {
+        getNextWateringDate().matches(Date.now, to: .day) || getNextWateringDate() < Date.now
+    }
+    
     func isPrimaryWaterer() -> Bool {
 //        primaryWaterer == ownerID
         true

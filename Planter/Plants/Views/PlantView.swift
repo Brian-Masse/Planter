@@ -11,30 +11,19 @@ import UIUniversals
 
 struct PlantView: View {
     
-    enum PlantPageTab: String, Identifiable, CaseIterable {
-        case overview
-        case calendar
-        case comments
-        
-        var id: String {
-            self.rawValue
-        }
-    }
-    
 //    MARK: Vars
     @Environment( \.colorScheme ) var colorScheme
     @Environment( \.presentationMode ) var presentationMode
+    
+    @State var showingPlantwateringScene = false
     
     let plant: PlanterPlant
     let image: Image
     
     init( plant: PlanterPlant ) {
         self.plant = plant
-        
-        self.image = PhotoManager.decodeImage(from: plant.coverImage) ?? Image("fern")
+        self.image = plant.getImage()
     }
-    
-    @State var activePage: PlantPageTab = .overview
     
 //    MARK: ViewBuilders
     @ViewBuilder
@@ -156,7 +145,7 @@ struct PlantView: View {
     private func makeActionButtons() -> some View {
         VStack(spacing: 2) {
             HStack(spacing: 0) {
-                makeActionButton(title: "Water") { }
+                makeActionButton(title: "Water", isPrimary: plant.wateringToday()) { showingPlantwateringScene = true }
                 makeActionButton(title: "Postpone", isPrimary: false) {}
             }
             HStack(spacing: 0) {
@@ -193,6 +182,9 @@ struct PlantView: View {
             }
         }
         .universalImageBackground(self.image)
+        .fullScreenCover(isPresented: $showingPlantwateringScene) {
+            PlantWateringScene(plant: plant)
+        }
     }
 }
 

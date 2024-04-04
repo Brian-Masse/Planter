@@ -54,6 +54,7 @@ struct PlantFullPreviewView: View {
     
 //    MARK: vars
     @State var showingPlantView: Bool = false
+    @State var showingPlantwateringScene: Bool = false
     
     let plant: PlanterPlant
 
@@ -90,22 +91,26 @@ struct PlantFullPreviewView: View {
                 }
             }
             
-            LargeTextButton("WA TER", at: 30, aspectRatio: 1.4,
-                            cornerRadius: Constants.UILargeCornerRadius,
-                            arrowDirection: .up,
-                            style: .secondary,
-                            reverseStyle: true) {
-                RealmManager.updateObject(plant) { thawed in
-                    thawed.dateLastWatered = Date.now - ( 5 * Constants.DayTime )
-                }
-            }.offset(x: -15)
+            if plant.wateringToday() {
+                LargeTextButton("WA TER", at: 30, aspectRatio: 1.4,
+                                cornerRadius: Constants.UILargeCornerRadius,
+                                arrowDirection: .up,
+                                style: .secondary,
+                                reverseStyle: true) {
+                    showingPlantwateringScene = true
+                }.offset(x: -15)
+            }
         }
         .universalTextStyle(reversed: true)
         .frame(minWidth: ViewConstants.width - (2 * ViewConstants.padding))
         .rectangularBackground(ViewConstants.padding, style: .primary, reverseStyle: true)
         .onTapGesture { showingPlantView = true }
+        
         .fullScreenCover(isPresented: $showingPlantView) {
             PlantView(plant: plant)
+        }
+        .fullScreenCover(isPresented: $showingPlantwateringScene) {
+            PlantWateringScene(plant: plant)
         }
     }
 }

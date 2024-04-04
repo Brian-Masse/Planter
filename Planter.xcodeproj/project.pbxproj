@@ -188,6 +188,7 @@
 				C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */,
 				C945C3C52BB4AEFB00EC9547 /* PlantsPageView.swift */,
 				C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */,
+				C911B8F62B24317C00F5986A /* PlanterWateringScene.swift */,
 				C91586FB2B194AAF00444826 /* PlantView.swift */,
 			);
 			path = Views;
@@ -223,7 +224,6 @@
 				C911B9052B2523AA00F5986A /* PlantOverviewView.swift */,
 				C911B9072B25254900F5986A /* PlantCommentsView.swift */,
 				C92968C02B36712A0089C83D /* PlantEditingView.swift */,
-				C911B8F62B24317C00F5986A /* PlanterWateringScene.swift */,
 			);
 			path = Archive;
 			sourceTree = "<group>";
