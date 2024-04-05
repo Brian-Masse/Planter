@@ -111,10 +111,10 @@ struct IconButton: View {
                     .fill(.clear)
                     .contentShape(Rectangle())
                     .frame(width: 70, height: 70)
-                    .onTapGesture {
+                    .onTapGesture { withAnimation {
                         action()
                         self.hideKeyboard()
-                    }
+                    } }
                     .zIndex(1000)
             }
     }
