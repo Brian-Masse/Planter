@@ -15,6 +15,13 @@ struct CalendarPageView: View {
     let plants: [PlanterPlant]
     
     @State private var activeMonth: Date = Date.now
+    private var schedule: [Date] {
+        var schedule: [Date] = []
+        for plant in plants {
+            schedule += plant.getWateringSchedule(in: activeMonth)
+        }
+        return schedule
+    }
 
     private var activeMonthName: String {
         let style = Date.FormatStyle().month(.abbreviated).year()
@@ -44,16 +51,95 @@ struct CalendarPageView: View {
     
     @ViewBuilder
     private func makeMonthSelector() -> some View {
-        HStack {
-            
-            UniversalText( activeMonthName, size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase )
+        HStack(spacing: 0) {
             
             IconButton("chevron.left") { progressMonth(backward: true) }
                 .padding(.horizontal, Constants.UISubPadding )
+            
+            UniversalText( activeMonthName, size: Constants.UISubHeaderTextSize, font: Constants.mainFont, case: .uppercase )
+                .padding(.horizontal, Constants.UISubPadding )
+            
             IconButton("chevron.right") { progressMonth() }
                 .padding(.horizontal, Constants.UISubPadding )
             
             Spacer()
+        }
+    }
+    
+//    MARK: Calendar
+    private func getWidthOfDay(_ geo: GeometryProxy) -> CGFloat {
+        (geo.size.width - 20) / 7
+    }
+    
+    @ViewBuilder
+    private func makeWeekDay(day: Int) -> some View {
+        let date = Calendar.current.date(bySetting: .weekday, value: day, of: .now)!
+        let style = Date.FormatStyle().weekday(.abbreviated)
+        
+        HStack(spacing: 0) {
+            Spacer()
+            UniversalText( date.formatted(style), size: Constants.UISmallTextSize + 3, font: Constants.titleFont, case: .uppercase, wrap: false, scale: true )
+            Spacer()
+        }.opacity(0.8)
+    }
+    
+    @ViewBuilder
+    private func makeWeekDayHeader() -> some View {
+        HStack(spacing: 0) {
+            ForEach( 1...7, id: \.self ) { i in
+                makeWeekDay(day: i)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func makeDay( _ day: Date, geo : GeometryProxy ) -> some View {
+        HStack(alignment: .top) {
+            Spacer()
+            VStack {
+                let style = Date.FormatStyle().day(.twoDigits)
+                
+                UniversalText( day.formatted(style), size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase, wrap: false, scale: true )
+                
+                Spacer()
+            }
+            .padding(.vertical, Constants.UISubPadding)
+            Spacer()
+        }
+        .universalTextStyle()
+        .opacity(0.5)
+        .frame(height: 75)
+        .rectangularBackground(2, style: .primary)
+        .frame(maxWidth: getWidthOfDay(geo))
+        
+    }
+    
+    @ViewBuilder
+    private func makeCalendar(geo : GeometryProxy) -> some View {
+        
+        let firstOfMonth = activeMonth.startOfMonth()
+        let lastOfMonth = activeMonth.endOfMonth()
+        let firstWeekDay = Calendar.current.component(.weekday, from: firstOfMonth)
+        
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach( 0..<5, id: \.self ) { i in
+                HStack(spacing: 0) {
+                    ForEach( 0..<7, id: \.self) { j in
+                        
+                        let offset = (i * 7) + j - firstWeekDay + 1
+                        let endOfMonth = Calendar.current.component(.day, from: lastOfMonth)
+                        
+                        if (i == 0 && j < firstWeekDay - 1) || (offset >= endOfMonth) {
+                            Color.clear
+                                .frame(width: getWidthOfDay(geo), height: 1)
+                        } else {
+                            let day = Calendar.current.date(byAdding: .day, value: offset, to: firstOfMonth)
+                            
+                            makeDay( day!, geo: geo)
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -63,17 +149,67 @@ struct CalendarPageView: View {
             
             makeHeader()
             
-            makeMonthSelector()
+            GeometryReader { geo in
+                RoundedContainer("") {
+                    makeMonthSelector()
+                        .padding(.bottom, Constants.UISubPadding)
+                    
+                    makeWeekDayHeader()
+                        .padding(.bottom, Constants.UISubPadding)
+                    
+                    makeCalendar(geo: geo)
+                }
+            }
+//            Text( activeMonth.endOfMonth().formatted() )
+//                .padding(.bottom)
+//            
+//            ForEach(plants) { plant in
+//                Text( plant.name )
+//                
+//                Text(plant.dateLastWatered.formatted())
+//                
+//                let schedule = plant.getWateringSchedule(in: self.activeMonth)
+//                ForEach(schedule, id: \.self) { date in
+//                    
+//                    Text( date.formatted() )
+//                    
+//                }
+//                
+//                Text( "\(plant.wateringInterval), \(plant.wateringInterval / Constants.DayTime)" )
+//                    .padding(.bottom)
+//                
+//            }
             
             Spacer()
-        }
-        
+        }  
     }
 }
 
 
-//#Preview {
-//    
-//    CalendarPageView()
-//    
-//}
+#Preview {
+    
+    let plant1 = PlanterPlant(ownerID: "100",
+                              name: "fern",
+                              roomName: "bedroom",
+                              notes: "great",
+                              wateringInstructions: "great",
+                              wateringAmount: 4,
+                              wateringInterval: 4,
+                              statusImageFrequency: 1,
+                              statusNotesFrequency: 1,
+                              coverImageData: Data())
+    
+    let plant2 = PlanterPlant(ownerID: "100",
+                              name: "cactus",
+                              roomName: "bedroom",
+                              notes: "great",
+                              wateringInstructions: "great",
+                              wateringAmount: 2,
+                              wateringInterval: 10,
+                              statusImageFrequency: 1,
+                              statusNotesFrequency: 1,
+                              coverImageData: Data())
+    
+    return CalendarPageView(plants: [plant1, plant2])
+    
+}

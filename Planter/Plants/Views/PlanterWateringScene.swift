@@ -130,7 +130,7 @@ struct PlantWateringScene: View {
                              notes: "This is the second plant I got. Initially it was wilting before it dropped a seed and gave birth to the largest and healthies plant I have",
                              wateringInstructions: "always spray after watering",
                              wateringAmount: 4,
-                             wateringInterval: 7 * Constants.DayTime,
+                             wateringInterval: 7,
                              statusImageFrequency: 4,
                              statusNotesFrequency: 10,
                              coverImageData: Data())

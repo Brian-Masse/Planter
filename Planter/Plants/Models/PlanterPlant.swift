@@ -70,7 +70,7 @@ class PlanterPlant: Object, Identifiable, Shareable {
         
         self.wateringInstructions = wateringInstructions
         self.wateringAmount = wateringAmount
-        self.wateringInterval = wateringInterval
+        self.wateringInterval = wateringInterval * Constants.DayTime
         
         self.statusImageFrequency = statusImageFrequency
         self.statusCommentFrequency = statusNotesFrequency
@@ -115,6 +115,27 @@ class PlanterPlant: Object, Identifiable, Shareable {
         RealmManager.updateObject(self) { thawed in
             thawed.isFavorite.toggle()
         }
+    }
+    
+    func getWateringSchedule(in month: Date) -> [ Date ] {
+        let firstOfMonth    = month.startOfMonth()
+        let endOfMonth      = month.endOfMonth()
+        
+        let differenceInDays    = firstOfMonth.timeIntervalSince(self.dateLastWatered) / Constants.DayTime
+        let intervalInDays      = self.wateringInterval / Constants.DayTime
+        
+        let offsetInDays = ceil(differenceInDays / intervalInDays) * intervalInDays
+        let firstWateringInMonth =  (self.dateLastWatered + offsetInDays * Constants.DayTime).resetToStartOfDay()
+        
+        var schedule = [firstWateringInMonth]
+        var nextDate = firstWateringInMonth + wateringInterval
+        
+        while nextDate < endOfMonth {
+            schedule.append(nextDate)
+            nextDate += wateringInterval
+        }
+        
+        return schedule
     }
     
     

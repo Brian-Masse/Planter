@@ -78,7 +78,7 @@ struct PlantCreationScene: View {
                                  notes: description,
                                  wateringInstructions: wateringInstructions,
                                  wateringAmount: wateringAmount,
-                                 wateringInterval: Double(wateringInterval) * Constants.DayTime,
+                                 wateringInterval: Double(wateringInterval),
                                  statusImageFrequency: statusImageFrequency,
                                  statusNotesFrequency: wateringInterval,
                                  coverImageData: coverImageData)

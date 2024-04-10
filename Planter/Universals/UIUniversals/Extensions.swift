@@ -15,4 +15,12 @@ extension Date {
         let component = Calendar.current.component(.weekday, from: self)
         return component == day   
     }
+    
+    func startOfMonth() -> Date {
+        Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Calendar.current.startOfDay(for: self)))!
+    }
+    
+    func endOfMonth() -> Date {
+        Calendar.current.date(byAdding: DateComponents(month: 1, second: -1), to: self.startOfMonth())!
+    }
 }
