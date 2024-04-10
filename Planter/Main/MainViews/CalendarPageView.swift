@@ -12,7 +12,7 @@ import UIUniversals
 struct CalendarPageView: View {
     
 //    MARK: vars
-    let plants: [PlanterPlant] = []
+    let plants: [PlanterPlant]
     
     @State private var activeMonth: Date = Date.now
 
@@ -72,8 +72,8 @@ struct CalendarPageView: View {
 }
 
 
-#Preview {
-    
-    CalendarPageView()
-    
-}
+//#Preview {
+//    
+//    CalendarPageView()
+//    
+//}

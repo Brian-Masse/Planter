@@ -75,7 +75,7 @@ struct PlantView: View {
             HStack {
                 Spacer()
                 
-                UniversalText( plant.wateringInstructions, size: Constants.UISmallTextSize, font: Constants.mainFont )
+                UniversalText( plant.wateringInstructions, size: Constants.UISmallTextSize, font: Constants.mainFont, textAlignment: .trailing )
                     .padding(.bottom, Constants.UISubPadding)
             }
             

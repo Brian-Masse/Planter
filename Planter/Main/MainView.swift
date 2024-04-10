@@ -93,7 +93,7 @@ struct MainView: View {
                     TabView(selection: $page) {
                         
                         PlantsPageView(plants: arrPlants)        .tag( MainPage.plants )
-                        CalendarPageView()      .tag( MainPage.calendar )
+                        CalendarPageView(plants: arrPlants)      .tag( MainPage.calendar )
                         SocialPageView()        .tag( MainPage.social )
                         ProfilePageView()       .tag( MainPage.profile )
                         
