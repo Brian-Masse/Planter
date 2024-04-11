@@ -20,6 +20,9 @@ struct CalendarPageView: View {
         for plant in plants {
             schedule += plant.getWateringSchedule(in: activeMonth)
         }
+        schedule.sort { date1, date2 in
+            date1 <= date2
+        }
         return schedule
     }
 
@@ -33,6 +36,15 @@ struct CalendarPageView: View {
         let newDate = Calendar.current.date(byAdding: .month, value: backward ? -1 : 1, to: activeMonth)
         
         self.activeMonth = newDate ?? activeMonth
+    }
+    
+    private func getTotalPlants(on day: Date) -> Int {
+        var total: Int = 0
+        for date in schedule {
+            if date.matches(day, to: .day) { total += 1 }
+            else if date > day { break }
+        }
+        return total
     }
     
 //    MARK: ViewBuilder
@@ -94,6 +106,8 @@ struct CalendarPageView: View {
     
     @ViewBuilder
     private func makeDay( _ day: Date, geo : GeometryProxy ) -> some View {
+        let plantsOnDay = getTotalPlants(on: day)
+        
         HStack(alignment: .top) {
             Spacer()
             VStack {
@@ -101,15 +115,19 @@ struct CalendarPageView: View {
                 
                 UniversalText( day.formatted(style), size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase, wrap: false, scale: true )
                 
+                if plantsOnDay > 0 {
+                    UniversalText( "\( plantsOnDay )", size: Constants.UISmallTextSize, font: Constants.titleFont )
+                }
+                
                 Spacer()
             }
             .padding(.vertical, Constants.UISubPadding)
             Spacer()
         }
-        .universalTextStyle()
-        .opacity(0.5)
+        .universalTextStyle( reversed: plantsOnDay > 0 )
+        .opacity( plantsOnDay > 0 ? 0.9 : 0.5)
         .frame(height: 75)
-        .rectangularBackground(2, style: .primary)
+        .rectangularBackground(2, style: plantsOnDay > 0 ? .accent : .primary)
         .frame(maxWidth: getWidthOfDay(geo))
         
     }
@@ -160,25 +178,6 @@ struct CalendarPageView: View {
                     makeCalendar(geo: geo)
                 }
             }
-//            Text( activeMonth.endOfMonth().formatted() )
-//                .padding(.bottom)
-//            
-//            ForEach(plants) { plant in
-//                Text( plant.name )
-//                
-//                Text(plant.dateLastWatered.formatted())
-//                
-//                let schedule = plant.getWateringSchedule(in: self.activeMonth)
-//                ForEach(schedule, id: \.self) { date in
-//                    
-//                    Text( date.formatted() )
-//                    
-//                }
-//                
-//                Text( "\(plant.wateringInterval), \(plant.wateringInterval / Constants.DayTime)" )
-//                    .padding(.bottom)
-//                
-//            }
             
             Spacer()
         }  
