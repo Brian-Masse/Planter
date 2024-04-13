@@ -122,18 +122,18 @@ struct PlantWateringScene: View {
 }
 
 
-#Preview {
-    
-    let plant = PlanterPlant(ownerID: "100",
-                             name: "Fern",
-                             roomName: "bedroom",
-                             notes: "This is the second plant I got. Initially it was wilting before it dropped a seed and gave birth to the largest and healthies plant I have",
-                             wateringInstructions: "always spray after watering",
-                             wateringAmount: 4,
-                             wateringInterval: 7,
-                             statusImageFrequency: 4,
-                             statusNotesFrequency: 10,
-                             coverImageData: Data())
-    
-    return PlantWateringScene(plant: plant)
-}
+//#Preview {
+//    
+//    let plant = PlanterPlant(ownerID: "100",
+//                             name: "Fern",
+//                             roomName: "bedroom",
+//                             notes: "This is the second plant I got. Initially it was wilting before it dropped a seed and gave birth to the largest and healthies plant I have",
+//                             wateringInstructions: "always spray after watering",
+//                             wateringAmount: 4,
+//                             wateringInterval: 7,
+//                             statusImageFrequency: 4,
+//                             statusNotesFrequency: 10,
+//                             coverImageData: Data())
+//    
+//    return PlantWateringScene(plant: plant)
+//}

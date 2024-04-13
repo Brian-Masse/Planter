@@ -117,7 +117,15 @@ class PlanterPlant: Object, Identifiable, Shareable {
         }
     }
     
-    func getWateringSchedule(in month: Date) -> [ Date ] {
+//    MARK: Scheduling
+//    This is how the calendar temporarily stores the schedule of plants
+//    it includes the date a plant should be watered on, and the plant that needs to be watered
+    struct ScheduleNode: Equatable {
+        let date: Date
+        let plant: PlanterPlant
+    }
+    
+    func getWateringSchedule(in month: Date) -> [ ScheduleNode ] {
         let firstOfMonth    = month.startOfMonth()
         let endOfMonth      = month.endOfMonth()
         
@@ -127,11 +135,11 @@ class PlanterPlant: Object, Identifiable, Shareable {
         let offsetInDays = ceil(differenceInDays / intervalInDays) * intervalInDays
         let firstWateringInMonth =  (self.dateLastWatered + offsetInDays * Constants.DayTime).resetToStartOfDay()
         
-        var schedule = [firstWateringInMonth]
+        var schedule = [ ScheduleNode(date: firstWateringInMonth, plant: self) ]
         var nextDate = firstWateringInMonth + wateringInterval
         
         while nextDate < endOfMonth {
-            schedule.append(nextDate)
+            schedule.append( .init(date: nextDate, plant: self) )
             nextDate += wateringInterval
         }
         
@@ -258,6 +266,22 @@ class PlanterPlant: Object, Identifiable, Shareable {
             query.getNextWateringDate().matches(date, to: .day)
         }
     }
+    
+//    MARK: WateringStatus
+    enum PlantWateringCompletion {
+        case missed
+        case completed
+        case upcoming
+    }
+    
+    func getWateringStatus(from date: Date = .now) -> PlantWateringCompletion {
+        let nextWateringDate = self.getNextWateringDate()
+        
+        if nextWateringDate < Date.now.resetToStartOfDay() { return .missed }
+        if self.dateLastWatered > date.resetToStartOfDay() { return .completed }
+        return .upcoming
+    }
+    
 }
 
 //MARK: PlanterWateringNode

@@ -12,51 +12,31 @@ import UIUniversals
 struct CalendarPageView: View {
     
 //    MARK: vars
+    
+    enum CalendarPageScene: String, Identifiable {
+        case month
+        case week
+        
+        var id: String { self.rawValue }
+    }
+    
     let plants: [PlanterPlant]
     
+    @State private var calendarPageScene: CalendarPageScene = .month
     @State private var activeMonth: Date = Date.now
-    private var schedule: [Date] {
-        var schedule: [Date] = []
+    
+    private var schedule: [PlanterPlant.ScheduleNode] {
+        var schedule: [PlanterPlant.ScheduleNode] = []
         for plant in plants {
             schedule += plant.getWateringSchedule(in: activeMonth)
         }
-        schedule.sort { date1, date2 in
-            date1 <= date2
+        schedule.sort { node1, node2 in
+            node1.date <= node2.date
         }
         return schedule
     }
-
-    private var activeMonthName: String {
-        let style = Date.FormatStyle().month(.abbreviated).year()
-        
-        return activeMonth.formatted(style)
-    }
     
-    private func progressMonth( backward: Bool = false ) {
-        let newDate = Calendar.current.date(byAdding: .month, value: backward ? -1 : 1, to: activeMonth)
-        
-        self.activeMonth = newDate ?? activeMonth
-    }
-    
-    private func getTotalPlants(on day: Date) -> Int {
-        var total: Int = 0
-        for date in schedule {
-            if date.matches(day, to: .day) { total += 1 }
-            else if date > day { break }
-        }
-        return total
-    }
-    
-//    MARK: Gestures
-    private var swipeGesture: some Gesture {
-        DragGesture(minimumDistance: 10)
-            .onEnded { value in
-                let direction = value.translation.width / abs( value.translation.width )
-                withAnimation { progressMonth( backward: direction == 1 ) }
-            }
-    }
-    
-//    MARK: ViewBuilder
+//    MARK: ViewBuilders
     @ViewBuilder
     private func makeHeader() -> some View {
         UniversalText( "Calendar",
@@ -68,133 +48,34 @@ struct CalendarPageView: View {
                        size: Constants.UIDefaultTextSize,
                        font: Constants.mainFont,
                        case: .uppercase)
+        .onTapGesture { withAnimation { activeMonth = Date.now } }
     }
     
     @ViewBuilder
-    private func makeMonthSelector() -> some View {
-        HStack(spacing: 0) {
+    private func makeBody() -> some View {
+        TabView(selection: $calendarPageScene) {
+            CalendarMonthView(plants: plants, schedule: schedule, activeMonth: $activeMonth, activeScene: $calendarPageScene)
+                .tag( CalendarPageScene.month )
             
-            IconButton("chevron.left") { progressMonth(backward: true) }
-                .padding(.horizontal, Constants.UISubPadding )
+            CalendarWeekView(plants: plants, schedule: schedule, activeMonth: $activeMonth)
+                .tag( CalendarPageScene.week )
             
-            UniversalText( activeMonthName, size: Constants.UISubHeaderTextSize, font: Constants.mainFont, case: .uppercase )
-                .padding(.horizontal, Constants.UISubPadding )
-            
-            IconButton("chevron.right") { progressMonth() }
-                .padding(.horizontal, Constants.UISubPadding )
-            
-            Spacer()
-        }
-    }
-    
-//    MARK: Calendar
-    private func getWidthOfDay(_ geo: GeometryProxy) -> CGFloat {
-        (geo.size.width - 20) / 7
-    }
-    
-    @ViewBuilder
-    private func makeWeekDay(day: Int) -> some View {
-        let date = Calendar.current.date(bySetting: .weekday, value: day, of: .now)!
-        let style = Date.FormatStyle().weekday(.abbreviated)
-        
-        HStack(spacing: 0) {
-            Spacer()
-            UniversalText( date.formatted(style), size: Constants.UISmallTextSize + 3, font: Constants.titleFont, case: .uppercase, wrap: false, scale: true )
-            Spacer()
-        }.opacity(0.8)
-    }
-    
-    @ViewBuilder
-    private func makeWeekDayHeader() -> some View {
-        HStack(spacing: 0) {
-            ForEach( 1...7, id: \.self ) { i in
-                makeWeekDay(day: i)
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private func makeDay( _ day: Date, geo : GeometryProxy ) -> some View {
-        let plantsOnDay = getTotalPlants(on: day)
-        
-        HStack(alignment: .top) {
-            Spacer()
-            VStack {
-                let style = Date.FormatStyle().day(.twoDigits)
-                
-                UniversalText( day.formatted(style), size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase, wrap: false, scale: true )
-                
-                if plantsOnDay > 0 {
-                    UniversalText( "\( plantsOnDay )", size: Constants.UISmallTextSize, font: Constants.titleFont )
-                }
-                
-                Spacer()
-            }
-            .padding(.vertical, Constants.UISubPadding)
-            Spacer()
-        }
-        .universalTextStyle( reversed: plantsOnDay > 0 )
-        .opacity( plantsOnDay > 0 ? 0.9 : 0.5)
-        .frame(height: 75)
-        .rectangularBackground(2, style: plantsOnDay > 0 ? .accent : .primary)
-        .frame(maxWidth: getWidthOfDay(geo))
-        
-    }
-    
-    @ViewBuilder
-    private func makeCalendar(geo : GeometryProxy) -> some View {
-        
-        let firstOfMonth = activeMonth.startOfMonth()
-        let lastOfMonth = activeMonth.endOfMonth()
-        let firstWeekDay = Calendar.current.component(.weekday, from: firstOfMonth)
-        
-        VStack(alignment: .leading, spacing: 0) {
-            ForEach( 0..<5, id: \.self ) { i in
-                HStack(spacing: 0) {
-                    ForEach( 0..<7, id: \.self) { j in
-                        
-                        let offset = (i * 7) + j - firstWeekDay + 1
-                        let endOfMonth = Calendar.current.component(.day, from: lastOfMonth)
-                        
-                        if (i == 0 && j < firstWeekDay - 1) || (offset >= endOfMonth) {
-                            Color.clear
-                                .frame(width: getWidthOfDay(geo), height: 1)
-                        } else {
-                            let day = Calendar.current.date(byAdding: .day, value: offset, to: firstOfMonth)
-                            
-                            makeDay( day!, geo: geo)
-                        }
-                    }
-                }
-            }
-        }
+        }.tabViewStyle(.page(indexDisplayMode: .never))
     }
     
 //    MARK: Body
     var body: some View {
         VStack(alignment: .leading) {
-            
             makeHeader()
             
-            GeometryReader { geo in
-                RoundedContainer("") {
-                    makeMonthSelector()
-                        .padding(.bottom, Constants.UISubPadding)
-                    
-                    makeWeekDayHeader()
-                        .padding(.bottom, Constants.UISubPadding)
-                    
-                    makeCalendar(geo: geo)
-                }
-                .gesture(swipeGesture)
-            }
-            
             Spacer()
-        }  
+            
+            makeBody()
+        }
     }
 }
 
-
+//MARK: Preview
 #Preview {
     
     let plant1 = PlanterPlant(ownerID: "100",

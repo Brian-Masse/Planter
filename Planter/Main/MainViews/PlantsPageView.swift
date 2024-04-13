@@ -121,8 +121,7 @@ struct PlantsPageView: View {
                 .padding(.leading, 10)
             
 //            BlurScroll(10, scrollPositionBinding: $srollPosition)
-            ScrollView
-            {
+            ScrollView(.vertical, showsIndicators: true) {
                 VStack(spacing: Constants.UISubPadding) {
                     makeUpcomingPlantsView()
                     
