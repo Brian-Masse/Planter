@@ -48,6 +48,7 @@
 		C99E8FD72BC05B3500063955 /* CalendarPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99E8FD52BC0598600063955 /* CalendarPageView.swift */; };
 		C9A28CCD2BCA05C80046018C /* CalendarWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A28CCC2BCA05C80046018C /* CalendarWeekView.swift */; };
 		C9A28CCF2BCA06780046018C /* CalendarMonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A28CCE2BCA06780046018C /* CalendarMonthView.swift */; };
+		C9A28CD12BCA277B0046018C /* CalendarDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A28CD02BCA277B0046018C /* CalendarDayView.swift */; };
 		C9B981422B140FCF0045D4A6 /* PlanterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981412B140FCF0045D4A6 /* PlanterApp.swift */; };
 		C9B981442B140FCF0045D4A6 /* PlanterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B981432B140FCF0045D4A6 /* PlanterView.swift */; };
 		C9B981462B140FD10045D4A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9B981452B140FD10045D4A6 /* Assets.xcassets */; };
@@ -116,6 +117,7 @@
 		C99E8FD52BC0598600063955 /* CalendarPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPageView.swift; sourceTree = "<group>"; };
 		C9A28CCC2BCA05C80046018C /* CalendarWeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarWeekView.swift; sourceTree = "<group>"; };
 		C9A28CCE2BCA06780046018C /* CalendarMonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthView.swift; sourceTree = "<group>"; };
+		C9A28CD02BCA277B0046018C /* CalendarDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayView.swift; sourceTree = "<group>"; };
 		C9B9813E2B140FCF0045D4A6 /* Planter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Planter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9B981412B140FCF0045D4A6 /* PlanterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterApp.swift; sourceTree = "<group>"; };
 		C9B981432B140FCF0045D4A6 /* PlanterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterView.swift; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				C9A28CCC2BCA05C80046018C /* CalendarWeekView.swift */,
+				C9A28CD02BCA277B0046018C /* CalendarDayView.swift */,
 				C9A28CCE2BCA06780046018C /* CalendarMonthView.swift */,
 			);
 			path = Calendar;
@@ -538,6 +541,7 @@
 				C911B90E2B267D0F00F5986A /* PlanterUniversals.swift in Sources */,
 				C911B8FD2B24F97900F5986A /* ProfileView.swift in Sources */,
 				C9B981422B140FCF0045D4A6 /* PlanterApp.swift in Sources */,
+				C9A28CD12BCA277B0046018C /* CalendarDayView.swift in Sources */,
 				C996EFC22B19C84500392C4E /* PlanterSheet.swift in Sources */,
 				C9A28CCF2BCA06780046018C /* CalendarMonthView.swift in Sources */,
 				C911B8FA2B24F23E00F5986A /* AuthenticationView.swift in Sources */,

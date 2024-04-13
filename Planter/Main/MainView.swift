@@ -25,6 +25,8 @@ struct MainView: View {
     }
 
 //    MARK: Vars
+    @Environment(\.colorScheme) var colorScheme
+    
     @ObservedResults( PlanterPlant.self ) var plants
     @ObservedResults( PlanterRoom.self ) var rooms
     
@@ -92,12 +94,20 @@ struct MainView: View {
                 NavigationView {
                     TabView(selection: $page) {
                         
-                        PlantsPageView(plants: arrPlants)        .tag( MainPage.plants )
-                        CalendarPageView(plants: arrPlants)      .tag( MainPage.calendar )
-                        SocialPageView()        .tag( MainPage.social )
-                        ProfilePageView()       .tag( MainPage.profile )
+                        PlantsPageView(plants: arrPlants)
+                            .tag( MainPage.plants )
+//                            .universalStyledBackgrond(.primary)
+                        CalendarPageView(plants: arrPlants)
+                            .tag( MainPage.calendar )
+//                            .universalStyledBackgrond(.primary)
+                        SocialPageView()
+                            .tag( MainPage.social )
+//                            .universalStyledBackgrond(.primary)
+                        ProfilePageView()
+                            .tag( MainPage.profile )
+//                            .universalStyledBackgrond(.primary)
                         
-                    }   
+                    }
                     .tabViewStyle(.automatic)
                 }
                 
@@ -111,7 +121,6 @@ struct MainView: View {
             }
         }
         .ignoresSafeArea()
-        .universalImageBackground( PlanterModel.profile.getProfilePicture() )
     }
 }
 

@@ -53,14 +53,16 @@ struct CalendarPageView: View {
     
     @ViewBuilder
     private func makeBody() -> some View {
-        TabView(selection: $calendarPageScene) {
-            CalendarMonthView(plants: plants, schedule: schedule, activeMonth: $activeMonth, activeScene: $calendarPageScene)
-                .tag( CalendarPageScene.month )
-            
-            CalendarWeekView(plants: plants, schedule: schedule, activeMonth: $activeMonth)
-                .tag( CalendarPageScene.week )
-            
-        }.tabViewStyle(.page(indexDisplayMode: .never))
+        NavigationView {
+            TabView(selection: $calendarPageScene) {
+                CalendarMonthView(plants: plants, schedule: schedule, activeMonth: $activeMonth, activeScene: $calendarPageScene)
+                    .tag( CalendarPageScene.month )
+                
+                CalendarWeekView(plants: plants, schedule: schedule, activeMonth: $activeMonth)
+                    .tag( CalendarPageScene.week )
+                
+            }.tabViewStyle(.page(indexDisplayMode: .never))
+        }
     }
     
 //    MARK: Body
