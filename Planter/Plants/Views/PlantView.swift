@@ -186,7 +186,7 @@ struct PlantView: View {
                 }
             }
         }
-        .background(.black.opacity(0.5))
+        .background(Colors.getBase(from: colorScheme).opacity(0.6))
         .universalImageBackground(self.image)
         .fullScreenCover(isPresented: $showingPlantwateringScene) {
             PlantWateringScene(plant: plant)
