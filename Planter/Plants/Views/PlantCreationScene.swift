@@ -107,7 +107,7 @@ struct PlantCreationScene: View {
                 
                 StyledTextField($description, prompt: "provide any additional notes", question: "Provide any other relevant details, such as proximity to sunlight or soil quality")
             }
-            .padding(.bottom, Constants.UIBottomOfPagePadding )
+            .padding(.bottom, Constants.UIBottomPagePadding )
         }
         .onChange(of: name) { checkOverviewSceneCompletion() }
         .onChange(of: room) { checkOverviewSceneCompletion() }
@@ -137,7 +137,7 @@ struct PlantCreationScene: View {
                                 prompt: "Add additional instructions",
                                 question: "are there any special requirements for watering this plant?" )
             }
-            .padding(.bottom, Constants.UIBottomOfPagePadding )
+            .padding(.bottom, Constants.UIBottomPagePadding )
         }.onAppear { sceneComplete = true }
     }
     

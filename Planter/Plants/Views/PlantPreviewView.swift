@@ -121,6 +121,8 @@ struct PlantSmallPreviewView: View {
     
     let plant: PlanterPlant
     
+    @State private var showingPlantView: Bool = false
+    
     var body: some View {
         
         ZStack(alignment: .bottomTrailing) {
@@ -141,5 +143,9 @@ struct PlantSmallPreviewView: View {
         .universalTextStyle(reversed: true)
         .padding(.horizontal, 10)
         .rectangularBackground(10, style: .primary, reverseStyle: true)
+        .onTapGesture { showingPlantView = true }
+        .fullScreenCover(isPresented: $showingPlantView) {
+            PlantView(plant: plant)
+        }
     }
 }

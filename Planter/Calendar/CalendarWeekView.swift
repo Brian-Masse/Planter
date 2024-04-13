@@ -115,6 +115,7 @@ struct CalendarWeekView: View {
                             DayView(day: day, weekSchedule: weekSchedule, showEmptyDays: $showEmptyDays)
                         }
                         makeShowAllDaysToggle()
+                            .padding(.bottom, Constants.UIBottomPagePadding)
                         
                     }
                     .padding(.bottom)
@@ -122,5 +123,6 @@ struct CalendarWeekView: View {
                 }
             }
         }
+        .ignoresSafeArea(edges: .bottom)
     }
 }

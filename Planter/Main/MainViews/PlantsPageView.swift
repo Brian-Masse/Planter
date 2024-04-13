@@ -129,7 +129,7 @@ struct PlantsPageView: View {
                     
                     makeAllPlants()
                 }
-                .padding(.bottom, Constants.UIBottomOfPagePadding)
+                .padding(.bottom, Constants.UIBottomPagePadding)
             }
             Spacer()
         }

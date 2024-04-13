@@ -61,8 +61,10 @@ struct CalendarPageView: View {
                 CalendarWeekView(plants: plants, schedule: schedule, activeMonth: $activeMonth)
                     .tag( CalendarPageScene.week )
                 
-            }.tabViewStyle(.page(indexDisplayMode: .never))
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
         }
+        .padding(.bottom, -69)
     }
     
 //    MARK: Body
