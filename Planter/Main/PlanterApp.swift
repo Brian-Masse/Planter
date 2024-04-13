@@ -14,11 +14,11 @@ struct PlanterApp: App {
     private func setupUIUniversals() {
         
         Colors.setColors(baseLight:         .init(255, 255, 255),
-                         secondaryLight:    .init(240, 240, 240),
+                         secondaryLight:    .init(230, 230, 230),
                          baseDark:          .init(0, 0, 0),
                          secondaryDark:     .init(30, 30, 30),
-                         lightAccent:       .init(245, 87, 66),
-                         darkAccent:        .init(245, 87, 66))
+                         lightAccent:       .init(240, 79, 50),
+                         darkAccent:        .init(240, 79, 50))
         
         Constants.UIDefaultCornerRadius = 25
         

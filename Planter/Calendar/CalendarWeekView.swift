@@ -103,6 +103,7 @@ struct CalendarWeekView: View {
         
         VStack(alignment: .leading ) {
             makeWeekSelector()
+                .padding(.horizontal, Constants.UISubPadding)
         
             Spacer()
             
@@ -119,7 +120,7 @@ struct CalendarWeekView: View {
                         
                     }
                     .padding(.bottom)
-                    .gesture(swipeGesture)
+//                    .gesture(swipeGesture)
                 }
             }
         }

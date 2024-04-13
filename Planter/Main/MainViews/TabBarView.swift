@@ -92,8 +92,8 @@ struct TabBarView: View {
                 
                 HStack(spacing: 0) {
                     makeTabBarButton(.calendar)
-                    makeTabBarButton(.profile)
                     makeTabBarButton(.social)
+                    makeTabBarButton(.profile)
                 }
                 .rectangularBackground(7, style: .transparent, cornerRadius: Constants.UILargeCornerRadius)
                 .frame(height: 75)
@@ -102,7 +102,7 @@ struct TabBarView: View {
             }
             .padding(.top, Constants.UISubPadding)
             .padding(Constants.UISubPadding + 10 )
-            .shadow(color: .black, radius: 25, y: 5)
+            .shadow(color: .black.opacity(0.4), radius: 25, y: 5)
         }
         .frame(height: 160)
         .fullScreenCover(isPresented: $showingPlantCreationScene) {

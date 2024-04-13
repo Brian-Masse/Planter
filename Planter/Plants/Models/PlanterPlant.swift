@@ -222,9 +222,31 @@ class PlanterPlant: Object, Identifiable, Shareable {
         return ""
     }
     
+///    "The fern needs to be watered in 5 days"
+    func getFullWateringMessage() -> String {
+        let days = getDaysUntilNextWateringDate()
+        let dayMessage = days == 1 ? "day" : "days"
+        let base = "This plant needs to be watered "
+        
+        if days > 0 { return base + "in \(days) \(dayMessage)" }
+        if days == 0 { return base + "today" }
+        if days < 0 { return base + "\(-days) \(dayMessage) ago" }
+        
+        return ""
+    }
+    
 ///    "last watered: 03/27/2024"
     func getLastWateredMessage() -> String {
         "Last watered: \( self.dateLastWatered.formatted(date: .numeric, time: .omitted) )"
+    }
+    
+///    "This plant was last watered on Apirl 12, 5 days ago."
+    func getFullLastWateredMessage() -> String {
+        let daysSinceLastWater = Int(Date.now.timeIntervalSince(self.dateLastWatered) / Constants.DayTime)
+        let dayMessage = daysSinceLastWater == 1 ? "day ago" : "days ago"
+        let ending = daysSinceLastWater == 0 ? "" : ", \(daysSinceLastWater) " + dayMessage
+        
+        return "This plant was last watered on \(self.dateLastWatered.formatted(date: .abbreviated, time: .omitted))" + ending
     }
     
 ///    This plant needs to be watered every 2 days

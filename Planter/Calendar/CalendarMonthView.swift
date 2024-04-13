@@ -125,6 +125,7 @@ struct CalendarMonthView: View {
             .padding(.vertical, Constants.UISubPadding)
             Spacer()
         }
+        .if(plantsOnDay > 0) { view in view.foregroundStyle(.black) }
         .universalTextStyle( reversed: plantsOnDay > 0 )
         .opacity( plantsOnDay > 0 ? 0.9 : 0.5)
         .frame(height: 75)
@@ -178,7 +179,7 @@ struct CalendarMonthView: View {
                         makeCalendar(geo: geo)
                     }
                 }
-                .gesture(swipeGesture)
+//                .gesture(sw   ipeGesture)
             }
         }
     }

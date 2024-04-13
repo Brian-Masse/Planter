@@ -25,6 +25,8 @@ struct PlantView: View {
         self.image = plant.getImage()
     }
     
+    static let textOpacity: Double = 0.7
+    
 //    MARK: ViewBuilders
     @ViewBuilder
     private func makeHeader() -> some View {
@@ -44,9 +46,10 @@ struct PlantView: View {
     @ViewBuilder
     private func makeOverview() -> some View {
         VStack(alignment: .leading) {
-            UniversalText(plant.notes, size: Constants.UISmallTextSize, font: Constants.mainFont)
-            
             UniversalText( "\(plant.roomName) plant", size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase )
+            
+            UniversalText(plant.notes, size: Constants.UISmallTextSize, font: Constants.mainFont)
+                .opacity(PlantView.textOpacity)
         }
     }
     
@@ -55,7 +58,7 @@ struct PlantView: View {
     private func makeWateringAmountVisual() -> some View {
         HStack {
             ForEach( 1...5, id: \.self ) { i in
-                ResizableIcon( i <= plant.wateringAmount ? "drop.fill" : "drop", size: Constants.UISubHeaderTextSize - 5)
+                ResizableIcon( i <= plant.wateringAmount ? "drop.fill" : "drop", size: Constants.UIDefaultTextSize)
             }
         }
     }
@@ -63,21 +66,19 @@ struct PlantView: View {
     @ViewBuilder
     private func makeWateringInstructions() -> some View {
         
-        VStack(alignment: .leading, spacing: Constants.UISubPadding) {
+        VStack(alignment: .leading, spacing: 0) {
             
             UniversalText("Instructions", size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase)
                 .padding(.trailing)
             
-            UniversalText( plant.getWaterIntervalMessage(), size: Constants.UIDefaultTextSize, font: Constants.mainFont, case: .uppercase)
-                .padding(.trailing)
-                .padding(.top, -Constants.UISubPadding)
+            UniversalText( plant.getWaterIntervalMessage(), size: Constants.UISmallTextSize, font: Constants.mainFont)
+                .padding([.horizontal, .bottom])
             
-            HStack {
-                Spacer()
-                
-                UniversalText( plant.wateringInstructions, size: Constants.UISmallTextSize, font: Constants.mainFont, textAlignment: .trailing )
-                    .padding(.bottom, Constants.UISubPadding)
-            }
+            UniversalText( plant.getFullLastWateredMessage(), size: Constants.UISmallTextSize, font: Constants.mainFont)
+                .padding([.horizontal, .bottom])
+            
+            UniversalText( plant.getFullWateringMessage(), size: Constants.UISmallTextSize, font: Constants.mainFont)
+                .padding([.horizontal, .bottom])
             
             plant.getImage()
                 .resizable()
@@ -85,16 +86,20 @@ struct PlantView: View {
                 .frame(height: 150)
                 .clipped()
                 .padding(.horizontal)
-                .padding(.bottom, Constants.UISubPadding)
+                .padding(.bottom)
             
-                UniversalText( "Watering Amount", size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase  )
-                
+                UniversalText( "Watering Amount", size: Constants.UIDefaultTextSize, font: Constants.titleFont, case: .uppercase  )
                 makeWateringAmountVisual()
                     .padding(.leading)
+                    .padding(.bottom)
+            
+            UniversalText( "Additional Instructions", size: Constants.UIDefaultTextSize, font: Constants.titleFont, case: .uppercase )
+            UniversalText( plant.wateringInstructions, size: Constants.UISmallTextSize, font: Constants.mainFont, textAlignment: .trailing )
+                .padding(.horizontal)
+                .padding(.bottom, Constants.UISubPadding)
         }
         .padding(.bottom)
-        .foregroundStyle(.black)
-        .rectangularBackground(style: .primary, reverseStyle: true)
+        .rectangularBackground(style: .primary)
     }
     
 //    MARK: ActionButtons
@@ -181,6 +186,7 @@ struct PlantView: View {
                 }
             }
         }
+        .background(.black.opacity(0.5))
         .universalImageBackground(self.image)
         .fullScreenCover(isPresented: $showingPlantwateringScene) {
             PlantWateringScene(plant: plant)
@@ -212,6 +218,6 @@ struct TestView: View {
     
 }
 
-//#Preview {
-//   TestView()
-//}
+#Preview {
+   TestView()
+}

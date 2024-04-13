@@ -71,6 +71,7 @@ struct CalendarPageView: View {
     var body: some View {
         VStack(alignment: .leading) {
             makeHeader()
+                .padding(.horizontal, Constants.UISubPadding)
             
             Spacer()
             

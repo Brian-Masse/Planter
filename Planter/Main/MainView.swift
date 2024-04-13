@@ -35,54 +35,6 @@ struct MainView: View {
     @State var page: MainPage = .plants
     @State var showingProfileView: Bool = false
     
-//    MARK: TabBar
-    struct TabBar: View {
-        
-        @Binding var page: MainPage
-        @Binding var showingProfileView: Bool
-        
-        @ViewBuilder
-        private func makeTabBarButton(page: MainPage ) -> some View {
-            
-            VStack {
-//                LargeTextButton( page.getDisplayString(),
-//                                 at: 0,
-//                                 aspectRatio: 1,
-//                                 arrow: false,
-//                                 style: self.page == page ? .accent : .secondary) {
-//                    self.page = page
-//                }
-            }
-            .scaleEffect(1.25)
-            .shadow(color: .black.opacity(0.4), radius: 10, y: 10)
-            
-        }
-        
-        var body: some View {
-         
-            
-            ZStack(alignment: .bottom) {
-                HStack(alignment: .bottom, spacing: 5) {
-
-                    makeTabBarButton(page: .calendar)
-                    Spacer()
-                    makeTabBarButton(page: .calendar)
-                }
-                .padding(.horizontal)
-                
-                LargeTextButton("pro file", at: 30, aspectRatio: 1.6, verticalTextAlignment: .top, arrowDirection: .down) {
-                    showingProfileView = true
-                }
-                .padding(.leading)
-                .scaleEffect(1.25)
-                .shadow(color: .black.opacity(0.4), radius: 10, y: 10)
-            }
-            .padding()
-            .padding(.bottom, 25)
-            
-        }
-    }
-    
 //    MARK: Body
     var body: some View {
         

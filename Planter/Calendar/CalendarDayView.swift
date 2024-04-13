@@ -61,7 +61,7 @@ struct DayView: View {
     private func makePlantCarousel() -> some View {
         VStack() {
             ForEach(daySchedule, id: \.plant.id) { node in
-                PlantSmallPreviewView(plant: node.plant)
+                PlantSmallPreviewView(plant: node.plant, accent: true)
             }
         }
         .scrollTargetLayout()

@@ -83,7 +83,8 @@ struct PlantsPageView: View {
             }
         }
     }
-    
+
+//    MARK: Filter
     @ViewBuilder
     private func makeFilterButton( filter: PlantFilter ) -> some View {
         let filterIsActive = filterIsActive(filter) != nil
@@ -93,11 +94,14 @@ struct PlantsPageView: View {
                        font: Constants.mainFont,
                        case: .uppercase,
                        wrap: false )
-            .universalTextStyle(reversed: true)
             .padding(.vertical, Constants.UISubPadding)
             .padding(.horizontal)
-            .if(filterIsActive) {   view in view.rectangularBackground( 0, style: .accent ) }
-            .if(!filterIsActive) {  view in view.rectangularBackground( 0, style: .primary, reverseStyle: true ) }
+            .if(filterIsActive)  {  view in
+                view
+                    .rectangularBackground( 0, style: .accent )
+                    .foregroundStyle(.black)
+            }
+            .if(!filterIsActive) {  view in view.rectangularBackground( 0, style: .primary ) }
             .onTapGesture { withAnimation { toggleFilterItem(filter) }}
     }
 

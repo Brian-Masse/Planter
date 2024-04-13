@@ -120,6 +120,12 @@ struct PlantFullPreviewView: View {
 struct PlantSmallPreviewView: View {
     
     let plant: PlanterPlant
+    let accent: Bool
+    
+    init(plant: PlanterPlant, accent: Bool = false) {
+        self.plant = plant
+        self.accent = accent
+    }
     
     @State private var showingPlantView: Bool = false
     
@@ -140,9 +146,9 @@ struct PlantSmallPreviewView: View {
             
             PlantFavoriteToggle(plant: plant)
         }
-        .universalTextStyle(reversed: true)
+        .universalTextStyle(reversed: accent)
         .padding(.horizontal, 10)
-        .rectangularBackground(10, style: .primary, reverseStyle: true)
+        .rectangularBackground(10, style: .primary, reverseStyle: accent)
         .onTapGesture { showingPlantView = true }
         .fullScreenCover(isPresented: $showingPlantView) {
             PlantView(plant: plant)
