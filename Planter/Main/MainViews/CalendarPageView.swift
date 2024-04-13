@@ -47,6 +47,15 @@ struct CalendarPageView: View {
         return total
     }
     
+//    MARK: Gestures
+    private var swipeGesture: some Gesture {
+        DragGesture(minimumDistance: 10)
+            .onEnded { value in
+                let direction = value.translation.width / abs( value.translation.width )
+                withAnimation { progressMonth( backward: direction == 1 ) }
+            }
+    }
+    
 //    MARK: ViewBuilder
     @ViewBuilder
     private func makeHeader() -> some View {
@@ -177,6 +186,7 @@ struct CalendarPageView: View {
                     
                     makeCalendar(geo: geo)
                 }
+                .gesture(swipeGesture)
             }
             
             Spacer()
