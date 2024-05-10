@@ -55,7 +55,7 @@ struct MainView: View {
                         SocialPageView()
                             .tag( MainPage.social )
 //                            .universalStyledBackgrond(.primary)
-                        ProfilePageView()
+                        ProfilePageView(profile: PlanterModel.profile)
                             .tag( MainPage.profile )
 //                            .universalStyledBackgrond(.primary)
                         

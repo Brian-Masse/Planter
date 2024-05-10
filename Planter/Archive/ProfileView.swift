@@ -32,7 +32,7 @@ struct ProfileView: View {
     
     init(_ profile: PlanterProfile? = nil) {
         self.profile = profile!
-        self.image = profile!.getProfilePicture()
+        self.image = profile!.getImage()
     }
     
 //    MARK: Body

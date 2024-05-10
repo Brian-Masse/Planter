@@ -181,7 +181,7 @@ struct ProfileSocialView: View {
             Rectangle()
                 .frame(width: 250, height: 300)
                 .overlay {
-                    profile.getProfilePicture()
+                    profile.getImage()
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .scaleEffect(3)

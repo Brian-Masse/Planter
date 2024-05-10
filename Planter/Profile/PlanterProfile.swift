@@ -39,6 +39,7 @@ class PlanterProfile: Object, Identifiable {
     @Persisted var birthday: Date = .now
     
     @Persisted var profileImage: Data = Data()
+    private var image: SwiftUI.Image? = nil
     
     @Persisted var dateJoined: Date = .now
     
@@ -66,12 +67,15 @@ class PlanterProfile: Object, Identifiable {
     }
     
 //    MARK: Convenience Functions
-    func fullName() -> String {
-        "\(firstName) \(lastName)"
+    
+    func getImage() -> SwiftUI.Image {
+        if let image = self.image { return image }
+        self.image = PhotoManager.decodeImage(from: self.profileImage) ?? Image("profile")
+        return self.image!
     }
     
-    func getProfilePicture() -> Image {
-        PhotoManager.decodeImage(from: self.profileImage) ?? Image("profile")
+    func fullName() -> String {
+        "\(firstName) \(lastName)"
     }
     
     func getPublicityString() -> String {

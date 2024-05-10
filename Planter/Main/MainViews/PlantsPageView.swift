@@ -30,11 +30,14 @@ struct PlantsPageView: View {
     }
     
 //    MARK: Vars
+    @Environment(\.colorScheme) var colorScheme
+    
     let plants: [PlanterPlant]
     
     @State var activeFilter: [PlantFilter] = []
-    
     @State var srollPosition: CGPoint = .zero
+    
+    @State var showingPlantCreationView: Bool = false
     
 //    MARK: Filter Methods
     private var filteredPlants: [PlanterPlant] {
@@ -118,11 +121,34 @@ struct PlantsPageView: View {
         }
     }
     
+    @ViewBuilder
+    private func makeHeader() -> some View {
+        HStack {
+            UniversalText("Planter", size: Constants.UIHeaderTextSize, font: SpaceGroteskMedium.shared, case: .uppercase)
+                .padding(.leading, 10)
+            
+            Spacer()
+            
+            HStack {
+                UniversalText( "new plant", size: Constants.UIDefaultTextSize, font: Constants.titleFont)
+            }
+            .foregroundStyle(.black)
+            .rectangularBackground(8,
+                                   style: .accent,
+                                   cornerRadius: Constants.UIDefaultCornerRadius )
+            .shadow(color: Colors.getAccent(from: colorScheme).opacity(0.6), radius: Constants.UISubPadding)
+            .padding(.trailing, Constants.UISubPadding)
+            .onTapGesture {
+                showingPlantCreationView = true
+            }
+        }
+        .padding(.bottom, Constants.UISubPadding)
+    }
+    
 //    MARK: Body
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            UniversalText("Planter", size: Constants.UIHeaderTextSize, font: SpaceGroteskMedium.shared, case: .uppercase)
-                .padding(.leading, 10)
+            makeHeader()
             
 //            BlurScroll(10, scrollPositionBinding: $srollPosition)
             ScrollView(.vertical, showsIndicators: true) {
@@ -136,6 +162,9 @@ struct PlantsPageView: View {
                 .padding(.bottom, Constants.UIBottomPagePadding)
             }
             Spacer()
+        }
+        .sheet(isPresented: $showingPlantCreationView) {
+            PlantCreationScene()
         }
         .ignoresSafeArea(edges: .bottom)
     }

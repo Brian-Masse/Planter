@@ -29,7 +29,6 @@
 		C92BD20C2B27938200AF6765 /* ProfileOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92BD20B2B27938200AF6765 /* ProfileOverviewView.swift */; };
 		C92BD20E2B2793F300AF6765 /* ProfileSocialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92BD20D2B2793F300AF6765 /* ProfileSocialView.swift */; };
 		C945C3C62BB4AEFB00EC9547 /* PlantsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C945C3C52BB4AEFB00EC9547 /* PlantsPageView.swift */; };
-		C945C3C92BB4B02700EC9547 /* ProfilePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C945C3C82BB4B02700EC9547 /* ProfilePageView.swift */; };
 		C945C3CC2BB4B07F00EC9547 /* SocialPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C945C3CB2BB4B07F00EC9547 /* SocialPageView.swift */; };
 		C945C3CE2BB4B28800EC9547 /* SpaceGrotesk-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C945C3CD2BB4B28800EC9547 /* SpaceGrotesk-Medium.ttf */; };
 		C945C3D02BB4B29200EC9547 /* SpaceGrotesk-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C945C3CF2BB4B29200EC9547 /* SpaceGrotesk-Regular.ttf */; };
@@ -43,6 +42,7 @@
 		C96C7E532B1717B300FC2FB0 /* UniversalButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E4B2B1717B300FC2FB0 /* UniversalButtons.swift */; };
 		C96C7E582B18338500FC2FB0 /* PlantCreationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */; };
 		C96C7E5A2B183E8300FC2FB0 /* PlantPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */; };
+		C988B7AC2BEDED5C00E5AD87 /* ProfilePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C988B7AB2BEDED5C00E5AD87 /* ProfilePageView.swift */; };
 		C996EFC22B19C84500392C4E /* PlanterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C996EFC12B19C84500392C4E /* PlanterSheet.swift */; };
 		C996EFC52B1BA71300392C4E /* RoomsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C996EFC42B1BA71300392C4E /* RoomsPageView.swift */; };
 		C99E8FD72BC05B3500063955 /* CalendarPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99E8FD52BC0598600063955 /* CalendarPageView.swift */; };
@@ -100,7 +100,6 @@
 		C92BD20B2B27938200AF6765 /* ProfileOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileOverviewView.swift; sourceTree = "<group>"; };
 		C92BD20D2B2793F300AF6765 /* ProfileSocialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSocialView.swift; sourceTree = "<group>"; };
 		C945C3C52BB4AEFB00EC9547 /* PlantsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantsPageView.swift; sourceTree = "<group>"; };
-		C945C3C82BB4B02700EC9547 /* ProfilePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePageView.swift; sourceTree = "<group>"; };
 		C945C3CB2BB4B07F00EC9547 /* SocialPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialPageView.swift; sourceTree = "<group>"; };
 		C945C3CD2BB4B28800EC9547 /* SpaceGrotesk-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Medium.ttf"; sourceTree = "<group>"; };
 		C945C3CF2BB4B29200EC9547 /* SpaceGrotesk-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SpaceGrotesk-Regular.ttf"; sourceTree = "<group>"; };
@@ -112,6 +111,7 @@
 		C96C7E572B18338500FC2FB0 /* PlantCreationScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantCreationScene.swift; sourceTree = "<group>"; };
 		C96C7E592B183E8300FC2FB0 /* PlantPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantPreviewView.swift; sourceTree = "<group>"; };
 		C96C7E5E2B18405000FC2FB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C988B7AB2BEDED5C00E5AD87 /* ProfilePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePageView.swift; sourceTree = "<group>"; };
 		C996EFC12B19C84500392C4E /* PlanterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanterSheet.swift; sourceTree = "<group>"; };
 		C996EFC42B1BA71300392C4E /* RoomsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomsPageView.swift; sourceTree = "<group>"; };
 		C99E8FD52BC0598600063955 /* CalendarPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPageView.swift; sourceTree = "<group>"; };
@@ -183,7 +183,6 @@
 			isa = PBXGroup;
 			children = (
 				C911B9092B264F3E00F5986A /* PlanterProfile.swift */,
-				C945C3C82BB4B02700EC9547 /* ProfilePageView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -205,6 +204,7 @@
 				C945C3C52BB4AEFB00EC9547 /* PlantsPageView.swift */,
 				C99E8FD52BC0598600063955 /* CalendarPageView.swift */,
 				C9DBF14C2BBB33DF006C5236 /* TabBarView.swift */,
+				C988B7AB2BEDED5C00E5AD87 /* ProfilePageView.swift */,
 			);
 			path = MainViews;
 			sourceTree = "<group>";
@@ -526,9 +526,9 @@
 				C92BD20E2B2793F300AF6765 /* ProfileSocialView.swift in Sources */,
 				C96C7E532B1717B300FC2FB0 /* UniversalButtons.swift in Sources */,
 				C96C7E4C2B1717B300FC2FB0 /* UniversalForm.swift in Sources */,
+				C988B7AC2BEDED5C00E5AD87 /* ProfilePageView.swift in Sources */,
 				C96C7E582B18338500FC2FB0 /* PlantCreationScene.swift in Sources */,
 				C906BDB92B141ECC0067B403 /* PlanterPlant.swift in Sources */,
-				C945C3C92BB4B02700EC9547 /* ProfilePageView.swift in Sources */,
 				C911B9062B2523AA00F5986A /* PlantOverviewView.swift in Sources */,
 				C911B90A2B264F3E00F5986A /* PlanterProfile.swift in Sources */,
 				C96C7E4F2B1717B300FC2FB0 /* Animations.swift in Sources */,
