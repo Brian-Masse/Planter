@@ -28,6 +28,8 @@ struct SocialPageView: View {
     
 //    MARK: ViewBuilders
     
+    
+//    MARK: Friends Preview
     @ViewBuilder
     private func makeFriendPreview(profile: PlanterProfile) -> some View {
         
@@ -51,7 +53,7 @@ struct SocialPageView: View {
                            font: Constants.mainFont,
                            textAlignment: .center)
             .opacity(0.8)
-        }
+        }.rectangularBackground(style: .primary)
     }
     
     @ViewBuilder
@@ -64,11 +66,11 @@ struct SocialPageView: View {
                                             phoneNumber: 17813153811,
                                             birthday: Date.now)
     
-//        let buddies = [ profile, profile, profile ]
+        let buddies = [ profile, profile, profile ]
         
         RoundedContainer("Plant Buddies", halfCut: true) {
             VStack(alignment: .leading) {
-                UniversalText( "\(profile.friends.count) buddies", size: Constants.UISmallTextSize, font: Constants.titleFont )
+                UniversalText( "\(friends.count) buddies", size: Constants.UISmallTextSize, font: Constants.titleFont )
                     .padding(.leading, Constants.UISubPadding)
                     .opacity(0.8)
                 
@@ -76,9 +78,60 @@ struct SocialPageView: View {
                     HStack(spacing: 0) {
                         ForEach( friends ) { buddy in
                             makeFriendPreview(profile: buddy)
-                                .padding(.horizontal)
+                                .padding(.horizontal, 2)
                         }
                     }
+                }
+            }
+        }
+    }
+    
+//    MARK: Buttons
+    @ViewBuilder
+    private func makeButtons() -> some View {
+        HStack {
+            ColoredIconButton("Share plants", icon: "shared.with.you",
+                              foregroundStyle: .black,
+                              backgroundStyle: .accent,
+                              size: Constants.UIDefaultTextSize,
+                              wide: true) { showingPlantsSharingPage = true }
+            
+            ColoredIconButton("Find buddies", icon: "magnifyingglass",
+                              foregroundStyle: .black,
+                              backgroundStyle: .accent,
+                              size: Constants.UIDefaultTextSize,
+                              wide: true) {}
+        }
+    }
+    
+//    MARK: PlantCarousels
+    @ViewBuilder
+    private func makeSharedPlants() -> some View {
+        let sharedPlants = plants.filter { plant in
+            plant.secondaryOwners.count > 0 && plant.primaryOwnerId == PlanterModel.shared.ownerID
+        }
+        
+        RoundedContainer("Shared Plants", halfCut: true) {
+            ScrollView(.horizontal) {
+                HStack {
+                    ForEach( sharedPlants ) { plant in
+                        SharedPlantPreviewView(plant: plant, accent: false)
+                    }
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func makeSharedWithMePlants() -> some View {
+        let sharedWithMePlants = plants.filter { plant in
+            plant.primaryOwnerId != PlanterModel.shared.ownerID
+        }
+        
+        RoundedContainer("plants shared with you") {
+            VStack {
+                ForEach( sharedWithMePlants ) { plant in
+                    SharedWithMePlantPreviewView(plant: plant)
                 }
             }
         }
@@ -87,27 +140,18 @@ struct SocialPageView: View {
 //    MARK: Body
     var body: some View {
         
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             
             UniversalText( "social", size: Constants.UIHeaderTextSize, font: Constants.titleFont, case: .uppercase )
             
             ScrollView(.vertical) {
                 makeFriendsCarosel()
+        
+                makeButtons()
                 
-//                ColoredIconButton("Find buddies", icon: "magnifyingglass",
-//                                  foregroundStyle: .black,
-//                                  backgroundStyle: .accent,
-//                                  size: Constants.UIDefaultTextSize,
-//                                  wide: true) {
-//                }
-//                
-                ColoredIconButton("Share plants", icon: "shared.with.you",
-                                  foregroundStyle: .black,
-                                  backgroundStyle: .accent,
-                                  size: Constants.UIDefaultTextSize,
-                                  wide: true) {
-                    showingPlantsSharingPage = true
-                }
+                makeSharedPlants()
+                
+                makeSharedWithMePlants()
                 
                 Text("")
                     .padding(.bottom, Constants.UIBottomPagePadding)
@@ -116,8 +160,12 @@ struct SocialPageView: View {
             }
         }
         .sheet(isPresented: $showingPlantsSharingPage) {
+            let filteredPlants = plants.filter { plant in
+                plant.primaryOwnerId == PlanterModel.shared.ownerID
+            }
+            
             PlantsSharingPageView(profile: profile,
-                                  plants: plants,
+                                  plants: filteredPlants,
                                   friends: friends)
         }
     }

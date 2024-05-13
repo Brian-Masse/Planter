@@ -155,3 +155,121 @@ struct PlantSmallPreviewView: View {
         }
     }
 }
+
+
+struct PrimaryWatererLabel: View {
+    
+    let plant: PlanterPlant
+    let primaryWatererOwnerId: String
+    
+    var body: some View {
+        if let primaryWaterer = PlanterProfile.getProfile(from: plant.primaryWaterer) {
+            
+            let isPrimaryWaterer = primaryWaterer.ownerId == PlanterModel.shared.ownerID
+            
+            let message = isPrimaryWaterer ? "you are the \nprimary waterer" : "\(primaryWaterer.firstName) is the \nprimary waterer"
+            
+            HStack(spacing: Constants.UISubPadding) {
+                VStack(alignment: .trailing, spacing: 0) {
+                    ResizableIcon( isPrimaryWaterer ? "drop.fill" : "drop", size: Constants.UIDefaultTextSize )
+                    
+                    UniversalText( message, size: Constants.UIDefaultTextSize, font: Constants.titleFont, case: .uppercase, textAlignment: .trailing )
+                }
+                if !isPrimaryWaterer {
+                    ProfilePicturePreview(from: primaryWaterer, size: 35)
+                }
+            }
+        }
+    }
+}
+
+//MARK: SharedPlantPreviewView
+struct SharedPlantPreviewView: View {
+    @Environment( \.colorScheme ) var colorScheme
+    
+    let plant: PlanterPlant
+    let accent: Bool
+    
+    let image: Image
+    
+    init( plant: PlanterPlant, accent: Bool = false ) {
+        self.plant = plant
+        self.accent = accent
+        self.image = plant.getImage()
+    }
+    
+    @ViewBuilder
+    private func makeSharedCarousel() -> some View {
+        let count = plant.secondaryOwners.count
+        let peopleText = count == 1 ? "person" : "people"
+     
+        VStack(alignment: .leading, spacing: 0) {
+            UniversalText( "your \(plant.name) is shared with \(count) \(peopleText)",
+                           size: Constants.UIDefaultTextSize,
+                           font: Constants.titleFont,
+                           case: .uppercase)
+                .padding(.trailing, 20)
+            
+            ScrollView(.horizontal) {
+                HStack {
+                    ForEach( plant.secondaryOwners ) { id in
+                        if let secondaryOwner = PlanterProfile.getProfile(from: id) {
+                            ProfilePicturePreview(from: secondaryOwner, size: 35)
+                        }
+                    }
+                }
+                .padding(.leading, Constants.UISubPadding)
+            }
+            
+            Spacer()
+            
+            HStack {
+                Spacer()
+                PrimaryWatererLabel(plant: plant, primaryWatererOwnerId: plant.primaryWaterer)
+            }
+        }
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 220, height: 100)
+                .clipped()
+            
+            makeSharedCarousel()
+        }
+        .padding(Constants.UISubPadding)
+        .frame(width: 230, height: 320)
+        .universalTextStyle(reversed: accent)
+        .rectangularBackground( style: .primary, reverseStyle: accent )
+        
+    }
+}
+
+
+//MARK: SharedWithMePlantPreviewView
+struct SharedWithMePlantPreviewView: View {
+    
+    let plant: PlanterPlant
+    
+    var body: some View {
+        
+        if let owner = PlanterProfile.getProfile(from: plant.primaryOwnerId) {
+            ZStack(alignment: .bottomLeading) {
+                VStack(alignment: .leading) {
+                    UniversalText( "\(owner.firstName)'s \(plant.name)", size: Constants.UIDefaultTextSize, font: Constants.titleFont, case: .uppercase )
+                    UniversalText( "\(plant.getLastWateredMessage())", size: Constants.UISmallTextSize, font: Constants.mainFont )
+                }.padding(.bottom, 65)
+                
+                HStack {
+                    Spacer()
+                    PrimaryWatererLabel(plant: plant, primaryWatererOwnerId: plant.primaryWaterer)
+                }
+            }
+            .universalTextStyle()
+            .rectangularBackground( style: .primary )
+        }
+    }
+}

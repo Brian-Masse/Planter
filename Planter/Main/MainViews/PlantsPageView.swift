@@ -129,16 +129,7 @@ struct PlantsPageView: View {
             
             Spacer()
             
-            HStack {
-                UniversalText( "new plant", size: Constants.UIDefaultTextSize, font: Constants.titleFont)
-            }
-            .foregroundStyle(.black)
-            .rectangularBackground(8,
-                                   style: .accent,
-                                   cornerRadius: Constants.UIDefaultCornerRadius )
-            .shadow(color: Colors.getAccent(from: colorScheme).opacity(0.6), radius: Constants.UISubPadding)
-            .padding(.trailing, Constants.UISubPadding)
-            .onTapGesture {
+            ColoredIconButton(icon: "plus") {
                 showingPlantCreationView = true
             }
         }

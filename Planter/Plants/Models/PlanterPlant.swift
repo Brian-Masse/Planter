@@ -277,7 +277,7 @@ class PlanterPlant: Object, Identifiable, Shareable {
         let name = profile.firstName
         
         if count <= 0 { return "you haven't shared any plants with \(name)" }
-        if count == 0 { return "you've shared 1 plant with \(name)" }
+        if count == 1 { return "you've shared 1 plant with \(name)" }
         else { return "you've shared \(count) plants with \(name)" }
     }
     
