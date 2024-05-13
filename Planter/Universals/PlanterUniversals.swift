@@ -92,6 +92,7 @@ struct RoundedContainer<C: View>: View {
     }
 }
 
+//MARK: IconButton
 struct IconButton: View {
     let icon: String
     let size: Double
@@ -117,6 +118,23 @@ struct IconButton: View {
                     } }
                     .zIndex(1000)
             }
+    }
+}
+
+//MARK: ColoredIconButton
+struct ColoredIconButton: View {
+    @Environment(\.colorScheme) var colorScheme
+    
+    let icon: String
+    let action: () -> Void
+
+    var body: some View {
+        UniversalButton {
+            ResizableIcon( icon, size: Constants.UIDefaultTextSize )
+                .foregroundStyle(Colors.getAccent(from: colorScheme))
+                .rectangularBackground(style: .secondary, cornerRadius: Constants.UIDefaultCornerRadius)
+            
+        } action: { action() }
     }
 }
 

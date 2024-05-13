@@ -12,11 +12,17 @@ import UIUniversals
 struct ProfilePageView: View {
     
 //    MARK: Vars
+//    for the mathced geometry effect
+    @Namespace var profilePageNameSpace
+    private let pictureId = "picture"
+    private let textId = "text"
+    private let subTextId = "subText"
+    private let iconId = "iconId"
+    
+    @Environment(\.colorScheme) var colorScheme
     
     @State var halfScroll: Bool = false
     @State var scrollPosition: CGPoint = .zero
-    
-    @Namespace var profilePageNameSpace
     
     let profile: PlanterProfile
     
@@ -38,41 +44,80 @@ struct ProfilePageView: View {
     
     @ViewBuilder
     private func makeProfilePicture() -> some View {
+        let profilePictureSize: CGFloat = halfScroll ? 75 : 400
         
-        let profilePictureSize: CGFloat = halfScroll ? 75 : 275
-        let bottomPadding: CGFloat = halfScroll ? Constants.UISubPadding * 2 : -Constants.UISubPadding
-        
-        VStack(alignment: .leading) {
-            HStack {
-                if !halfScroll { Spacer() }
-                
+        if !halfScroll {
+            VStack {
+                self.image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: profilePictureSize)
+                    .clipShape( RoundedRectangle(cornerRadius: 0) )
+            }
+            .matchedGeometryEffect(id: pictureId, in: profilePageNameSpace)
+        } else {
+            VStack {
                 self.image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: profilePictureSize, height: profilePictureSize)
-                    .clipped()
-                    .clipShape(Circle())
+                    .clipShape( RoundedRectangle(cornerRadius: 100) )
                     .shadow(color: .white.opacity(0.1), radius: 15, y: 5)
                     .shadow(color: .white.opacity(0.2), radius: 70, y: 10)
-                
-                if halfScroll {
-                    UniversalText("\(profile.firstName) \(profile.lastName)", size: Constants.UISubHeaderTextSize, font: Constants.titleFont, case: .uppercase, lineSpacing: -15)
-                        .matchedGeometryEffect(id: "name", in: profilePageNameSpace)
-                        .padding(.leading)
-                }
-                
-                Spacer()
             }
-            .padding(.horizontal)
-            .padding(.bottom, bottomPadding)
+            .matchedGeometryEffect(id: pictureId, in: profilePageNameSpace)
+        }
+    }
+    
+    @ViewBuilder
+    private func makeProfileHeaderDescription() -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 0) {
+                UniversalText( "\(profile.firstName) \(profile.lastName)",
+                               size: halfScroll ? Constants.UISubHeaderTextSize : Constants.UIHeaderTextSize,
+                               font: Constants.titleFont, case: .uppercase )
+                .frame(minWidth: halfScroll ? 0 : 300, alignment: .leading)
+                .matchedGeometryEffect(id: textId, in: profilePageNameSpace)
+                
+                UniversalText( "Planter Member since \( profile.dateJoined.formatted(date: .abbreviated, time: .omitted) )",
+                               size: Constants.UISmallTextSize,
+                               font: Constants.mainFont)
+                    .opacity(0.7)
+                    .matchedGeometryEffect(id: subTextId, in: profilePageNameSpace)
+            }
+            Spacer()
             
-            if !halfScroll {
-                UniversalText("\(profile.firstName) \n\(profile.lastName)", size: Constants.UIHeaderTextSize, font: Constants.titleFont, case: .uppercase, lineSpacing: -15)
-                    .padding(.leading)
-                    .frame(width: 200, alignment: .leading)
-                    .matchedGeometryEffect(id: "name", in: profilePageNameSpace)
+            ColoredIconButton(icon: "pencil") { }
+                .matchedGeometryEffect(id: iconId, in: profilePageNameSpace)
+        }
+    }
+    
+    @ViewBuilder
+    private func makePageHeader() -> some View {
+        if halfScroll {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: .center) {
+                    makeProfilePicture()
+                        .padding(.trailing, Constants.UISubPadding)
+                    
+                    makeProfileHeaderDescription()
+                }
             }
-        }.padding(.top, Constants.UISubPadding)
+            .padding(.top, 40)
+            .padding(.horizontal, Constants.UISubPadding)
+        } else {
+            ZStack(alignment: .bottom) {
+                makeProfilePicture()
+                    .overlay( LinearGradient(colors: [.clear, Colors.getBase(from: colorScheme)],
+                                             startPoint: .init(x: 0.5, y: 0.5),
+                                             endPoint: .bottom)
+                    )
+                
+                makeProfileHeaderDescription()
+                    .padding(.horizontal)
+                    .padding(.bottom)
+            }
+        }
     }
     
     @ViewBuilder
@@ -103,10 +148,6 @@ struct ProfilePageView: View {
                     
                     Divider()
                     
-                    makeContactField(label: "planter member since",
-                                     content: profile.dateJoined.formatted(date: .abbreviated, time: .omitted))
-                    .padding(.bottom, Constants.UISubPadding)
-                    
                     makeContactField(label: "Birthday",
                                      content: profile.birthday.formatted(date: .abbreviated, time: .omitted))
                     
@@ -118,7 +159,7 @@ struct ProfilePageView: View {
 //    MARK: Body
     var body: some View {
         VStack(alignment: .leading) {
-            makeProfilePicture()
+            makePageHeader()
             
             ScrollReader($scrollPosition, showingIndicator: false) {
                 VStack(alignment: .leading, spacing: Constants.UISubPadding) {
@@ -131,7 +172,7 @@ struct ProfilePageView: View {
             }
             .onChange(of: scrollPosition) { oldValue, newValue in
                 if abs( newValue.y ) > 50 {
-                    withAnimation(.easeInOut(duration: 0.35)) { self.halfScroll = true }
+                    withAnimation { self.halfScroll = true }
                 } else if newValue.y > 10 {
                     withAnimation { self.halfScroll = false }
                 }
@@ -139,6 +180,7 @@ struct ProfilePageView: View {
 //            ScrollView(.vertical) {
 //            }
         }
+        .ignoresSafeArea()
     }
 }
 
