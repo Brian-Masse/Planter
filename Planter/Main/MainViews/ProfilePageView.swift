@@ -156,6 +156,21 @@ struct ProfilePageView: View {
         }
     }
     
+    @ViewBuilder
+    private func makeFooterView() -> some View {
+        
+        VStack {
+            ColoredIconButton("log out", icon: "ipad.and.arrow.forward",
+                              style: .primary,
+                              wide: true) {
+                Task { await PlanterModel.realmManager.logout() }
+            }
+            
+            UniversalText( "\(PlanterModel.shared.ownerID)", size: Constants.UISmallTextSize, font: Constants.mainFont )
+                .onTapGesture { print( PlanterModel.shared.ownerID ) }
+        }
+    }
+
 //    MARK: Body
     var body: some View {
         VStack(alignment: .leading) {
@@ -167,6 +182,8 @@ struct ProfilePageView: View {
                     makeInformationOverview()
                     makeInformationOverview()
                     makeInformationOverview()
+                    
+                    makeFooterView()
                 }
                 .padding(.bottom, Constants.UIBottomPagePadding)
             }
@@ -177,8 +194,6 @@ struct ProfilePageView: View {
                     withAnimation { self.halfScroll = false }
                 }
             }
-//            ScrollView(.vertical) {
-//            }
         }
         .ignoresSafeArea()
     }
@@ -186,7 +201,6 @@ struct ProfilePageView: View {
 
 
 #Preview {
-    
     let profile = PlanterProfile(ownerId: "ownerID",
                                         firstName: "Brian",
                                         lastName: "Masse",

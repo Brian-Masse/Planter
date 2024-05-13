@@ -62,7 +62,7 @@ class PlanterPlant: Object, Identifiable, Shareable {
         self.init()
         
         self.ownerID = ownerID
-//        self.primaryWaterer = ownerID
+        self.primaryWaterer = ownerID
         
         self.name = name
         self.roomName = roomName
@@ -108,6 +108,12 @@ class PlanterPlant: Object, Identifiable, Shareable {
     private func updateOwnerId(to ownerID: String) {
         RealmManager.updateObject(self) { thawed in
             thawed.ownerID = ownerID
+        }
+    }
+    
+    func updatePrimaryWatererId(to ownerID: String) {
+        RealmManager.updateObject(self) { thawed in
+            thawed.primaryWaterer = ownerID
         }
     }
     
@@ -263,6 +269,27 @@ class PlanterPlant: Object, Identifiable, Shareable {
         else {
             return "You are the primary Waterer"
         }
+    }
+    
+    /// You have shared 5 plants with Ken
+    static func getNumberOfPlantsSharedWithProfileMessage(_ profile: PlanterProfile, plants: [PlanterPlant]) -> String {
+        let count = getNumberOfPlantsShared(with: profile, plants: plants)
+        let name = profile.firstName
+        
+        if count <= 0 { return "you haven't shared any plants with \(name)" }
+        if count == 0 { return "you've shared 1 plant with \(name)" }
+        else { return "you've shared \(count) plants with \(name)" }
+    }
+    
+    static func getNumberOfPlantsShared(with profile: PlanterProfile, plants: [PlanterPlant]) -> Int {
+        var sum = 0
+        for plant in plants {
+            let contains = plant.secondaryOwners.contains(where: { id in
+                id == profile.ownerId
+            })
+            sum += contains ? 1 : 0
+        }
+        return sum
     }
     
 //    MARK: General

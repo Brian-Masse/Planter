@@ -136,7 +136,6 @@ class PlanterProfile: Object, Identifiable {
         }
         
         return results
-        
     }
     
     func requestFriend( _ profile: PlanterProfile ) {

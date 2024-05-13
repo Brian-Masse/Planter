@@ -48,16 +48,12 @@ struct MainView: View {
                         
                         PlantsPageView(plants: arrPlants)
                             .tag( MainPage.plants )
-//                            .universalStyledBackgrond(.primary)
                         CalendarPageView(plants: arrPlants)
                             .tag( MainPage.calendar )
-//                            .universalStyledBackgrond(.primary)
-                        SocialPageView()
+                        SocialPageView(profile: PlanterModel.profile, plants: arrPlants)
                             .tag( MainPage.social )
-//                            .universalStyledBackgrond(.primary)
                         ProfilePageView(profile: PlanterModel.profile)
                             .tag( MainPage.profile )
-//                            .universalStyledBackgrond(.primary)
                         
                     }
                     .tabViewStyle(.automatic)

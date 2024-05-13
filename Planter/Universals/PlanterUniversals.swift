@@ -124,19 +124,56 @@ struct IconButton: View {
 //MARK: ColoredIconButton
 struct ColoredIconButton: View {
     @Environment(\.colorScheme) var colorScheme
-    
+
     let icon: String
+    let label: String
+    
+    let size: Double
+    let foregroundStyle: Color?
+    let style: UniversalStyle
+    let backgroundStyle: UniversalStyle
+    let wide: Bool
+    
     let action: () -> Void
+    
+    init( _ label: String = "", icon: String,
+          style: UniversalStyle = .accent,
+          foregroundStyle: Color? = nil,
+          backgroundStyle: UniversalStyle = .secondary,
+          size: Double = Constants.UIDefaultTextSize,
+          wide:Bool = false,
+          action: @escaping () -> Void ) {
+        self.label = label
+        self.icon = icon
+        self.foregroundStyle = foregroundStyle
+        self.style = style
+        self.backgroundStyle = backgroundStyle
+        self.wide = wide
+        self.size = size
+        self.action = action
+    }
 
     var body: some View {
         UniversalButton {
-            ResizableIcon( icon, size: Constants.UIDefaultTextSize )
-                .foregroundStyle(Colors.getAccent(from: colorScheme))
-                .rectangularBackground(style: .secondary, cornerRadius: Constants.UIDefaultCornerRadius)
-            
+            HStack {
+                
+                if wide { Spacer() }
+
+                if label != "" {
+                    UniversalText( label, size: size, font: Constants.mainFont, case: .uppercase )
+                }
+                
+                ResizableIcon( icon, size: Constants.UIDefaultTextSize )
+                
+                if wide { Spacer() }
+            }
+            .foregroundStyle(foregroundStyle != nil ? foregroundStyle! : Colors.getColor(from: style, in: colorScheme, reversed: style != .accent))
+            .rectangularBackground(style: backgroundStyle, cornerRadius: Constants.UIDefaultCornerRadius)
         } action: { action() }
     }
 }
+
+
 
 struct DismissButton: View {
     
