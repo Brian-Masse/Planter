@@ -72,9 +72,13 @@ struct CalendarWeekView: View {
         HStack {
             IconButton("chevron.left") { progressWeek(backward: true) }
             
-            UniversalText( weekName, size: Constants.UISubHeaderTextSize, font: Constants.mainFont, case: .uppercase )
+            UniversalText( weekName, size: Constants.UIDefaultTextSize, font: Constants.titleFont, case: .uppercase )
             
             IconButton("chevron.right") { progressWeek() }
+            
+            Spacer()
+            
+            makeShowAllDaysToggle()
         }
     }
     
@@ -83,17 +87,9 @@ struct CalendarWeekView: View {
         let message = showEmptyDays ? "hide empty days" : "show empty days"
         let icon    = showEmptyDays ? "square.3.layers.3d.down.right.slash" : "square.3.layers.3d.down.right"
         
-        HStack {
-            
-            Spacer()
-            UniversalText( message, size: Constants.UISmallTextSize, font: Constants.mainFont )
-            ResizableIcon( icon, size: Constants.UISmallTextSize )
-            Spacer()
-        }
-        .if(showEmptyDays) { view in view.foregroundStyle(.black) }
-        .rectangularBackground( style: showEmptyDays ? .accent : .secondary )
-        .onTapGesture { withAnimation { showEmptyDays.toggle() } }
-        
+        ColoredIconButton(icon: icon, action: {
+            showEmptyDays.toggle()
+        })
     }
     
 //    MARK: Body
@@ -115,7 +111,7 @@ struct CalendarWeekView: View {
                             
                             DayView(day: day, weekSchedule: weekSchedule, showEmptyDays: $showEmptyDays)
                         }
-                        makeShowAllDaysToggle()
+                        Spacer()
                             .padding(.bottom, Constants.UIBottomPagePadding)
                         
                     }

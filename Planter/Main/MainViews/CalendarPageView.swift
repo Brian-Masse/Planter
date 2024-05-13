@@ -45,9 +45,10 @@ struct CalendarPageView: View {
                        case: .uppercase)
         
         UniversalText( Date.now.formatted(date: .complete, time: .omitted),
-                       size: Constants.UIDefaultTextSize,
+                       size: Constants.UISmallTextSize,
                        font: Constants.mainFont,
                        case: .uppercase)
+        .opacity(0.75)
         .onTapGesture { withAnimation { activeMonth = Date.now } }
     }
     
